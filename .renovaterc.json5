@@ -95,5 +95,12 @@
       matchPackageNames: ["/amazoncorretto/"],
       allowedVersions: "/17-alpine3\\.22/",
     },
+    {
+      description: ["Allow Unstable Versions"],
+      matchDatasources: ["github-releases"],
+      matchFileNames: ["**/docker-bake.hcl"],
+      matchPackageNames: ["/Emby\\.Releases/"],
+      ignoreUnstable: false,
+    }
   ],
 }
