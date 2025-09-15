@@ -1,21 +1,20 @@
 ---
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
-name: Trigger Renovate
+name: Renovate
 
 on:
   push:
     branches:
-      - "main"
+      - main
     paths:
-      - ".renovaterc.json5"
+      - .renovaterc.json5
+      - .renovate/**.json5
   workflow_dispatch:
 
 jobs:
-  trigger:
-    name: Trigger Renovate run
+  renovate:
+    name: Renovate
     runs-on: ubuntu-latest
-    outputs:
-      changed-files: ${{ steps.changed-files.outputs.changed_files }}
     steps:
       - name: Generate Token
         uses: actions/create-github-app-token@67018539274d69449ef7c02e8e71183d1719ab42 # v2.1.4
@@ -25,9 +24,8 @@ jobs:
           private-key: ${{ secrets.BOT_APP_PRIVATE_KEY }}
           owner: ${{ github.repository_owner }}
 
-      - name: Trigger Renovate run
-        shell: bash
+      - name: Run Renovate
         env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-        run: >-
-          gh workflow run --repo home-operations/.github renovate.yaml -F autodiscoverFilter="${{ github.event.repository.name }}"
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |-
+          gh workflow run --repo "${{ github.repository_owner }}/.github" renovate.yaml -F autodiscoverFilter="${{ github.event.repository.name }}"
