@@ -34,6 +34,11 @@
       format: "json",
       transformTemplates: ['{"releases":[{"version": $[0].version}]}'],
     },
+    "servarr-plugins": {
+      defaultRegistryUrlTemplate: "https://{{packageName}}.servarr.com/v1/update/plugins/changes?os=linux&runtime=netcore",
+      format: "json",
+      transformTemplates: ['{"releases":[{"version": $[0].version}]}'],
+    },
     "servarr-nightly": {
       defaultRegistryUrlTemplate: "https://{{packageName}}.servarr.com/v1/update/nightly/changes?os=linux&runtime=netcore",
       format: "json",
