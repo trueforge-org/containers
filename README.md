@@ -141,9 +141,10 @@ We encourage the use of official upstream container images whenever possible. Ho
 
 - The upstream application is **actively maintained**.
 - **And** one of the following applies:
-  - No official upstream container exists.
-  - The official image does not support **multi-architecture builds**.
-  - The official image uses tools like **s6-overlay**, **gosu**, or other unconventional initialization mechanisms.
+  - no official image exists.
+  - the official image does not support **multi-architecture builds**.
+  - the official image uses tools like **s6-overlay**, **gosu**, or other unconventional initialization mechanisms.
+  - does not tag releases.
 
 ## Deprecations
 
