@@ -175,7 +175,7 @@ Which repository should I follow? Whichever rocks your boat!
 
 ## Licence
 
-[![License](https://img.shields.io/badge/License-BSD%203--Clause-orange.svg?style=for-the-badge)](https://github.com/trueforge-org/truecharts/blob/master/docs/LICENSE.BSD3)
+[![License](https://img.shields.io/badge/license-AGPL--v3-blue.svg?style=for-the-badge)](https://github.com/trueforge-org/truecharts/blob/master/docs/LICENSE.BSD3)
 
 ---
 
