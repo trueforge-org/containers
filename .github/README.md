@@ -22,6 +22,8 @@ Our goal is to provide [semantically versioned](https://semver.org/), [rootless]
 
 We adhere to the [KISS principle](https://en.wikipedia.org/wiki/KISS_principle), logging to stdout, maintaining [one process per container](https://testdriven.io/tips/59de3279-4a2d-4556-9cd0-b444249ed31e/), avoiding tools like [s6-overlay](https://github.com/just-containers/s6-overlay), and building all images on top of [Alpine](https://hub.docker.com/_/alpine) or [Ubuntu](https://hub.docker.com/_/ubuntu).
 
+We believe in not doing work twice without good reason. That is why we aim to follow the CI standards set by the [home-operations](https://github.com/home-operations) community [repository](https://github.com/home-operations/containers)
+
 ## Features
 
 ### Tag Immutability
@@ -157,6 +159,18 @@ Containers in this repository may be deprecated for the following reasons:
 3. The applicaitons cannot reasonably be made to fit the **Mission Statement**
 
 **Note**: Deprecated containers will be announced with a release and remain available in the registry for as long as reasonably possible
+
+## Difference with Home-Operations
+
+Some might ask how our repository differs from [home-operations]https://github.com/home-operations), which we forked and follow. Our repository goals differ in the following areas:
+
+- We aim to include any containers, even if a good upstream is available. Comparable with [linuxserver.io](https://www.linuxserver.io/)
+
+- We keep applications even if an application is deprecated, as long as it keeps building. This ensures some updates to dependencies.
+
+- We also host containers specifically designed for our community projects, such as [TrueCharts](https://truecharts.org)
+
+Which repository should I follow? Whichever rocks your boat!
 
 ## Credits
 
