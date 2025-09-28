@@ -9,8 +9,13 @@ _An opinionated collection of container images_
 <div align="center">
 
 ![GitHub Repo stars](https://img.shields.io/github/stars/trueforge-org/containers?style=for-the-badge)
-![GitHub forks](https://img.shields.io/github/forks/trueforge-org/containers?style=for-the-badge)
 ![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/trueforge-org/containers/release.yaml?style=for-the-badge&label=Release)
+
+---
+
+[![docs](https://img.shields.io/badge/docs-rtfm-yellow?logo=gitbook&logoColor=white&style=for-the-badge)](https://truecharts.org/)
+[![Discord](https://img.shields.io/badge/discord-chat-7289DA.svg?maxAge=60&style=for-the-badge)](https://discord.gg/Js6xv9nGuU)
+[![GitHub last commit](https://img.shields.io/github/last-commit/truecharts/charts?color=brightgreen&logoColor=white&style=for-the-badge)](https://github.com/trueforge-org/truecharts/commits)
 
 </div>
 
