@@ -24,8 +24,6 @@ apk update && \
 
 USER nobody:nogroup
 
-COPY ./containers/apps/db-wait-postgres/entrypoint.sh /entrypoint.sh
-CMD ["/entrypoint.sh"]
 
 
 

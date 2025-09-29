@@ -27,9 +27,6 @@ apk update && \
 
 USER nobody:nogroup
 
-COPY ./containers/apps/db-wait-redis/entrypoint.sh /entrypoint.sh
-CMD ["/entrypoint.sh"]
-
 
 
 
