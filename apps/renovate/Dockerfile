@@ -1,6 +1,6 @@
 # hadolint ignore=DL3007
 ARG VERSION
-FROM docker.io/renovate/renovate:${VERSION}-full@sha256:fcbe8ca8c73d6f2d82552edae5248778ac5acbaaf21fff039492f53a1748ab2d
+FROM docker.io/renovate/renovate:${VERSION}-full
 
 
 ARG CLUSTERTOOL_VERSION=2.0.6
