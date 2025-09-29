@@ -80,8 +80,8 @@ RUN chown -R vscode:vscode /home/vscode/
 RUN chmod -R 755 /home/vscode/
 
 ARG TARGETARCH
-ARG TARGETARCH=${TARGETARCH/arm64/ARM64}
-ARG TARGETARCH=${TARGETARCH/amd64/AMDx64}
+ARG TARGETARCH=${TARGETARCH/arm64}
+ARG TARGETARCH=${TARGETARCH/amd64}
 
 # Download and set up the clustertool binary
 RUN curl -L "https://github.com/trueforge-org/truecharts/releases/download/v${VERSION}/clustertool_${VERSION}_linux_${TARGETARCH}.tar.gz" -o /tmp/clustertool.tar.gz \
