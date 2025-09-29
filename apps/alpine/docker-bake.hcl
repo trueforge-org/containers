@@ -23,6 +23,7 @@ group "default" {
 
 target "image" {
   inherits = ["docker-metadata-action"]
+  compress = true
   args = {
     VERSION = "${VERSION}"
   }
