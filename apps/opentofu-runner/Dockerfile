@@ -3,6 +3,8 @@
 FROM ghcr.io/trueforge-org/alpine:3.22.1 AS builder
 ARG TARGETARCH
 ARG VERSION
+
+USER root
 RUN apk add --no-cache curl \
     && curl -fsSL "https://github.com/opentofu/opentofu/releases/download/v${VERSION}/tofu_${VERSION}_linux_${TARGETARCH}.tar.gz" \
         | tar xzf - -C /tmp
