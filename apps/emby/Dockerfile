@@ -10,7 +10,6 @@ ENV DEBIAN_FRONTEND="noninteractive" \
 USER root
 
 RUN \
-    && \
     curl -fsSL -o /tmp/emby.deb \
         "https://github.com/MediaBrowser/Emby.Releases/releases/download/${VERSION}/emby-server-deb_${VERSION}_${TARGETARCH}.deb" \
     && \
