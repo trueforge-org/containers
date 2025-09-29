@@ -44,5 +44,4 @@ COPY . /
 USER nobody:nogroup
 WORKDIR /config
 
-ENTRYPOINT ["/usr/bin/catatonit", "--", "/entrypoint.sh"]
 CMD ["dashboard", "/config"]

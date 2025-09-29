@@ -37,4 +37,3 @@ COPY . /
 
 USER nobody:nogroup
 
-ENTRYPOINT ["/usr/bin/catatonit", "--", "/entrypoint.sh"]

@@ -40,4 +40,3 @@ WORKDIR /app
 
 VOLUME ["/app"]
 
-ENTRYPOINT ["/usr/bin/catatonit", "--", "/entrypoint.sh"]
