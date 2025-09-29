@@ -45,5 +45,3 @@ COPY --from=ghcr.io/linuxserver/unrar:latest /usr/bin/unrar-alpine /usr/bin/unra
 
 USER nobody:nogroup
 WORKDIR /config
-
-VOLUME ["/config"]

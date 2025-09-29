@@ -6,8 +6,6 @@ ARG TARGETARCH=${TARGETARCH/arm64/ARM64}
 ARG TARGETARCH=${TARGETARCH/amd64/AMDx64}
 ARG VERSION
 
-ENV XDG_CONFIG_HOME=/config
-
 USER root
 
 RUN \
@@ -21,5 +19,4 @@ COPY . /
 
 USER nobody:nogroup
 WORKDIR /config
-VOLUME ["/config"]
 

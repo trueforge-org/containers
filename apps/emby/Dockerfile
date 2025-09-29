@@ -26,4 +26,3 @@ COPY . /
 
 USER nobody:nogroup
 WORKDIR /config
-VOLUME ["/config"]
