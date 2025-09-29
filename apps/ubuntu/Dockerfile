@@ -7,7 +7,7 @@ ARG VENDOR
 
 
 ENV DEBIAN_FRONTEND="noninteractive" \
-    NVIDIA_DRIVER_CAPABILITIES="compute,video,utility" \
+    NVIDIA_DRIVER_CAPABILITIES="compute,video,utility"
 
 USER root
 WORKDIR /app
