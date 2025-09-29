@@ -24,7 +24,6 @@ WORKDIR /app
 RUN \
     apk add --no-cache \
         7zip \
-        coreutils \
     && \
     apk add --no-cache --repository="https://dl-cdn.alpinelinux.org/alpine/edge/testing/" \
         par2cmdline-turbo \

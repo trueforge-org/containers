@@ -21,9 +21,6 @@ USER root
 WORKDIR /app
 
 RUN \
-    apk add --no-cache \
-        coreutils \
-    && \
     apk add --no-cache --virtual .build-deps \
         build-base \
         cargo \

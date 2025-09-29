@@ -25,7 +25,6 @@ WORKDIR /app
 
 RUN \
     apk add --no-cache \
-        coreutils \
         jo \
         trurl \
     && mkdir -p /app/bin \

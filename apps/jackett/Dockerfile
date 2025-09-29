@@ -11,9 +11,7 @@ ENV XDG_CONFIG_HOME=/config
 USER root
 
 RUN \
-    apk add --no-cache \
-        coreutils \
-    && mkdir -p /app/bin \
+    mkdir -p /app/bin \
     && curl -fsSL "https://github.com/Jackett/Jackett/releases/download/${VERSION}/Jackett.Binaries.LinuxMusl${TARGETARCH}.tar.gz" \
         | tar xzf - -C /app/bin --strip-components 1 \
     && chown -R root:root /app && chmod -R 755 /app \

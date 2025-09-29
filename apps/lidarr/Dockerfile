@@ -14,7 +14,6 @@ WORKDIR /app
 RUN \
     apk add --no-cache \
         chromaprint \
-        coreutils \
         ffmpeg \
         sqlite-libs \
     && mkdir -p /app/bin \

@@ -13,7 +13,6 @@ USER root
 RUN \
     apk add --no-cache \
         7zip \
-        coreutils \
         py3-future \
         py3-requests \
     && \

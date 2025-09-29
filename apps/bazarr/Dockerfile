@@ -27,7 +27,6 @@ WORKDIR /app
 
 RUN \
     apk add --no-cache \
-        coreutils \
         ffmpeg \
         libxml2 \
         libpq \

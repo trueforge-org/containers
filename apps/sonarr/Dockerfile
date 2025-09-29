@@ -13,7 +13,6 @@ WORKDIR /app
 
 RUN \
     apk add --no-cache \
-        coreutils \
         sqlite-libs \
     && mkdir -p /app/bin \
     && curl -fsSL "https://services.sonarr.tv/v1/update/${SONARR__UPDATE__BRANCH}/download?version=${VERSION}&os=linuxmusl&runtime=netcore&arch=${TARGETARCH/amd64/x64}" \

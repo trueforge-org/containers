@@ -23,7 +23,6 @@ WORKDIR /app
 RUN \
     apk add --no-cache \
         7zip \
-        coreutils \
         lscpu \
     && \
     curl -fsSL -o /tmp/nzbget.run \

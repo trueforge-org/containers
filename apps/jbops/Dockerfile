@@ -18,9 +18,7 @@ ENV PLEXAPI_CONFIG_PATH="/config/config.ini" \
 USER root
 WORKDIR /app
 
-RUN apk add --no-cache \
-        coreutils \
-    && \
+RUN \
     apk add --no-cache --virtual=.build-deps \
         build-base \
         libffi-dev \

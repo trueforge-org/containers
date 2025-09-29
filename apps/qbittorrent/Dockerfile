@@ -20,7 +20,6 @@ WORKDIR /app
 RUN \
     apk add --no-cache \
         7zip \
-        coreutils \
     && \
     mkdir -p /app \
     && LIBTORRENT=$(curl -sL "https://github.com/userdocs/qbittorrent-nox-static/releases/latest/download/dependency-version.json" | jq -r '.libtorrent_2_0') \

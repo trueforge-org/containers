@@ -13,7 +13,6 @@ WORKDIR /app
 
 RUN \
     apk add --no-cache \
-        coreutils \
         sqlite-libs \
     && mkdir -p /app/bin \
     && curl -fsSL "https://whisparr.servarr.com/v1/update/${WHISPARR__UPDATE__BRANCH}/updatefile?version=${VERSION}&os=linuxmusl&runtime=netcore&arch=${TARGETARCH/amd64/x64}" \

@@ -17,7 +17,6 @@ USER root
 RUN \
     apk add --no-cache \
         7zip \
-        coreutils \
         transmission-daemon=="${VERSION}" \
         transmission-cli=="${VERSION}" \
         transmission-extra=="${VERSION}" \
