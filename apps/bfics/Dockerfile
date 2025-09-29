@@ -9,7 +9,7 @@ RUN pip install --no-cache-dir requests beautifulsoup4 icalendar pytz
 WORKDIR /app
 
 # Copy code
-COPY --chown=nobody:nogroup --chmod=775 . /
+COPY --chown=nobody:nogroup . /
 
 # Create output dir for serving
 RUN touch /app/balfolk.ics
