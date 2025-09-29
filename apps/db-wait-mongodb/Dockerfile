@@ -1,5 +1,5 @@
 # hadolint ignore=DL3007
-FROM ghcr.io/trueforge-org/ubuntu:24.0.0
+FROM ghcr.io/trueforge-org/ubuntu:24.04
 
 ARG TARGETPLATFORM
 ARG VERSION
