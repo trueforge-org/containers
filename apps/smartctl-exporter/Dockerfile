@@ -6,6 +6,8 @@ ARG TARGETOS
 ARG TARGETARCH
 ARG TARGETPLATFORM
 
+USER root
+
 RUN apk add --no-cache smartmontools \
     && wget "https://github.com/prometheus-community/smartctl_exporter/releases/download/v$VERSION/smartctl_exporter-$VERSION.$TARGETOS-$TARGETARCH.tar.gz" \
     && tar xvzf smartctl_exporter-$VERSION.$TARGETOS-$TARGETARCH.tar.gz \
@@ -14,5 +16,5 @@ RUN apk add --no-cache smartmontools \
     && chmod +x /bin/smartctl_exporter \
     && rm -rf smartctl_exporter*
 
-USER nobody
+USER nobody:nogroup
 ENTRYPOINT ["/bin/smartctl_exporter"]
