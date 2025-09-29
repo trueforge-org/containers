@@ -5,8 +5,8 @@ FROM docker.io/renovate/renovate:${VERSION}-full
 
 
 ARG TARGETARCH
-ARG TARGETARCH=${TARGETARCH/arm64}
-ARG TARGETARCH=${TARGETARCH/amd64}
+ARG TARGETARCH=${TARGETARCH/arm64/ARM64}
+ARG TARGETARCH=${TARGETARCH/amd64/amd64}
 ARG CLUSTERTOOL_VERSION=2.0.6
 
 # Download and set up the clustertool binary
