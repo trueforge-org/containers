@@ -1,4 +1,4 @@
-FROM python-alpine@sha256:9ba6d8cbebf0fb6546ae71f2a1c14f6ffd2fdab83af7fa5669734ef30ad48844
+FROM ghcr.io/trueforge-org/python-alpine:3.13.0
 
 # Install dependencies
 RUN pip install --no-cache-dir requests beautifulsoup4 icalendar pytz
