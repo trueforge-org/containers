@@ -1,4 +1,4 @@
-FROM docker.io/library/python:3.13-alpine3.22
+FROM docker.io/library/python:${VERSION}
 ARG VERSION
 
 ENV XDG_CONFIG_HOME=/config \
