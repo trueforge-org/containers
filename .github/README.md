@@ -48,6 +48,17 @@ _If pinning an image to the `sha256` digest, tools like [Renovate](https://githu
 
 By default the majority of our containers run as a non-root user (`65534:65534`), you are able to change the user/group by updating your configuration files.
 
+### Standardised Base Images
+
+We base all our containers on-top of our standardised base images.
+The following base images are available:
+
+- Alpine
+- Python-Alpine
+- Ubuntu
+
+*Please note that external containers might be used as buildcontainers as well*
+
 #### Docker Compose
 
 ```yaml
