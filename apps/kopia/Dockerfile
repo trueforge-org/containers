@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM docker.io/library/alpine:3.22
+FROM ghcr.io/trueforge-org/alpine:3.22.1
 ARG TARGETARCH
 ARG TARGETARCH=${TARGETARCH/amd64/x64}
 ARG VERSION

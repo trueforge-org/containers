@@ -5,7 +5,7 @@ ARG VERSION
 ENV CGO_ENABLED=0
 RUN go install -a -ldflags "-X=main.volsyncVersion=${VERSION}" github.com/backube/volsync@${VERSION}
 
-FROM docker.io/library/alpine:3.21
+FROM ghcr.io/trueforge-org/alpine:3.22.1
 ARG VERSION
 RUN \
     apk add --no-cache \
