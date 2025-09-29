@@ -16,12 +16,12 @@ RUN apt-get update && \
     tar -xf /tmp/vscode-cli.tar.gz -C /usr/bin && \
     rm /tmp/vscode-cli.tar.gz
 
-USER apps
+USER nobody:nogroup
 
 CMD [ "code", "tunnel", "--accept-server-license-terms" ]
 
 ARG CONTAINER_NAME
 ARG CONTAINER_VER
-LABEL "maintainer"="TrueCharts <info@truecharts.org>"
-LABEL "org.opencontainers.image.source"="https://github.com/truecharts/apps"
+
+
 

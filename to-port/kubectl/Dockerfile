@@ -19,10 +19,10 @@ RUN apk update && apk add --no-cache curl git \
     && apk del curl
 
 
-USER apps
+USER nobody:nogroup
 
 ARG CONTAINER_NAME
 ARG CONTAINER_VER
-LABEL "maintainer"="TrueCharts <info@truecharts.org>"
-LABEL "org.opencontainers.image.source"="https://github.com/truecharts/apps"
+
+
 

@@ -94,13 +94,13 @@ RUN \
   && printf "umask %d" "${UMASK}" >> /etc/bash.bashrc \
   && update-ca-certificates
 
-USER apps
+USER nobody:nogroup
 
 COPY ./containers/apps/db-wait-mongodb/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
-LABEL "maintainer"="TrueCharts <info@truecharts.org>"
-LABEL "org.opencontainers.image.source"="https://github.com/truecharts/apps"
+
+
 
 ARG CONTAINER_NAME
 ARG CONTAINER_VER

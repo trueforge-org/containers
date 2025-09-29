@@ -1,5 +1,5 @@
 # hadolint ignore=DL3007
-FROM oci.trueforge.org/tccr/alpine:latest@sha256:6dc807ae4f2867cb2d00d061f8f579f1966420ad792c179ac68072ab235109f8
+FROM ghcr.io/trueforge-org/alpine:3.22.1
 
 ARG TARGETPLATFORM
 ARG VERSION
@@ -25,13 +25,13 @@ apk update && \
   printf "umask %d" "${UMASK}" >> /etc/profile && \
   update-ca-certificates
 
-USER apps
+USER nobody:nogroup
 
 COPY ./containers/apps/db-wait-redis/entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
-LABEL "maintainer"="TrueCharts <info@truecharts.org>"
-LABEL "org.opencontainers.image.source"="https://github.com/truecharts/apps"
+
+
 
 ARG CONTAINER_NAME
 ARG CONTAINER_VER

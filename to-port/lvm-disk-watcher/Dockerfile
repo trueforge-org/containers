@@ -1,4 +1,4 @@
-FROM oci.trueforge.org/tccr/alpine:v3.22.1@sha256:6dc807ae4f2867cb2d00d061f8f579f1966420ad792c179ac68072ab235109f8
+FROM ghcr.io/trueforge-org/alpine:3.22.1
 
 ARG TARGETPLATFORM
 ARG VERSION
@@ -22,6 +22,6 @@ ENTRYPOINT ["/bin/bash", "/scripts/watch_lvm.sh"]
 
 ARG CONTAINER_NAME
 ARG CONTAINER_VER
-LABEL "maintainer"="TrueCharts <info@truecharts.org>"
-LABEL "org.opencontainers.image.source"="https://github.com/truecharts/apps"
+
+
 

@@ -88,7 +88,7 @@ RUN set -ex; \
     sed -i 's/exec "$@"//g' /entrypoint.sh; \
     cat /tmp/post-install.sh >> /entrypoint.sh
 
-LABEL "org.opencontainers.image.source"="https://github.com/truecharts/containers"
+
 
 ARG CONTAINER_NAME
 ARG CONTAINER_VER
