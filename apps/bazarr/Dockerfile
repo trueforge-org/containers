@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM docker.io/library/python:3.13-alpine3.22
+FROM ghcr.io/trueforge-org/python-alpine:3.13.0
 ARG VENDOR
 ARG VERSION
 

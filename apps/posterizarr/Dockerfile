@@ -1,4 +1,4 @@
-FROM docker.io/library/python:3.13-alpine
+FROM ghcr.io/trueforge-org/python-alpine:3.13.0
 
 ARG TARGETARCH
 ARG VENDOR

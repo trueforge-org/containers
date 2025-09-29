@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM docker.io/library/python:3.13-alpine3.22 AS builder
+FROM ghcr.io/trueforge-org/python-alpine:3.13.0 AS builder
 ARG VERSION
 RUN \
     apk add --no-cache \
