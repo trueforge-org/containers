@@ -12,6 +12,8 @@ ENV HOME="/config" \
     XDG_DATA_HOME="/config" \
     TRANSMISSION_WEB_HOME="/usr/share/transmission/public_html"
 
+USER root
+
 RUN \
     apk add --no-cache \
         7zip \

@@ -24,32 +24,27 @@ ENV \
 USER root
 WORKDIR /app
 
-RUN \
-    apt-get update \
-    && \
-    apt-get install -y --no-install-recommends --no-install-suggests \
+RUN set -eux; \
+    apk update; \
+    apk add --no-cache \
         ca-certificates \
         catatonit \
         curl \
         git \
-        iputils-ping \
-        libcairo2 \
-        libmagic1 \
+        iputils \
+        cairo \
+        file \
         openssh-client \
-        patch \
-    && pip install uv \
-    && uv pip install \
+        patch; \
+    pip install uv; \
+    uv pip install \
         setuptools \
-        "esphome[displays]==${VERSION}" \
-    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
-    && apt-get autoremove -y \
-    && apt-get clean \
-    && rm -rf /tmp/* /var/{cache,log}/* /var/lib/apt/lists/* /usr/src/*
+        "esphome[displays]==${VERSION}"; \
+    rm -rf /var/cache/apk/* /tmp/*
 
 COPY . /
 
 USER nobody:nogroup
-
 WORKDIR /config
 
 ENTRYPOINT ["/usr/bin/catatonit", "--", "/entrypoint.sh"]

@@ -2,6 +2,9 @@
 
 FROM ghcr.io/trueforge-org/python-alpine:3.13.0 AS builder
 ARG VERSION
+
+USER root
+
 RUN \
     apk add --no-cache \
         curl \
