@@ -7,6 +7,8 @@ RUN go install -a -ldflags "-X=main.volsyncVersion=${VERSION}" github.com/backub
 
 FROM ghcr.io/trueforge-org/alpine:3.22.1
 ARG VERSION
+
+USER root
 RUN \
     apk add --no-cache \
         acl \
@@ -28,4 +30,3 @@ RUN \
 COPY --from=ghcr.io/rclone/rclone:1.69.2 /usr/local/bin/rclone /usr/local/bin/rclone
 COPY --from=docker.io/restic/restic:0.18.0 /usr/bin/restic /usr/local/bin/restic
 COPY --from=builder /go/bin/volsync /manager
-ENTRYPOINT ["/bin/bash"]
