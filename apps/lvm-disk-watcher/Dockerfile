@@ -10,8 +10,7 @@ COPY --chown=nobody:nogroup --chmod=775 . /
 
 # hadolint ignore=DL3018,DL4006
 RUN apk update && apk add --no-cache lvm2 lvm2-dmeventd device-mapper-event-libs \
-    && mkdir -p /scripts /config \
-    && chmod +x /scripts/watch_lvm.sh
+    && chmod +x /app/watch_lvm.sh
 
 WORKDIR /scripts
 

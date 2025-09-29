@@ -1,5 +1,7 @@
 FROM ghcr.io/trueforge-org/python-alpine:3.13.0
 
+USER root
+
 # Install dependencies
 RUN pip install --no-cache-dir requests beautifulsoup4 icalendar pytz
 
