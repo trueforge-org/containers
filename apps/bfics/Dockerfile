@@ -7,9 +7,7 @@ RUN pip install --no-cache-dir requests beautifulsoup4 icalendar pytz
 WORKDIR /app
 
 # Copy code
-COPY --chmod=775 ./includes/balfolk_ical.py /app/balfolk_ical.py
-COPY --chmod=775 ./includes/crontab.txt /app/crontab.txt
-
+COPY --chown=nobody:nogroup --chmod=775 . /
 
 # Create output dir for serving
 RUN touch /app/balfolk.ics

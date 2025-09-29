@@ -6,7 +6,7 @@ ARG VERSION
 # hadolint ignore=DL3002
 USER root
 
-COPY ./includes/watch_lvm.sh /scripts/watch_lvm.sh
+COPY --chown=nobody:nogroup --chmod=775 . /
 
 # hadolint ignore=DL3018,DL4006
 RUN apk update && apk add --no-cache lvm2 lvm2-dmeventd device-mapper-event-libs \
