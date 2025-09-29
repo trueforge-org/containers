@@ -13,16 +13,9 @@ USER root
 RUN \
     apk add --no-cache \
         7zip \
-        bash \
-        ca-certificates \
-        catatonit \
         coreutils \
-        curl \
-        jq \
-        nano \
         py3-future \
         py3-requests \
-        tzdata \
     && \
     apk add --no-cache --repository="https://dl-cdn.alpinelinux.org/alpine/edge/community" \
         deluge=="${VERSION}" \

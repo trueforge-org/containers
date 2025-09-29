@@ -11,14 +11,11 @@ RUN set -ex; \
         vips-poppler; \
     go install github.com/h2non/imaginary@b632dae8cc321452c3f85bcae79c580b1ae1ed84
 
-FROM public.ecr.aws/docker/library/alpine:3.22.1@sha256:4bcff63911fcb4448bd4fdacec207030997caf25e9bea4045fa6c8c44de311d1
-
+FROM ghcr.io/trueforge-org/alpine:3.22.0
 # hadolint ignore=DL3018
 RUN set -ex; \
     apk add --no-cache \
         vips \
-        curl \
-        tzdata \
         vips-jxl \
         vips-heif \
         vips-magick \

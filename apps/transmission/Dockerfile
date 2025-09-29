@@ -17,18 +17,11 @@ USER root
 RUN \
     apk add --no-cache \
         7zip \
-        bash \
-        ca-certificates \
-        catatonit \
         coreutils \
-        curl \
-        jq \
-        nano \
         transmission-daemon=="${VERSION}" \
         transmission-cli=="${VERSION}" \
         transmission-extra=="${VERSION}" \
         transmission-remote=="${VERSION}" \
-        tzdata \
     && \
     curl -fsSL https://github.com/mitsuhiko/minijinja/releases/download/2.8.0/minijinja-cli-${MINIJINJA_ARCH}-unknown-linux-musl.tar.xz \
         | tar xJf - -C /usr/local/bin/ --strip-components=1 \

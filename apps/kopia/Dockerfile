@@ -19,15 +19,7 @@ ENV \
 USER root
 
 RUN \
-    apk add --no-cache \
-        ca-certificates \
-        catatonit \
-        curl \
-        bash \
-        jq \
-        nano \
-        tzdata \
-    && curl -fsSL "https://github.com/kopia/kopia/releases/download/${VERSION}/kopia-${VERSION#*v}-linux-${TARGETARCH}.tar.gz" \
+    curl -fsSL "https://github.com/kopia/kopia/releases/download/${VERSION}/kopia-${VERSION#*v}-linux-${TARGETARCH}.tar.gz" \
         | tar xzf - -C /usr/local/bin --strip-components 1 \
     && rm -rf /tmp/*
 

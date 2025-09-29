@@ -23,15 +23,8 @@ WORKDIR /app
 RUN \
     apk add --no-cache \
         7zip \
-        bash \
-        ca-certificates \
-        catatonit \
         coreutils \
-        curl \
-        jq \
         lscpu \
-        nano \
-        tzdata \
     && \
     curl -fsSL -o /tmp/nzbget.run \
         "https://github.com/nzbgetcom/nzbget/releases/download/v${VERSION}/nzbget-${VERSION}-bin-linux.run" \

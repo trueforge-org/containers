@@ -10,16 +10,6 @@ ENV DEBIAN_FRONTEND="noninteractive" \
 USER root
 
 RUN \
-    apt-get update \
-    && \
-    apt-get install -y --no-install-recommends --no-install-suggests \
-        bash \
-        ca-certificates \
-        catatonit \
-        curl \
-        jq \
-        nano \
-        tzdata \
     && \
     curl -fsSL -o /tmp/emby.deb \
         "https://github.com/MediaBrowser/Emby.Releases/releases/download/${VERSION}/emby-server-deb_${VERSION}_${TARGETARCH}.deb" \

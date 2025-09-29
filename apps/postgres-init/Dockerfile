@@ -5,9 +5,6 @@ ARG VERSION
 USER root
 RUN \
     apk add --no-cache \
-        bash \
-        ca-certificates \
-        catatonit \
         postgresql17-client=="${VERSION}" \
     && rm -rf /tmp/*
 COPY . /

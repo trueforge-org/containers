@@ -12,17 +12,7 @@ USER root
 
 RUN \
     apk add --no-cache \
-        bash \
-        ca-certificates \
-        catatonit \
         coreutils \
-        curl \
-        icu-data-full \
-        icu-libs \
-        jq \
-        libintl \
-        nano \
-        tzdata \
     && mkdir -p /app/bin \
     && curl -fsSL "https://github.com/Jackett/Jackett/releases/download/${VERSION}/Jackett.Binaries.LinuxMusl${TARGETARCH}.tar.gz" \
         | tar xzf - -C /app/bin --strip-components 1 \

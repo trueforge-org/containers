@@ -13,17 +13,8 @@ WORKDIR /app
 
 RUN \
     apk add --no-cache \
-        bash \
-        ca-certificates \
-        catatonit \
         coreutils \
-        curl \
-        icu-libs \
-        jq \
-        libintl \
-        nano \
         sqlite-libs \
-        tzdata \
     && mkdir -p /app/bin \
     && curl -fsSL "https://radarr.servarr.com/v1/update/${RADARR__UPDATE__BRANCH}/updatefile?version=${VERSION}&os=linuxmusl&runtime=netcore&arch=${TARGETARCH/amd64/x64}" \
         | tar xzf - -C /app/bin --strip-components=1 \

@@ -7,15 +7,6 @@ ARG VERSION
 USER root
 
 RUN \
-    apk add --no-cache \
-        ca-certificates \
-        catatonit \
-        curl \
-        bash \
-        jq \
-        nano \
-        tzdata \
-    && \
     mkdir -p /app/bin \
     && curl -fsSL "https://github.com/autobrr/tqm/releases/download/${VERSION}/tqm_${VERSION#*v}_linux_${TARGETARCH}.tar.gz" \
         | tar xzf - -C /app/bin \

@@ -27,9 +27,6 @@ WORKDIR /app
 RUN set -eux; \
     apk update; \
     apk add --no-cache \
-        ca-certificates \
-        catatonit \
-        curl \
         git \
         iputils \
         cairo \

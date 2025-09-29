@@ -27,20 +27,13 @@ WORKDIR /app
 
 RUN \
     apk add --no-cache \
-        bash \
-        ca-certificates \
-        catatonit \
         coreutils \
-        curl \
         ffmpeg \
-        jq \
         libxml2 \
         libpq \
         libxslt \
         mediainfo \
-        nano \
         trurl \
-        tzdata \
         unzip \
     && \
     apk add --no-cache --virtual .build-deps \

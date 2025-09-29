@@ -24,14 +24,7 @@ WORKDIR /app
 RUN \
     apk add --no-cache \
         7zip \
-        bash \
-        ca-certificates \
-        catatonit \
         coreutils \
-        curl \
-        jq \
-        nano \
-        tzdata \
     && \
     apk add --no-cache --repository="https://dl-cdn.alpinelinux.org/alpine/edge/testing/" \
         par2cmdline-turbo \

@@ -13,17 +13,8 @@ WORKDIR /app
 
 RUN \
     apk add --no-cache \
-        bash \
-        ca-certificates \
-        catatonit \
         coreutils \
-        curl \
-        icu-libs \
-        jq \
-        libintl \
-        nano \
         sqlite-libs \
-        tzdata \
     && mkdir -p /app/bin \
     && curl -fsSL "https://services.sonarr.tv/v1/update/${SONARR__UPDATE__BRANCH}/download?version=${VERSION}&os=linuxmusl&runtime=netcore&arch=${TARGETARCH/amd64/x64}" \
         | tar xzf - -C /app/bin --strip-components=1 \

@@ -14,14 +14,11 @@ USER root
 
 RUN \
     apk add --no-cache \
-        catatonit \
-        curl \
         imagemagick  \
         imagemagick-heic \
         imagemagick-jpeg \
         libjpeg-turbo \
         powershell \
-        tzdata \
     && \
     pwsh -Command "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted; \
         Install-Module -Name FanartTvAPI -Scope AllUsers -Force" \

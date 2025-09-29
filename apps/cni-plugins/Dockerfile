@@ -13,7 +13,6 @@ RUN \
         rsync \
     && \
     apk add --no-cache --virtual=.build-deps \
-        curl \
         tar \
     && mkdir -p /plugins \
     && curl -fsSL "https://github.com/containernetworking/plugins/releases/download/${VERSION}/cni-plugins-linux-${TARGETARCH}-${VERSION}.tgz" \

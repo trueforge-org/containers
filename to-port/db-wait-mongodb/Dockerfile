@@ -1,5 +1,5 @@
 # hadolint ignore=DL3007
-FROM ubuntu:latest@sha256:353675e2a41babd526e2b837d7ec780c2a05bca0164f7ea5dbbd433d21d166fc
+FROM ghcr.io/trueforge-org/ubuntu:24.0
 
 ARG TARGETPLATFORM
 ARG VERSION
@@ -27,20 +27,14 @@ RUN \
     apt-get -qq update \
     && \
     apt-get install -y \
-        bash \
-        ca-certificates \
-        curl \
         dnsutils \
         iputils-ping \
         jo \
-        jq \
         gnupg \
         locales \
         moreutils \
         pv \
         tini \
-    nano \
-        tzdata \
         vim-tiny \
         unrar \
         unzip \

@@ -25,7 +25,6 @@ RUN \
         build-base \
         curl-dev \
     && apk add --no-cache \
-        catatonit \
         ffmpeg \
         libatomic \
         libcurl \

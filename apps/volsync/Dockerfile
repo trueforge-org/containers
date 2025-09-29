@@ -12,11 +12,7 @@ USER root
 RUN \
     apk add --no-cache \
         acl \
-        bash \
-        ca-certificates \
-        curl \
         coreutils \
-        tzdata \
     && \
     curl -fsSL "https://github.com/backube/volsync/archive/refs/tags/${VERSION}.tar.gz" \
         | tar xzf - -C /tmp --strip-components=1 \

@@ -25,15 +25,9 @@ WORKDIR /app
 
 RUN \
     apk add --no-cache \
-        bash \
-        ca-certificates \
-        catatonit \
         coreutils \
-        curl \
         jo \
-        jq \
         trurl \
-        tzdata \
     && mkdir -p /app/bin \
     && \
     curl -fsSL "https://github.com/adnanh/webhook/releases/download/${VERSION}/webhook-linux-${TARGETARCH}.tar.gz" \

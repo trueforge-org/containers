@@ -22,14 +22,7 @@ WORKDIR /app
 
 RUN \
     apk add --no-cache \
-        bash \
-        ca-certificates \
-        catatonit \
         coreutils \
-        curl \
-        jq \
-        nano \
-        tzdata \
     && \
     apk add --no-cache --virtual .build-deps \
         build-base \

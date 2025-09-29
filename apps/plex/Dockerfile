@@ -20,14 +20,7 @@ RUN \
     apt-get update \
     && \
     apt-get install -y --no-install-recommends --no-install-suggests \
-        bash \
-        ca-certificates \
-        catatonit \
         coreutils \
-        curl \
-        jq \
-        nano \
-        tzdata \
         uuid-runtime \
         xmlstarlet \
     && \
