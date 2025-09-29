@@ -8,6 +8,8 @@ ARG VERSION
 
 ENV XDG_CONFIG_HOME=/config
 
+USER root
+
 RUN \
     apk add --no-cache \
         bash \
