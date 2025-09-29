@@ -23,5 +23,5 @@ COPY --chmod=775 ./containers/apps/nextcloud-push-notify/scripts/entrypoint.sh /
 
 ENTRYPOINT ["/entrypoint.sh"]
 
-ARG CONTAINER_NAME
-ARG CONTAINER_VER
+
+

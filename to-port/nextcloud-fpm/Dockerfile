@@ -90,6 +90,6 @@ RUN set -ex; \
 
 
 
-ARG CONTAINER_NAME
-ARG CONTAINER_VER
+
+
 

@@ -1,7 +1,0 @@
-FROM docker.io/codercom/code-server:4.104.2@sha256:6edc8e2d2849749c1a1a5eff8e76563b96db407e68899c143473a6004d0a6b5a
-
-
-
-ARG CONTAINER_NAME
-ARG CONTAINER_VER
-

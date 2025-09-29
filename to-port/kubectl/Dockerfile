@@ -1,4 +1,4 @@
-FROM oci.trueforge.org/truecharts/alpine:v3.18.4@sha256:cc37d84517c2d4420c67b618d87b6c88a367ec3afd6f5176ce4f7ae1fe4eeaf8
+FROM ghcr.io/trueforge-org/alpine:3.22.0
 
 ARG TARGETPLATFORM
 ARG VERSION
@@ -7,7 +7,7 @@ ARG VERSION
 USER root
 
 # hadolint ignore=DL3018,DL4006
-RUN apk update && apk add --no-cache curl git \
+RUN apk update && apk add --no-cache git \
     && curl -LO "https://dl.k8s.io/release/${VERSION}/bin/linux/amd64/kubectl" \
     && curl -LO "https://dl.k8s.io/release/${VERSION}/bin/linux/amd64/kubectl.sha256" \
     && echo "$(cat kubectl.sha256)  kubectl" | sha256sum -c \
@@ -21,8 +21,8 @@ RUN apk update && apk add --no-cache curl git \
 
 USER nobody:nogroup
 
-ARG CONTAINER_NAME
-ARG CONTAINER_VER
+
+
 
 
 
