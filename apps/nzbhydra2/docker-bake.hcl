@@ -9,6 +9,11 @@ variable "VERSION" {
   default = "v7.19.2"
 }
 
+variable "LICENSE" {
+  default = "MIT"
+}
+
+
 variable "SOURCE" {
   default = "https://github.com/theotherp/nzbhydra2"
 }
@@ -24,6 +29,7 @@ target "image" {
   }
   labels = {
     "org.opencontainers.image.source" = "${SOURCE}"
+    "org.opencontainers.image.licenses" = "${LICENSE}"
   }
 }
 

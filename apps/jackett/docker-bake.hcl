@@ -9,6 +9,11 @@ variable "VERSION" {
   default = "v0.23.74"
 }
 
+variable "LICENSE" {
+  default = "MIT"
+}
+
+
 variable "SOURCE" {
   default = "https://github.com/Jackett/Jackett"
 }
@@ -24,6 +29,7 @@ target "image" {
   }
   labels = {
     "org.opencontainers.image.source" = "${SOURCE}"
+    "org.opencontainers.image.licenses" = "${LICENSE}"
   }
 }
 

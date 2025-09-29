@@ -9,6 +9,11 @@ variable "VERSION" {
   default = "1.37.0"
 }
 
+variable "LICENSE" {
+  default = "MIT"
+}
+
+
 variable "SOURCE" {
   default = "https://www.busybox.net"
 }
@@ -24,6 +29,7 @@ target "image" {
   }
   labels = {
     "org.opencontainers.image.source" = "${SOURCE}"
+    "org.opencontainers.image.licenses" = "${LICENSE}"
   }
 }
 

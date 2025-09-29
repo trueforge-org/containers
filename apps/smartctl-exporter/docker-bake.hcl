@@ -9,6 +9,11 @@ variable "VERSION" {
   default = "0.14.0"
 }
 
+variable "LICENSE" {
+  default = "MIT"
+}
+
+
 variable "SOURCE" {
   default = "https://github.com/prometheus-community/smartctl_exporter"
 }
@@ -24,6 +29,7 @@ target "image" {
   }
   labels = {
     "org.opencontainers.image.source" = "${SOURCE}"
+    "org.opencontainers.image.licenses" = "${LICENSE}"
   }
 }
 

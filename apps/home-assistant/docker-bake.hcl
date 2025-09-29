@@ -9,6 +9,11 @@ variable "VERSION" {
   default = "2025.9.4"
 }
 
+variable "LICENSE" {
+  default = "MIT"
+}
+
+
 variable "SOURCE" {
   default = "https://github.com/home-assistant/core"
 }
@@ -24,6 +29,7 @@ target "image" {
   }
   labels = {
     "org.opencontainers.image.source" = "${SOURCE}"
+    "org.opencontainers.image.licenses" = "${LICENSE}"
   }
 }
 

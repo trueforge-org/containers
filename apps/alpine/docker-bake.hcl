@@ -9,6 +9,10 @@ variable "VERSION" {
   default = "3.22.1"
 }
 
+variable "LICENSE" {
+  default = "AGPL-3.0-or-later"
+}
+
 variable "SOURCE" {
   default = "https://hub.docker.com/_/alpine"
 }
@@ -24,6 +28,7 @@ target "image" {
   }
   labels = {
     "org.opencontainers.image.source" = "${SOURCE}"
+    "org.opencontainers.image.licenses" = "${LICENSE}"
   }
 }
 

@@ -5,6 +5,11 @@ variable "VERSION" {
   default = "1.9.37"
 }
 
+variable "LICENSE" {
+  default = "MIT"
+}
+
+
 variable "SOURCE" {
   default = "https://github.com/fscorrupt/Posterizarr"
 }
@@ -20,6 +25,7 @@ target "image" {
   }
   labels = {
     "org.opencontainers.image.source" = "${SOURCE}"
+    "org.opencontainers.image.licenses" = "${LICENSE}"
   }
 }
 

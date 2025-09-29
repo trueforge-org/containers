@@ -10,6 +10,11 @@ variable "VERSION" {
   default = "4.0.6-r4"
 }
 
+variable "LICENSE" {
+  default = "MIT"
+}
+
+
 variable "SOURCE" {
   default = "https://github.com/transmission/transmission"
 }
@@ -25,6 +30,7 @@ target "image" {
   }
   labels = {
     "org.opencontainers.image.source" = "${SOURCE}"
+    "org.opencontainers.image.licenses" = "${LICENSE}"
   }
 }
 
