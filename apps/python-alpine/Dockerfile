@@ -1,5 +1,7 @@
-FROM docker.io/library/python:${VERSION}
+# syntax=docker/dockerfile:1
+
 ARG VERSION
+FROM docker.io/library/python:${VERSION}
 
 ENV XDG_CONFIG_HOME=/config \
     UMASK=0002

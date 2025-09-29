@@ -1,3 +1,6 @@
+# syntax=docker/dockerfile:1
+
+ARG VERSION
 FROM docker.io/library/alpine:${VERSION}@sha256:4bcff63911fcb4448bd4fdacec207030997caf25e9bea4045fa6c8c44de311d1
 
 ENV XDG_CONFIG_HOME=/config \

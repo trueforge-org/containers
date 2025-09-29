@@ -1,9 +1,10 @@
 # syntax=docker/dockerfile:1
 
+ARG VERSION
 FROM docker.io/library/ubuntu:${VERSION}
 ARG TARGETARCH
 ARG VENDOR
-ARG VERSION
+
 
 ENV DEBIAN_FRONTEND="noninteractive" \
     NVIDIA_DRIVER_CAPABILITIES="compute,video,utility" \
