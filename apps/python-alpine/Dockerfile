@@ -1,54 +1,54 @@
-# syntax=docker/dockerfile:1
+# Stage 1: Upstream Python 3.13 Alpine image with optimized binaries
+FROM python:3.13-alpine AS python-build
 
-ARG VERSION
-FROM docker.io/library/python:${VERSION}
+# Stage 2: Your custom Alpine base
+FROM ghcr.io/trueforge-org/alpine/3.22.1
 
-ENV XDG_CONFIG_HOME=/config \
-    UMASK=0002
-
-ENV \
-    CRYPTOGRAPHY_DONT_BUILD_RUST=1 \
-    PIP_BREAK_SYSTEM_PACKAGES=1 \
-    PIP_DISABLE_PIP_VERSION_CHECK=1 \
-    PIP_NO_CACHE_DIR=1 \
-    PIP_ROOT_USER_ACTION=ignore \
-    PYTHONDONTWRITEBYTECODE=1 \
+ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    UV_NO_CACHE=true \
-    UV_SYSTEM_PYTHON=true \
-    UV_EXTRA_INDEX_URL="https://wheel-index.linuxserver.io/alpine-3.22/"
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_BREAK_SYSTEM_PACKAGES=1 \
+    PIP_ROOT_USER_ACTION=ignore \
+    PATH=/usr/local/bin:$PATH \
+    LANG=C.UTF-8
 
-WORKDIR /app
+USER root
 
-# Install required packages
-# hadolint ignore=DL3018
-RUN apk add --no-cache \
-        bash \
-        ca-certificates \
-        catatonit \
-        coreutils \
-        curl \
-        icu-data-full \
-        icu-libs \
-        jq \
-        libintl \
-        nano \
-        tzdata \
-        grep \
-    && update-ca-certificates \
-    && rm -rf /var/cache/apk/*
+# Install the Alpine Python package (minimal runtime deps)
+RUN apk add --no-cache python3 py3-pip \
+    ca-certificates tzdata \
+    libffi libnsl libtirpc bzip2 zlib xz sqlite-libs tk
 
-# Copy base-scripts files with correct ownership
-COPY --chown=nobody:nogroup . /
+# Replace binaries with upstream optimized Python
+COPY --from=python-build /usr/local/bin /usr/local/bin
+COPY --from=python-build /usr/local/lib /usr/local/lib
 
-# Switch to non-root user
+# Optional: recreate standard symlinks
+RUN set -eux; \
+    for src in idle3 pip3 pydoc3 python3 python3-config; do \
+        dst="$(echo "$src" | tr -d 3)"; \
+        [ -s "/usr/local/bin/$src" ]; \
+        [ ! -e "/usr/local/bin/$dst" ]; \
+        ln -svT "$src" "/usr/local/bin/$dst"; \
+    done
+
+
+
 USER nobody:nogroup
 
-WORKDIR /config
-VOLUME ["/config"]
+# Verify and delete unneeded parts of python
+RUN set -eux; \
+    # Basic Python runtime checks
+    python3 --version; \
+    pip3 --version; \
+    python3 -c "import sys, os, ssl, sqlite3, tk, zlib, bz2; print('Python runtime OK')"; \
+    \
+    # Optional: run Python self-tests (slower)
+    cd /usr/local/lib/python3.13; \
+    python3 -m test -w -v; \
+    \
+    # Remove tests and headers to reduce image size
+    rm -rf /usr/local/lib/python3.13/test /usr/local/include
 
-# Start the container with catatonit as init
-ENTRYPOINT ["/usr/bin/catatonit", "--", "/entrypoint.sh"]
-
-
-
+CMD ["python3"]
