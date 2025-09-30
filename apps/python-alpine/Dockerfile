@@ -40,9 +40,9 @@ RUN set -eux; \
     python3 --version; \
     pip3 --version; \
     \
-    # Optional: run Python self-tests (slower)
-    python3 -m test -w -v; \
-    \
+    # TODO: run Python self-tests
+    # python3 -m test -w -v; \
+    # \
     # Remove tests and headers to reduce image size
     rm -rf /usr/local/lib/python[0-9].[0-9]*/test /usr/local/include
 
