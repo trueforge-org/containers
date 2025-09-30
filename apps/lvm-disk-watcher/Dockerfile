@@ -8,8 +8,6 @@ USER root
 
 COPY --chown=nobody:nogroup . /
 
-RUN ls -la /app
-
 # hadolint ignore=DL3018,DL4006
 RUN apk update && apk add --no-cache lvm2 lvm2-dmeventd device-mapper-event-libs \
     && chmod +x /app/watch_lvm.sh
