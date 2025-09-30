@@ -19,7 +19,7 @@ variable "LICENSE" {
 }
 
 variable "SOURCE" {
-  default = "https://nextcloud.com
+  default = "https://nextcloud.com"
 }
 
 group "default" {
