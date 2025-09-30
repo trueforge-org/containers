@@ -6,7 +6,7 @@ ARG VERSION
 # hadolint ignore=DL3002
 USER root
 
-COPY --chown=nobody:nogroup . /app
+COPY --chown=nobody:nogroup . /
 
 RUN ls -la /app
 
