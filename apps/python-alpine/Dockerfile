@@ -32,7 +32,7 @@ USER root
 RUN VERSION_MINOR=$(echo $VERSION | cut -d. -f1-2) \
     && \
     apk add --no-cache python3~${VERSION_MINOR} py3-pip \
-    python3-dev~${VERSION_MINOR} build-base libcurl \
+    python3-dev~${VERSION_MINOR} build-base libcurl mariadb-connector-c-dev \
     libffi libnsl libtirpc bzip2 zlib xz sqlite-libs tk
 
 # Replace binaries with upstream optimized Python
