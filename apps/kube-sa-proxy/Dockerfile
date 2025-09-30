@@ -4,11 +4,11 @@ FROM golang:1.25.1-alpine@sha256:b6ed3fd0452c0e9bcdef5597f29cc1418f61672e9d3a2f5
 # Install necessary build dependencies
 RUN apk --no-cache add --update gcc musl-dev
 
+# Copy go mod and sum files
+COPY . /
+
 # Create the necessary directories
 RUN mkdir -p /build /output
-
-# Copy go mod and sum files
-COPY . /build
 
 # Set the working directory
 WORKDIR /build
