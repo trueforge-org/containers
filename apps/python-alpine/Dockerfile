@@ -48,8 +48,5 @@ RUN set -eux; \
     \
     # TODO: run Python self-tests
     # python3 -m test -w -v; \
-    # \
-    # Remove tests and headers to reduce image size
-    rm -rf /usr/local/lib/python[0-9].[0-9]*/test /usr/local/include
 
 CMD ["python3"]
