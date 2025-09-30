@@ -8,7 +8,7 @@ ARG ALPINE_VERSION_STRIPPED
 FROM python:${VERSION}-alpine${ALPINE_VERSION_STRIPPED} AS python-build
 
 # Stage 2: Your custom Alpine base
-FROM ghcr.io/trueforge-org/alpine:ALPINE_VERSION
+FROM ghcr.io/trueforge-org/alpine:${ALPINE_VERSION}
 
 # Set Python and runtime environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
