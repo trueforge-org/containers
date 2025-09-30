@@ -8,6 +8,7 @@ ENV HOME="/config"
 USER root
 WORKDIR /app
 
+
 RUN \
     apk add --no-cache --virtual=build-dependencies \
         build-base \
