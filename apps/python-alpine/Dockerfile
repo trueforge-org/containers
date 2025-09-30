@@ -1,9 +1,16 @@
-# Stage 1: Upstream Python 3.13 Alpine image with optimized binaries
-FROM python:3.13-alpine AS python-build
+# syntax=docker/dockerfile:1
+
+ARG VERSION
+ARG ALPINE_VERSION
+ARG ALPINE_VERSION_STRIPPED
+
+# Stage 1: Upstream Python Alpine image with optimized binaries
+FROM python:${VERSION}-alpine${ALPINE_VERSION_STRIPPED} AS python-build
 
 # Stage 2: Your custom Alpine base
-FROM ghcr.io/trueforge-org/alpine/3.22.1
+FROM ghcr.io/trueforge-org/alpine:ALPINE_VERSION
 
+# Set Python and runtime environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1 \
@@ -15,8 +22,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 USER root
 
-# Install the Alpine Python package (minimal runtime deps)
-RUN apk add --no-cache python3 py3-pip \
+# Install the Alpine Python package with the same version as upstream
+RUN apk add --no-cache python3=${VERSION} py3-pip \
     ca-certificates tzdata \
     libffi libnsl libtirpc bzip2 zlib xz sqlite-libs tk
 
@@ -33,8 +40,6 @@ RUN set -eux; \
         ln -svT "$src" "/usr/local/bin/$dst"; \
     done
 
-
-
 USER nobody:nogroup
 
 # Verify and delete unneeded parts of python
@@ -45,10 +50,10 @@ RUN set -eux; \
     python3 -c "import sys, os, ssl, sqlite3, tk, zlib, bz2; print('Python runtime OK')"; \
     \
     # Optional: run Python self-tests (slower)
-    cd /usr/local/lib/python3.13; \
+    cd /usr/local/lib/python${VERSION}; \
     python3 -m test -w -v; \
     \
     # Remove tests and headers to reduce image size
-    rm -rf /usr/local/lib/python3.13/test /usr/local/include
+    rm -rf /usr/local/lib/python${VERSION}/test /usr/local/include
 
 CMD ["python3"]

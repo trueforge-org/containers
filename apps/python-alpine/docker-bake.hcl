@@ -6,7 +6,16 @@ variable "APP" {
 
 variable "VERSION" {
   // renovate: datasource=docker depName=docker.io/library/python
-  default = "3.13-alpine3.22"
+  default = "3.13.7"
+}
+
+variable "ALPINE_VERSION" {
+  // renovate: datasource=docker depName=ghcri.io/trueforge-org/alpine
+  default = "3.22.1"
+}
+
+variable "ALPINE_VERSION_STRIPPED" {
+  default = "${regex("^\\d+\\.\\d+", var.ALPINE_VERSION)}"
 }
 
 variable "LICENSE" {
