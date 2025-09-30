@@ -1,6 +1,8 @@
 # Stage 1 - Build the Go application
 FROM golang:1.25.1-alpine@sha256:b6ed3fd0452c0e9bcdef5597f29cc1418f61672e9d3a2f55bf02e7222c014abd AS builder
 
+USER root
+
 # Install necessary build dependencies
 RUN apk --no-cache add --update gcc musl-dev
 
@@ -22,9 +24,6 @@ RUN go build -ldflags "-w -s" -o /output/my-proxy-service .
 # Stage 2 - Create the final image
 FROM ghcr.io/trueforg-org/alpine:3.22.1 AS runner
 
-# Install necessary runtime dependencies
-RUN apk --no-cache add ca-certificates
-
 # Set the working directory
 WORKDIR /app
 
@@ -38,4 +37,4 @@ ENV PORT=3000
 EXPOSE $PORT
 
 # Set the default command to run the binary
-CMD sh -c "./my-proxy-service"
+CMD ["./my-proxy-service"]
