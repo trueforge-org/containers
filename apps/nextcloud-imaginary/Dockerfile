@@ -2,6 +2,7 @@
 FROM public.ecr.aws/docker/library/golang:1.21.5-alpine3.17@sha256:92cb87af996ec6befc85f0aec27e12ead2fab396695fa8a7abff79e021e58195 as go
 
 ARG IMAGINARY_COMMMIT=b632dae8cc321452c3f85bcae79c580b1ae1ed84
+
 # hadolint ignore=DL3018
 RUN set -ex; \
     apk add --no-cache \
@@ -14,6 +15,9 @@ RUN set -ex; \
     go install github.com/h2non/imaginary@${IMAGINARY_COMMMIT}
 
 FROM ghcr.io/trueforge-org/alpine:3.22.1
+
+USER root
+
 # hadolint ignore=DL3018
 RUN set -ex; \
     apk add --no-cache \
