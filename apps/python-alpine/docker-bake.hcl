@@ -15,7 +15,8 @@ variable "ALPINE_VERSION" {
 }
 
 variable "ALPINE_VERSION_STRIPPED" {
-  default = "${regex("^\\d+\\.\\d+", var.ALPINE_VERSION)}"
+  # strip patch version (3.22.1 → 3.22) using regex
+  default = "${regex(\"^\\d+\\.\\d+\", ALPINE_VERSION)}"
 }
 
 variable "LICENSE" {
