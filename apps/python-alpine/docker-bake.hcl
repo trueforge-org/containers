@@ -5,8 +5,8 @@ variable "APP" {
 }
 
 variable "VERSION" {
-  // renovate: datasource=docker depName=docker.io/library/python
-  default = "3.13.7"
+  // renovate: datasource=repology depName=alpine_3_22/python3
+  default = "3.12.11"
 }
 
 variable "ALPINE_VERSION" {
