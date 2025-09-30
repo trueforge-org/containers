@@ -1,54 +1,49 @@
 # syntax=docker/dockerfile:1
 
 ARG VERSION
-FROM docker.io/library/python:${VERSION}
+ARG ALPINE_VERSION
+ARG ALPINE_VERSION_STRIPPED
+FROM python:${VERSION}-alpine${ALPINE_VERSION_STRIPPED} AS python-build
 
-ENV XDG_CONFIG_HOME=/config \
-    UMASK=0002
+ARG ALPINE_VERSION
+FROM ghcr.io/trueforge-org/alpine:${ALPINE_VERSION}
 
-ENV \
-    CRYPTOGRAPHY_DONT_BUILD_RUST=1 \
-    PIP_BREAK_SYSTEM_PACKAGES=1 \
-    PIP_DISABLE_PIP_VERSION_CHECK=1 \
-    PIP_NO_CACHE_DIR=1 \
-    PIP_ROOT_USER_ACTION=ignore \
-    PYTHONDONTWRITEBYTECODE=1 \
+ARG VERSION
+
+# Set Python and runtime environment variables
+ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    UV_NO_CACHE=true \
-    UV_SYSTEM_PYTHON=true \
-    UV_EXTRA_INDEX_URL="https://wheel-index.linuxserver.io/alpine-3.22/"
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_BREAK_SYSTEM_PACKAGES=1 \
+    PIP_ROOT_USER_ACTION=ignore \
+    PATH=/usr/local/bin:$PATH \
+    LANG=C.UTF-8
 
-WORKDIR /app
+USER root
 
-# Install required packages
-# hadolint ignore=DL3018
-RUN apk add --no-cache \
-        bash \
-        ca-certificates \
-        catatonit \
-        coreutils \
-        curl \
-        icu-data-full \
-        icu-libs \
-        jq \
-        libintl \
-        nano \
-        tzdata \
-        grep \
-    && update-ca-certificates \
-    && rm -rf /var/cache/apk/*
+# Install the Alpine Python package with the same version as upstream
+RUN VERSION_MINOR=$(echo $VERSION | cut -d. -f1-2) \
+    && \
+    apk add --no-cache python3~${VERSION_MINOR} py3-pip \
+    libffi libnsl libtirpc bzip2 zlib xz sqlite-libs tk
 
-# Copy base-scripts files with correct ownership
-COPY --chown=nobody:nogroup . /
+# Replace binaries with upstream optimized Python
+COPY --from=python-build /usr/local/bin /usr/local/bin
+COPY --from=python-build /usr/local/lib /usr/local/lib
 
-# Switch to non-root user
 USER nobody:nogroup
 
-WORKDIR /config
-VOLUME ["/config"]
+# Verify and delete unneeded parts of python
+RUN set -eux; \
+    # Basic Python runtime checks
+    python3 --version; \
+    pip3 --version; \
+    \
+    # TODO: run Python self-tests
+    # python3 -m test -w -v; \
+    # \
+    # Remove tests and headers to reduce image size
+    rm -rf /usr/local/lib/python[0-9].[0-9]*/test /usr/local/include
 
-# Start the container with catatonit as init
-ENTRYPOINT ["/usr/bin/catatonit", "--", "/entrypoint.sh"]
-
-
-
+CMD ["python3"]
