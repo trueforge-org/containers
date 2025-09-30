@@ -1,5 +1,7 @@
 # https://github.com/nextcloud/all-in-one/tree/main/Containers/imaginary
 FROM public.ecr.aws/docker/library/golang:1.21.5-alpine3.17@sha256:92cb87af996ec6befc85f0aec27e12ead2fab396695fa8a7abff79e021e58195 as go
+
+ARG IMAGINARY_COMMMIT = b632dae8cc321452c3f85bcae79c580b1ae1ed84
 # hadolint ignore=DL3018
 RUN set -ex; \
     apk add --no-cache \
@@ -9,7 +11,7 @@ RUN set -ex; \
         build-base \
         vips-magick \
         vips-poppler; \
-    go install github.com/h2non/imaginary@b632dae8cc321452c3f85bcae79c580b1ae1ed84
+    go install github.com/h2non/imaginary@${IMAGINARY_COMMMIT}
 
 FROM ghcr.io/trueforge-org/alpine:3.22.0
 # hadolint ignore=DL3018
@@ -29,4 +31,4 @@ USER nobody
 # https://github.com/h2non/imaginary#memory-issues
 ENV MALLOC_ARENA_MAX=2
 
-ENTRYPOINT ["imaginary", "-p", "${PORT:-9000}"]
+CMD ["imaginary", "-p", "${PORT:-9000}"]

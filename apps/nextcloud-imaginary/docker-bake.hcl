@@ -1,21 +1,25 @@
 target "docker-metadata-action" {}
 
 variable "APP" {
-  default = "kubectl"
+  default = "Nextcloud-imaginary"
 }
 
 variable "VERSION" {
-  // renovate: datasource=github-releases depName=Jackett/Jackett
-  default = "v1.31.1"
+  default = "20230401"
 }
+
+variable "IMAGINARY_COMMMIT" {
+  // renovate: datasource=git-refs depName=https://github.com/h2non/imaginary
+  default = "b632dae8cc321452c3f85bcae79c580b1ae1ed84"
+}
+
 
 variable "LICENSE" {
   default = "AGPL-3.0-or-later"
 }
 
-
 variable "SOURCE" {
-  default = "https://github.com/Jackett/Jackett"
+  default = "https://nextcloud.com
 }
 
 group "default" {

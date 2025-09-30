@@ -1,4 +1,5 @@
-FROM public.ecr.aws/docker/library/nextcloud:31.0.9-fpm@sha256:e2d5ea25d0aa53a3bb22e7fa537f40f8246e1d9ce8cd825891a9a8ada24188b0
+ARG VERSION
+FROM public.ecr.aws/docker/library/nextcloud:${VERSION}-fpm@sha256:e2d5ea25d0aa53a3bb22e7fa537f40f8246e1d9ce8cd825891a9a8ada24188b0
 
 # Adds SURY PHP repository (This is a workaround because IMAP php extension is no longer available in Debian Trixie)
 # https://github.com/nextcloud/docker/issues/2456
@@ -73,16 +74,16 @@ RUN set -ex; \
     rm -rf /var/lib/apt/lists/*
 
 # Copy occ script to /usr/bin/occ
-COPY --chmod=755 ./containers/apps/nextcloud-fpm/scripts/occ /usr/bin/occ
+COPY --chmod=755 ./scripts/occ /usr/bin/occ
 
 # Copy post-install script to a temp location so we can append it to the entrypoint.sh
-COPY --chmod=755 ./containers/apps/nextcloud-fpm/scripts/post-install.sh /tmp/post-install.sh
+COPY --chmod=755 ./scripts/post-install.sh /tmp/post-install.sh
 
 # Copy the healthcheck
-COPY --chmod=755 ./containers/apps/nextcloud-fpm/scripts/healthcheck.sh /healthcheck.sh
+COPY --chmod=755 ./scripts/healthcheck.sh /healthcheck.sh
 
 # Copy the configure-scripts that will be sourced by the post-install
-COPY --chmod=755 ./containers/apps/nextcloud-fpm/configure-scripts /configure-scripts
+COPY --chmod=755 ./configure-scripts /configure-scripts
 
 RUN set -ex; \
     sed -i 's/exec "$@"//g' /entrypoint.sh; \

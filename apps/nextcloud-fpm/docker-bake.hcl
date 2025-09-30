@@ -5,13 +5,14 @@ variable "APP" {
 }
 
 variable "VERSION" {
-  // renovate: datasource=github-releases depName=Jackett/Jackett
-  default = "v0.23.87"
+  // renovate: datasource=docker depName=public.ecr.aws/docker/library/nextcloud
+  default = "31.0.9"
 }
 
 variable "LICENSE" {
   default = "AGPL-3.0-or-later"
 }
+
 
 variable "SOURCE" {
   default = "https://github.com/Jackett/Jackett"

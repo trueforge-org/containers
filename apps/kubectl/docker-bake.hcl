@@ -1,17 +1,18 @@
 target "docker-metadata-action" {}
 
 variable "APP" {
-  default = "jackett"
+  default = "kubectl"
 }
 
 variable "VERSION" {
-  // renovate: datasource=github-releases depName=Jackett/Jackett
-  default = "v0.23.87"
+  // renovate: datasource=github-tags packageName=kubernetes/kubectl
+  default = "v1.31.1"
 }
 
 variable "LICENSE" {
   default = "AGPL-3.0-or-later"
 }
+
 
 variable "SOURCE" {
   default = "https://github.com/Jackett/Jackett"

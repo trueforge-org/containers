@@ -1,21 +1,20 @@
 target "docker-metadata-action" {}
 
 variable "APP" {
-  default = "jackett"
+  default = "nextcloud-notify-push"
 }
 
 variable "VERSION" {
-  // renovate: datasource=github-releases depName=Jackett/Jackett
-  default = "v0.23.87"
+  // renovate: datasource=github-releases depName=nextcloud/notify_push
+  default = "1.2.0"
 }
 
 variable "LICENSE" {
   default = "AGPL-3.0-or-later"
 }
 
-
 variable "SOURCE" {
-  default = "https://github.com/Jackett/Jackett"
+  default = "https://github.com/nextcloud/notify_push"
 }
 
 group "default" {

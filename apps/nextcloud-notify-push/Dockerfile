@@ -19,9 +19,4 @@ RUN set -ex; \
 
 USER nobody
 
-COPY --chmod=775 ./containers/apps/nextcloud-push-notify/scripts/entrypoint.sh /entrypoint.sh
-
-ENTRYPOINT ["/entrypoint.sh"]
-
-
-
+COPY --chmod=775 . /
