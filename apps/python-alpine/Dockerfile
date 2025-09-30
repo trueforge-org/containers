@@ -1,12 +1,14 @@
 # syntax=docker/dockerfile:1
 
 ARG VERSION
+ARG ALPINE_VERSION
 ARG ALPINE_VERSION_STRIPPED
-
 FROM python:${VERSION}-alpine${ALPINE_VERSION_STRIPPED} AS python-build
 
 ARG ALPINE_VERSION
 FROM ghcr.io/trueforge-org/alpine:${ALPINE_VERSION}
+
+ARG VERSION
 
 # Set Python and runtime environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
