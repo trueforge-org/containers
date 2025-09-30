@@ -5,3 +5,6 @@
 !defaults/
 !scripts/
 !entrypoint.sh
+!start.sh
+!/app
+!/configure-scripts
