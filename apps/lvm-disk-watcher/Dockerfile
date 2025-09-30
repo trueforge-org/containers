@@ -6,7 +6,9 @@ ARG VERSION
 # hadolint ignore=DL3002
 USER root
 
-COPY --chown=nobody:nogroup ./app /app
+COPY --chown=nobody:nogroup . /pp
+
+RUN ls -la /
 
 # hadolint ignore=DL3018,DL4006
 RUN apk update && apk add --no-cache lvm2 lvm2-dmeventd device-mapper-event-libs \
