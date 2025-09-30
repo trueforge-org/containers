@@ -18,6 +18,12 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PIP_BREAK_SYSTEM_PACKAGES=1 \
     PIP_ROOT_USER_ACTION=ignore \
     PATH=/usr/local/bin:$PATH \
+    CRYPTOGRAPHY_DONT_BUILD_RUST=1 \
+    PIP_PREFER_BINARY=1 \
+    UV_NO_CACHE=true \
+    UV_SYSTEM_PYTHON=true \
+    UV_EXTRA_INDEX_URL="https://wheel-index.linuxserver.io/alpine-3.22/ https://pypi.org/simple https://wheels.home-assistant.io/musllinux-index/" \
+    UV_INDEX_STRATEGY="unsafe-best-match" \
     LANG=C.UTF-8
 
 USER root

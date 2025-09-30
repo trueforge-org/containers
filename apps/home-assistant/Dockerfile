@@ -12,6 +12,7 @@ ENV \
     PIP_BREAK_SYSTEM_PACKAGES=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     PIP_NO_CACHE_DIR=1 \
+    PIP_PREFER_BINARY=1 \
     PIP_ROOT_USER_ACTION=ignore \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
@@ -19,7 +20,6 @@ ENV \
     UV_SYSTEM_PYTHON=true \
     UV_EXTRA_INDEX_URL="https://wheel-index.linuxserver.io/alpine-3.22/ https://pypi.org/simple https://wheels.home-assistant.io/musllinux-index/" \
     UV_INDEX_STRATEGY="unsafe-best-match"
-
 
 ENV HOME="/config" \
     PYTHONUSERBASE="/usr/local" \
@@ -76,12 +76,12 @@ RUN \
     && \
     HOME_ASSISTANT_BASE=$(curl -fsSL "https://raw.githubusercontent.com/home-assistant/core/${VERSION}/build.yaml" | grep "${ARCH}: " | cut -d ":" -f3) \
     && \
-    uv pip install --index-strategy unsafe-best-match --only-binary=:all: \
+    uv pip install --index-strategy unsafe-best-match --prefer-binary \
         --requirement "https://raw.githubusercontent.com/home-assistant/docker/${HOME_ASSISTANT_BASE}/requirements.txt" \
     && \
-    uv pip install --index-strategy unsafe-best-match --only-binary=:all: --requirement /tmp/requirements_all.txt \
+    uv pip install --index-strategy unsafe-best-match --prefer-binary --requirement /tmp/requirements_all.txt \
     && \
-    uv pip install --index-strategy unsafe-best-match --only-binary=:all: homeassistant=="${VERSION}" \
+    uv pip install --index-strategy unsafe-best-match --prefer-binary homeassistant=="${VERSION}" \
     && curl -fsSL -o /bin/go2rtc \
         "https://github.com/AlexxIT/go2rtc/releases/latest/download/go2rtc_linux_${TARGETARCH}" \
     && chmod +x /bin/go2rtc \
