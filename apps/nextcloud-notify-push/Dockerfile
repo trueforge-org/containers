@@ -4,6 +4,8 @@ SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 # hadolint ignore=DL3018
 RUN apk add --no-cache ca-certificates curl
 
+ARG VERSION
+
 ARG TARGETARCH
 ARG TARGETARCH=${TARGETARCH/arm64/aarch64}
 ARG TARGETARCH=${TARGETARCH/amd64/x86_64}
