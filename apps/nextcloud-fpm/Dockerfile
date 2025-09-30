@@ -1,6 +1,8 @@
 ARG VERSION
 FROM public.ecr.aws/docker/library/nextcloud:${VERSION}-fpm@sha256:e2d5ea25d0aa53a3bb22e7fa537f40f8246e1d9ce8cd825891a9a8ada24188b0
 
+ARG TARGETARCH
+
 # Adds SURY PHP repository (This is a workaround because IMAP php extension is no longer available in Debian Trixie)
 # https://github.com/nextcloud/docker/issues/2456
 # https://www.voodoo.business/blog/2025/08/11/trixie-php8-4-imap-missing/
@@ -38,8 +40,14 @@ RUN set -ex; \
         libfcgi-bin \
         heif-gdk-pixbuf \
         imagemagick-common \
-        intel-media-va-driver-non-free \
     ; \
+    # Skip non ARM64 packages
+    if [ "$TARGETARCH" != "arm64" ]; then \
+      apt-get install -y --no-install-recommends intel-media-va-driver-non-free; \
+    else \
+      echo "Skipping intel-media-va-driver-non-free on $TARGETARCH"; \
+    fi; \
+    # Optional package installation
     savedAptMark="$(apt-mark showmanual)"; \
     \
     apt-get update; \
