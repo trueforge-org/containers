@@ -1,7 +1,7 @@
 target "docker-metadata-action" {}
 
 variable "APP" {
-  default = "jackett"
+  default = "nextcloud-fpm"
 }
 
 variable "VERSION" {
@@ -15,7 +15,7 @@ variable "LICENSE" {
 
 
 variable "SOURCE" {
-  default = "https://github.com/Jackett/Jackett"
+  default = "https://nextcloud.com"
 }
 
 group "default" {
