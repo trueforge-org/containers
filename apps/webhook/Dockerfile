@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM ghcr.io/trueforge-org/python-alpine:3.13.0
+FROM ghcr.io/trueforge-org/python-alpine:3.12.11
 ARG TARGETARCH
 ARG VERSION
 

@@ -2,7 +2,7 @@
 
 ARG TARGETARCH
 ARG ARCH=${TARGETARCH/arm64/aarch64}
-FROM ghcr.io/home-assistant/${ARCH}-base-python:3.13-alpine3.22
+FROM ghcr.io/trueforge-org/python-alpine:3.12.11
 ARG TARGETARCH
 ARG ARCH=${TARGETARCH/arm64/aarch64}
 ARG VERSION
@@ -28,25 +28,18 @@ WORKDIR /app
 
 RUN \
     apk add --no-cache \
-        bash \
         binutils \
         bluez \
         bluez-deprecated \
         bluez-libs \
-        ca-certificates \
-        catatonit \
-        coreutils \
         cups-libs \
-        curl \
         eudev-libs \
         ffmpeg \
         git \
-        grep \
         hwdata-usb \
         imlib2 \
         iperf3 \
         iputils \
-        jq \
         libcap \
         libftdi1 \
         libgpiod \
@@ -57,7 +50,6 @@ RUN \
         libzbar \
         mailcap \
         mariadb-connector-c \
-        nano \
         net-tools \
         nmap \
         openssh-client \
@@ -67,7 +59,6 @@ RUN \
         pulseaudio-alsa \
         socat \
         tiff \
-        tzdata \
         unzip \
         xz \
     && \
