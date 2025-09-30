@@ -22,7 +22,7 @@ RUN go mod download
 RUN go build -ldflags "-w -s" -o /output/my-proxy-service .
 
 # Stage 2 - Create the final image
-FROM ghcr.io/trueforg-org/alpine:3.22.1 AS runner
+FROM ghcr.io/trueforge-org/alpine:3.22.1 AS runner
 
 # Set the working directory
 WORKDIR /app
