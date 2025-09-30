@@ -10,7 +10,7 @@ RUN apk --no-cache add --update gcc musl-dev
 COPY . /
 
 # Create the necessary directories
-RUN mkdir -p /build /output && cd /build
+RUN mkdir -p /build /output && cd /build && ls /build
 
 # Set the working directory
 WORKDIR /build
