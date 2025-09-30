@@ -16,10 +16,10 @@ RUN mkdir -p /build /output && cd /build && ls /build
 WORKDIR /build
 
 # Download dependencies
-RUN go mod download
+RUN cd /build && go mod download
 
 # Build the Go application
-RUN go build -ldflags "-w -s" -o /output/my-proxy-service .
+RUN cd /build && go build -ldflags "-w -s" -o /output/my-proxy-service .
 
 # Stage 2 - Create the final image
 FROM ghcr.io/trueforge-org/alpine:3.22.1 AS runner
