@@ -22,6 +22,6 @@ RUN \
         && cp /tmp/mover-restic/entry.sh /mover-restic/ \
         && chmod a+rx /mover-restic/*.sh \
     && rm -rf /tmp/*
-COPY --from=ghcr.io/rclone/rclone:1.69.2 /usr/local/bin/rclone /usr/local/bin/rclone
+COPY --from=ghcr.io/rclone/rclone:1.71.1 /usr/local/bin/rclone /usr/local/bin/rclone
 COPY --from=docker.io/restic/restic:0.18.0 /usr/bin/restic /usr/local/bin/restic
 COPY --from=builder /go/bin/volsync /manager
