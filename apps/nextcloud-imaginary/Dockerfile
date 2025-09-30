@@ -13,7 +13,7 @@ RUN set -ex; \
         vips-poppler; \
     go install github.com/h2non/imaginary@${IMAGINARY_COMMMIT}
 
-FROM ghcr.io/trueforge-org/alpine:3.22.0
+FROM ghcr.io/trueforge-org/alpine:3.22.1
 # hadolint ignore=DL3018
 RUN set -ex; \
     apk add --no-cache \

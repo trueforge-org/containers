@@ -1,4 +1,4 @@
-FROM ghcr.io/trueforge-org/alpine:3.22.0
+FROM ghcr.io/trueforge-org/alpine:3.22.1
 
 ARG TARGETPLATFORM
 ARG VERSION

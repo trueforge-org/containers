@@ -20,7 +20,7 @@ RUN go mod download
 RUN go build -ldflags "-w -s" -o /output/my-proxy-service .
 
 # Stage 2 - Create the final image
-FROM ghcr.io/trueforg-org/alpine:3.22.0 AS runner
+FROM ghcr.io/trueforg-org/alpine:3.22.1 AS runner
 
 # Install necessary runtime dependencies
 RUN apk --no-cache add ca-certificates
