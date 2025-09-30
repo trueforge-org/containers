@@ -23,8 +23,9 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 USER root
 
 # Install the Alpine Python package with the same version as upstream
-RUN apk add --no-cache python3=${VERSION} py3-pip \
-    ca-certificates tzdata \
+RUN VERSION_MINOR=$(echo $VERSION | cut -d. -f1-2) \
+    && \
+    apk add --no-cache python3~${VERSION_MINOR} py3-pip \
     libffi libnsl libtirpc bzip2 zlib xz sqlite-libs tk
 
 # Replace binaries with upstream optimized Python
@@ -50,6 +51,7 @@ RUN set -eux; \
     python3 -c "import sys, os, ssl, sqlite3, tk, zlib, bz2; print('Python runtime OK')"; \
     \
     # Optional: run Python self-tests (slower)
+    ls /usr/local/lib
     cd /usr/local/lib/python${VERSION}; \
     python3 -m test -w -v; \
     \
