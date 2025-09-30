@@ -7,20 +7,14 @@ RUN apk --no-cache add --update gcc musl-dev
 # Create the necessary directories
 RUN mkdir -p /build /output
 
+# Copy go mod and sum files
+COPY . /build
+
 # Set the working directory
 WORKDIR /build
 
-# Copy go mod and sum files
-COPY ./containers/apps/kube-sa-proxy/go.mod ./containers/apps/kube-sa-proxy/go.sum ./
-
 # Download dependencies
 RUN go mod download
-
-# Copy the rest of the Go application source code
-COPY ./containers/apps/kube-sa-proxy/cmd/main.go .
-COPY ./containers/apps/kube-sa-proxy/internal/config ./internal/config
-COPY ./containers/apps/kube-sa-proxy/internal/proxy ./internal/proxy
-COPY ./containers/apps/kube-sa-proxy/internal/utils ./internal/utils
 
 # Build the Go application
 RUN go build -ldflags "-w -s" -o /output/my-proxy-service .
