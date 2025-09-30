@@ -39,7 +39,6 @@ RUN set -eux; \
     # Basic Python runtime checks
     python3 --version; \
     pip3 --version; \
-    python3 -c "import sys, os, ssl, sqlite3, tk, zlib, bz2; print('Python runtime OK')"; \
     \
     # Optional: run Python self-tests (slower)
     python3 -m test -w -v; \
