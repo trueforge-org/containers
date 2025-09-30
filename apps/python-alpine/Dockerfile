@@ -51,7 +51,8 @@ RUN set -eux; \
     python3 -c "import sys, os, ssl, sqlite3, tk, zlib, bz2; print('Python runtime OK')"; \
     \
     # Optional: run Python self-tests (slower)
-    ls /usr/local/lib
+    ls /usr/local/lib \
+    && \
     cd /usr/local/lib/python${VERSION}; \
     python3 -m test -w -v; \
     \
