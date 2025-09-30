@@ -22,7 +22,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PIP_PREFER_BINARY=1 \
     UV_NO_CACHE=true \
     UV_SYSTEM_PYTHON=true \
-    UV_EXTRA_INDEX_URL="https://wheel-index.linuxserver.io/alpine-3.22/ https://pypi.org/simple https://wheels.home-assistant.io/musllinux-index/" \
+    UV_EXTRA_INDEX_URL="https://alpine-wheels.github.io/index https://pypi.org/simple https://wheel-index.linuxserver.io/alpine-3.22/  https://wheels.home-assistant.io/musllinux-index/" \
     UV_INDEX_STRATEGY="unsafe-best-match" \
     LANG=C.UTF-8
 
