@@ -1,7 +1,7 @@
 target "docker-metadata-action" {}
 
 variable "APP" {
-  default = "bfics"
+  default = "balfolk-ics"
 }
 
 variable "VERSION" {
