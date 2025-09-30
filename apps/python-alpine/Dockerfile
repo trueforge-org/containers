@@ -44,8 +44,7 @@ USER nobody:nogroup
 RUN set -eux; \
     # Basic Python runtime checks
     python3 --version; \
-    pip3 --version; \
-    \
+    pip3 --version;
     # TODO: run Python self-tests
     # python3 -m test -w -v; \
 
