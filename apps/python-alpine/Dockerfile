@@ -3,11 +3,9 @@
 ARG VERSION
 ARG ALPINE_VERSION_STRIPPED
 
-# Stage 1: Upstream Python Alpine image with optimized binaries
 FROM python:${VERSION}-alpine${ALPINE_VERSION_STRIPPED} AS python-build
 
 ARG ALPINE_VERSION
-# Stage 2: Your custom Alpine base
 FROM ghcr.io/trueforge-org/alpine:${ALPINE_VERSION}
 
 # Set Python and runtime environment variables

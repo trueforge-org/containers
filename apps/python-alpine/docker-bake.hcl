@@ -35,6 +35,8 @@ target "image" {
   inherits = ["docker-metadata-action"]
   args = {
     VERSION = "${VERSION}"
+    ALPINE_VERSION = "${ALPINE_VERSION}"
+    ALPINE_VERSION_STRIPPED = "${ALPINE_VERSION_STRIPPED}"
   }
   labels = {
     "org.opencontainers.image.source" = "${SOURCE}"
