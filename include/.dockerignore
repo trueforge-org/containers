@@ -6,6 +6,6 @@
 !scripts/
 !entrypoint.sh
 !start.sh
-!/app
-!/configure-scripts
-!/build
+!app/
+!configure-scripts/
+!build/
