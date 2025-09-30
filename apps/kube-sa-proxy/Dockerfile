@@ -38,3 +38,4 @@ EXPOSE $PORT
 
 # Set the default command to run the binary
 CMD ["./my-proxy-service"]
+
