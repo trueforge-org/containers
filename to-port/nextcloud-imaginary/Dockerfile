@@ -11,7 +11,7 @@ RUN set -ex; \
         vips-poppler; \
     go install github.com/h2non/imaginary@b632dae8cc321452c3f85bcae79c580b1ae1ed84
 
-FROM ghcr.io/trueforge-org/alpine:3.22.0
+FROM ghcr.io/trueforge-org/alpine:3.22.1
 # hadolint ignore=DL3018
 RUN set -ex; \
     apk add --no-cache \
