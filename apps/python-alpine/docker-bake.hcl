@@ -15,8 +15,8 @@ variable "ALPINE_VERSION" {
 }
 
 variable "ALPINE_VERSION_STRIPPED" {
-  # strip patch version (3.22.1 → 3.22) using regex
-  default = "${regex(\"^\\d+\\.\\d+\", ALPINE_VERSION)}"
+  // renovate: datasource=docker depName=ghcri.io/trueforge-org/alpine
+  default = "3.22"
 }
 
 variable "LICENSE" {
