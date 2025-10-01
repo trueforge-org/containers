@@ -96,12 +96,14 @@ RUN set -eux; \
                 | sed 's|^.*/||;s|\.py$||' \
                 | sort); \
 
+    # Some tests are inherently broken on Alpine/MUSL and should be skipped when doing PGO
+    # TODO: manually appent when tests break again
     UNSAFE_TESTS="test__locale test_c_locale_coercion test_datetime test_date_locale2 test_os test_ctypes test_fcntl test_hashlib test_decimal test_math test_time test_re test_threaded_import test_threading_local test_threading_timeout test_signal test_socketserver test_ssl test_multiprocessing test_subprocess test_select test_telnetlib test_readline"; \
 
     SAFE_TESTS=$(echo "$ALL_TESTS" | grep -vxFf <(printf "%s\n" $UNSAFE_TESTS)); \
 
     PROFILE_TASK="-m test.regrtest --pgo $SAFE_TESTS"; \
-    echo "Selected Alpine-safe tests: $SAFE_TESTS"
+    echo "Selected Alpine-safe tests: $SAFE_TESTS"; \
 
 	make -j "$nproc" \
 		"EXTRA_CFLAGS=${EXTRA_CFLAGS:-}" \
