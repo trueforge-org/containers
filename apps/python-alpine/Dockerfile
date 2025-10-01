@@ -58,8 +58,6 @@ RUN set -eux; \
 	; \
 	\
 	wget -O python.tar.xz "https://www.python.org/ftp/python/${VERSION%%[a-z]*}/Python-${VERSION}.tar.xz"; \
-    wget -O SHA256SUMS "https://www.python.org/ftp/python/${VERSION%%[a-z]*}/Python-${VERSION}.tar.xz.sha256"; \
-    sha256sum -c SHA256SUMS; \
 	wget -O python.tar.xz.asc "https://www.python.org/ftp/python/${VERSION%%[a-z]*}/Python-${VERSION}.tar.xz.asc"; \
 	GNUPGHOME="$(mktemp -d)"; export GNUPGHOME; \
 	gpg --batch --keyserver hkps://keys.openpgp.org --recv-keys "$GPG_KEY"; \
