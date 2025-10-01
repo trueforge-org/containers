@@ -17,7 +17,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     UV_SYSTEM_PYTHON=true \
     UV_EXTRA_INDEX_URL="https://alpine-wheels.github.io/index https://pypi.org/simple https://wheel-index.linuxserver.io/alpine-3.22/  https://wheels.home-assistant.io/musllinux-index/" \
     UV_INDEX_STRATEGY="unsafe-best-match" \
-    PATH /usr/local/bin:$PATH \
+    PATH="/usr/local/bin:$PATH" \
     LANG=C.UTF-8
 
 ENV GPG_KEY 7169605F62C751356D054A26A821E680E5FA6305
