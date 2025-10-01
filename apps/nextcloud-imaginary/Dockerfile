@@ -1,5 +1,5 @@
 # https://github.com/nextcloud/all-in-one/tree/main/Containers/imaginary
-FROM public.ecr.aws/docker/library/golang:1.21.5-alpine3.17@sha256:92cb87af996ec6befc85f0aec27e12ead2fab396695fa8a7abff79e021e58195 as go
+FROM ghcr.io/trueforge-org/go-alpine:1.25.1 as go
 
 ARG IMAGINARY_COMMMIT=b632dae8cc321452c3f85bcae79c580b1ae1ed84
 
