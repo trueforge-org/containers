@@ -125,7 +125,7 @@ RUN set -eux; \
 		test_time \
 		test_traceback \
 		test_unicode \
-	' \
+	'; \
 
 	make -j "$nproc" \
 		"EXTRA_CFLAGS=${EXTRA_CFLAGS:-}" \
