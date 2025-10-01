@@ -55,7 +55,7 @@ RUN \
         build-base \
         libffi-dev \
     && \
-    pip install uv \
+    pip install uv psycopg2-binary \
     && \
     curl -fsSL "https://github.com/home-assistant/core/archive/${VERSION}.tar.gz" \
         | tar xzf - -C /tmp --strip-components=1 \
