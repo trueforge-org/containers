@@ -89,7 +89,176 @@ RUN set -eux; \
 	# https://gcc.gnu.org/onlinedocs/gcc-14.2.0/gcc/x86-Options.html#index-momit-leaf-frame-pointer-2
 	# https://gcc.gnu.org/onlinedocs/gcc-14.2.0/gcc/AArch64-Options.html#index-momit-leaf-frame-pointer
 	EXTRA_CFLAGS="${EXTRA_CFLAGS:-} -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer"; \
-    PROFILE_TASK=""
+# https://github.com/docker-library/python/issues/160#issuecomment-509426916
+		PROFILE_TASK='-m test.regrtest --pgo \
+          test_array \
+          test_base64 \
+          test_binascii \
+          test_binhex \
+          test_binop \
+          test_bytes \
+          test_class \
+          test_cmath \
+          test_codecs \
+          test_compile \
+          test_complex \
+          test_csv \
+          test_dict
+          test_float \
+          test_fstring \
+          test_io \
+          test_iter \
+          test_json \
+          test_long \
+          test_memoryview \
+          test_pickle \
+          test_set \
+          test_slice \
+          test_struct \
+          test_threading \
+          test_traceback \
+          test_unicode \
+		' \
+          ## More tests \
+          # test_abc \
+          # test_aifc \
+          # test_argparse \
+          # test_ast \
+          # test_asynchat \
+          # test_asyncio \
+          # test_asyncore \
+          # test_atexit \
+          # test_audioop \
+          # test_bdb \
+          # test_bisect \
+          # test_bz2 \
+          # test_calendar \
+          # test_cgi \
+          # test_chunk \
+          # test_cmd \
+          # test_code \
+          # test_codeop \
+          # test_collections \
+          # test_colorsys \
+          # test_compileall \
+          # test_concurrent \
+          # test_configparser \
+          # test_contextlib \
+          # test_copy \
+          # test_copyreg \
+          # test_curses \
+          # test_dataclasses \
+          # test_distutils \
+          # test_doctest \
+          # test_dummy_threading \
+          # test_email \
+          # test_enumerate \
+          # test_functools \
+          # test_gdbm \
+          # test_genericpath \
+          # test_gettext \
+          # test_glob \
+          # test_graphlib \
+          # test_gzip \
+          # test_heapq \
+          # test_hmac \
+          # test_html \
+          # test_http \
+          # test_idlelib \
+          # test_imp \
+          # test_io \
+          # test_ipaddress \
+          # test_itertools \
+          # test_keyword \
+          # test_linecache \
+          # test_logging \
+          # test_lzma \
+          # test_mailbox \
+          # test_mailcap \
+          # test_marshal \
+          # test_mimetypes \
+          # test_modulefinder \
+          # test_multibytecodec \
+          # test_multiprocessing \
+          # test_netrc \
+          # test_nntplib \
+          # test_numbers \
+          # test_operator \
+          # test_optparse \
+          # test_pathlib \
+          # test_pipes \
+          # test_pkgutil \
+          # test_platform \
+          # test_plistlib \
+          # test_poplib \
+          # test_posix \
+          # test_posixpath \
+          # test_pprint \
+          # test_profile \
+          # test_pstats \
+          # test_ptypes \
+          # test_queue \
+          # test_quopri \
+          # test_random \
+          # test_readline \
+          # test_reprlib \
+          # test_resource \
+          # test_rlcompleter \
+          # test_runpy \
+          # test_sched \
+          # test_sdbm \
+          # test_select \
+          # test_shelve \
+          # test_shlex \
+          # test_shutil \
+          # test_signal \
+          # test_site \
+          # test_smtpd \
+          # test_smtplib \
+          # test_socket \
+          # test_socketserver \
+          # test_spwd \
+          # test_sqlite3 \
+          # test_ssl \
+          # test_stat \
+          # test_statistics \
+          # test_string \
+          # test_stringprep \
+          # test_subprocess \
+          # test_sunau \
+          # test_surt \
+          # test_symtable \
+          # test_sys \
+          # test_sysconfig \
+          # test_tarfile \
+          # test_telnetlib \
+          # test_tempfile \
+          # test_textwrap \
+          # test_timeit \
+          # test_tkinter \
+          # test_token \
+          # test_tokenize \
+          # test_tracemalloc \
+          # test_turtle \
+          # test_turtledemo \
+          # test_types \
+          # test_typing \
+          # test_unittest \
+          # test_urllib \
+          # test_uuid \
+          # test_venv \
+          # test_warnings \
+          # test_wave \
+          # test_weakref \
+          # test_webbrowser \
+          # test_xdrlib \
+          # test_xml \
+          # test_xmlrpc \
+          # test_zipapp \
+          # test_zipfile \
+          # test_zipimport \
+          # test_zlib \
+
 	make -j "$nproc" \
 		"EXTRA_CFLAGS=${EXTRA_CFLAGS:-}" \
 		"LDFLAGS=${LDFLAGS:-}" \
