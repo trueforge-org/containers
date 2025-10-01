@@ -89,21 +89,61 @@ RUN set -eux; \
 	# https://gcc.gnu.org/onlinedocs/gcc-14.2.0/gcc/x86-Options.html#index-momit-leaf-frame-pointer-2
 	# https://gcc.gnu.org/onlinedocs/gcc-14.2.0/gcc/AArch64-Options.html#index-momit-leaf-frame-pointer
 	EXTRA_CFLAGS="${EXTRA_CFLAGS:-} -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer"; \
+
+    ## TODO: move to moving above all-tests fetching withy filtering after
     # https://github.com/docker-library/python/issues/160#issuecomment-509426916
     cd /usr/src/python; \
+
     # list all tests
-    ALL_TESTS=$(find Lib/test -maxdepth 1 -type f -name 'test_*.py' \
-                | sed 's|^.*/||;s|\.py$||' \
-                | sort); \
+    #ALL_TESTS=$(find Lib/test -maxdepth 1 -type f -name 'test_*.py' \
+    #            | sed 's|^.*/||;s|\.py$||' \
+    #            | sort); \
+
+    # ALL_TESTS=""
 
     # Some tests are inherently broken on Alpine/MUSL and should be skipped when doing PGO
-    # TODO: manually appent when tests break again
-    UNSAFE_TESTS="test__locale test_c_locale_coercion test_datetime test_date_locale2 test_os test_ctypes test_fcntl test_hashlib test_decimal test_math test_time test_re test_threaded_import test_threading_local test_threading_timeout test_signal test_socketserver test_ssl test_multiprocessing test_subprocess test_select test_telnetlib test_readline"; \
+    # UNSAFE_TESTS="test__locale test_c_locale_coercion test_datetime test_date_locale2 test_os test_ctypes test_fcntl test_hashlib test_decimal test_math test_time test_re test_threaded_import test_threading_local test_threading_timeout test_signal test_socketserver test_ssl test_multiprocessing test_subprocess test_select test_telnetlib test_readline"; \
 
-    SAFE_TESTS=$(echo "$ALL_TESTS" | grep -vxFf <(printf "%s\n" $UNSAFE_TESTS)); \
+    # SAFE_TESTS=$(echo "$ALL_TESTS" | grep -vxFf <(printf "%s\n" $UNSAFE_TESTS)); \
 
-    PROFILE_TASK="-m test.regrtest --pgo $SAFE_TESTS"; \
-    echo "Selected Alpine-safe tests: $SAFE_TESTS"; \
+
+    # PROFILE_TASK="-m test.regrtest --pgo $SAFE_TESTS"; \
+    # echo "Selected Alpine-safe tests: $SAFE_TESTS"; \
+
+	PROFILE_TASK='-m test.regrtest --pgo \
+		test_array \
+		test_base64 \
+		test_binascii \
+		test_binhex \
+		test_binop \
+		test_bytes \
+		test_c_locale_coercion \
+		test_class \
+		test_cmath \
+		test_codecs \
+		test_compile \
+		test_complex \
+		test_csv \
+		test_decimal \
+		test_dict \
+		test_float \
+		test_fstring \
+		test_hashlib \
+		test_io \
+		test_iter \
+		test_json \
+		test_long \
+		test_math \
+		test_memoryview \
+		test_pickle \
+		test_set \
+		test_slice \
+		test_struct \
+		test_threading \
+		test_time \
+		test_traceback \
+		test_unicode \
+	' \
 
 	make -j "$nproc" \
 		"EXTRA_CFLAGS=${EXTRA_CFLAGS:-}" \
