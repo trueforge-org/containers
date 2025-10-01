@@ -1,6 +1,5 @@
 # syntax=docker/dockerfile:1
 
-# NOTE: Alpine version is tied to the version in the Renovate annotation in docker-bake.hcl
 FROM ghcr.io/trueforge-org/python-alpine:3.13.7
 ARG TARGETARCH
 ARG MINIJINJA_ARCH=${TARGETARCH/arm64/aarch64}
@@ -17,6 +16,7 @@ USER root
 RUN \
     apk add --no-cache \
         7zip \
+        xz \
         transmission-daemon=="${VERSION}" \
         transmission-cli=="${VERSION}" \
         transmission-extra=="${VERSION}" \
