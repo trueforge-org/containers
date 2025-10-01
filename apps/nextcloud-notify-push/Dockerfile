@@ -1,5 +1,7 @@
 FROM ghcr.io/trueforge-org/alpine:3.22.1
 
+USER root
+
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 # hadolint ignore=DL3018
 RUN apk add --no-cache ca-certificates curl
