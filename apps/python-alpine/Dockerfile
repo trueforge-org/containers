@@ -93,26 +93,13 @@ RUN set -eux; \
     cd /usr/src/python; \
     # list all tests
     ALL_TESTS=$(find Lib/test -maxdepth 1 -type f -name 'test_*.py' \
-                  | sed 's|^.*/||;s|\.py$||' \
-                  | sort); \
-    \
-    # define unsafe tests
-    UNSAFE_TESTS="test__locale
-test_c_locale_coercion
-test_datetime
-test_date_locale2
-test_os
-test_ctypes
-test_fcntl
-test_hashlib
-test_decimal
-test_math
-test_time"; \
-    \
-    # filter out unsafe tests
-    SAFE_TESTS=$(echo "$ALL_TESTS" | grep -vxF -e $(echo "$UNSAFE_TESTS" | tr '\n' ' -e ')); \
-    \
-    # assign PROFILE_TASK
+                | sed 's|^.*/||;s|\.py$||' \
+                | sort); \
+
+    UNSAFE_TESTS="test__locale test_c_locale_coercion test_datetime test_date_locale2 test_os test_ctypes test_fcntl test_hashlib test_decimal test_math test_time"; \
+
+    SAFE_TESTS=$(echo "$ALL_TESTS" | grep -vxFf <(printf "%s\n" $UNSAFE_TESTS)); \
+
     PROFILE_TASK="-m test.regrtest --pgo $SAFE_TESTS"; \
     echo "Selected Alpine-safe tests: $SAFE_TESTS"
 
