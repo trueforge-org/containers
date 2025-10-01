@@ -23,6 +23,7 @@ RUN apk add --no-cache \
         nano \
         tzdata \
         grep \
+        tar \
     && update-ca-certificates \
     && rm -rf /var/cache/apk/*
 
