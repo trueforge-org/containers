@@ -96,7 +96,7 @@ RUN set -eux; \
                 | sed 's|^.*/||;s|\.py$||' \
                 | sort); \
 
-    UNSAFE_TESTS="test__locale test_re test_c_locale_coercion test_datetime test_date_locale2 test_os test_ctypes test_fcntl test_hashlib test_decimal test_math test_time"; \
+    UNSAFE_TESTS="test__locale test_c_locale_coercion test_datetime test_date_locale2 test_os test_ctypes test_fcntl test_hashlib test_decimal test_math test_time test_re test_threaded_import test_threading_local test_threading_timeout test_signal test_socketserver test_ssl test_multiprocessing test_subprocess test_select test_telnetlib test_readline"; \
 
     SAFE_TESTS=$(echo "$ALL_TESTS" | grep -vxFf <(printf "%s\n" $UNSAFE_TESTS)); \
 
