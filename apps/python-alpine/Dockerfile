@@ -43,6 +43,7 @@ RUN set -eux; \
 		libtirpc-dev \
 		linux-headers \
 		make \
+        musl-dev \
 		ncurses-dev \
 		openssl-dev \
 		pax-utils \
@@ -98,6 +99,7 @@ RUN set -eux; \
 	make -j "$nproc" \
 		"EXTRA_CFLAGS=${EXTRA_CFLAGS:-}" \
 		"LDFLAGS=${LDFLAGS:--Wl},-rpath='\$\$ORIGIN/../lib'" \
+        PROFILE_TASK="" \
 		python \
 	; \
 	make install; \
@@ -119,8 +121,6 @@ RUN set -eux; \
 		| xargs -rt apk add --no-network --virtual .python-rundeps \
 	; \
 	apk del --no-network .build-deps; \
-	\
-	export PYTHONDONTWRITEBYTECODE=1; \
 	python3 --version; \
 	pip3 --version
 
