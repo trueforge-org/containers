@@ -62,10 +62,10 @@ RUN \
     && \
     HOME_ASSISTANT_BASE=$(curl -fsSL "https://raw.githubusercontent.com/home-assistant/core/${VERSION}/build.yaml" | grep "${ARCH}: " | cut -d ":" -f3) \
     && \
-    uv pip install --index-strategy unsafe-best-match \
+    uv pip install --only-binary=:all: --index-strategy unsafe-best-match \
         --requirement "https://raw.githubusercontent.com/home-assistant/docker/${HOME_ASSISTANT_BASE}/requirements.txt" \
     && \
-    uv pip install --index-strategy unsafe-best-match --requirement /tmp/requirements_all.txt \
+    uv pip install --only-binary=:all: --index-strategy unsafe-best-match --requirement /tmp/requirements_all.txt \
     && \
     uv pip install --index-strategy unsafe-best-match homeassistant=="${VERSION}" \
     && curl -fsSL -o /bin/go2rtc \
