@@ -96,7 +96,6 @@ RUN set -eux; \
 		test_array \
 		test_base64 \
 		test_binascii \
-		test_binhex \
 		test_binop \
 		test_bytes \
 		test_class \
