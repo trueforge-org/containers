@@ -29,7 +29,6 @@ RUN set -eux; \
 	\
 	apk add --no-cache --virtual .build-deps \
 		gnupg \
-		tar \
 		xz \
 		bluez-dev \
 		bzip2-dev \

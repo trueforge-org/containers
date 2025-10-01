@@ -10,7 +10,7 @@ ARG TARGETARCH
 USER root
 
 RUN set -eux; \
-    apk add --no-cache gnupg tar wget; \
+    apk add --no-cache gnupg; \
     \
     url="https://dl.google.com/go/go${VERSION}.linux-${TARGETARCH}.tar.gz"; \
     wget -O go.tgz "$url"; \
@@ -29,7 +29,7 @@ RUN set -eux; \
     ln -svfT /target/usr/local/go /usr/local/go; \
     \
     go version; \
-    apk del gnupg wget
+    apk del gnupg
 
 FROM ghcr.io/trueforge-org/alpine:3.22.1
 
