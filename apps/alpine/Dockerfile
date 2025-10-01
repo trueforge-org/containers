@@ -24,6 +24,7 @@ RUN apk add --no-cache \
         tzdata \
         grep \
         tar \
+        wget \
     && update-ca-certificates \
     && rm -rf /var/cache/apk/*
 
