@@ -17,10 +17,7 @@ RUN set -eux; \
     wget -O go.tgz.asc "$url.asc"; \
     \
     GNUPGHOME="$(mktemp -d)"; export GNUPGHOME; \
-    gpg --batch --keyserver keyserver.ubuntu.com --recv-keys 6A0B0FAD; \
     gpg --batch --keyserver keyserver.ubuntu.com --recv-keys B9AE9905; \
-    gpg --batch --keyserver keyserver.ubuntu.com --recv-keys F63BD38B; \
-    gpg --batch --keyserver keyserver.ubuntu.com --recv-keys 3CB3BD13; \
     gpg --batch --verify go.tgz.asc go.tgz; \
     rm -rf "$GNUPGHOME" go.tgz.asc; \
     \
