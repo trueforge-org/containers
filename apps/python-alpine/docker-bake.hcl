@@ -6,17 +6,7 @@ variable "APP" {
 
 variable "VERSION" {
   // renovate: datasource=repology depName=alpine_3_22/python3
-  default = "3.12.11"
-}
-
-variable "ALPINE_VERSION" {
-  // renovate: datasource=docker depName=ghcri.io/trueforge-org/alpine
-  default = "3.22.1"
-}
-
-variable "ALPINE_VERSION_STRIPPED" {
-  // renovate: datasource=docker depName=ghcri.io/trueforge-org/alpine
-  default = "3.22"
+  default = "3.13.7"
 }
 
 variable "LICENSE" {
@@ -35,8 +25,6 @@ target "image" {
   inherits = ["docker-metadata-action"]
   args = {
     VERSION = "${VERSION}"
-    ALPINE_VERSION = "${ALPINE_VERSION}"
-    ALPINE_VERSION_STRIPPED = "${ALPINE_VERSION_STRIPPED}"
   }
   labels = {
     "org.opencontainers.image.source" = "${SOURCE}"

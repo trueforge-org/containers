@@ -1,12 +1,6 @@
 # syntax=docker/dockerfile:1
 
-ARG VERSION
-ARG ALPINE_VERSION
-ARG ALPINE_VERSION_STRIPPED
-FROM python:${VERSION}-alpine${ALPINE_VERSION_STRIPPED} AS python-build
-
-ARG ALPINE_VERSION
-FROM ghcr.io/trueforge-org/alpine:${ALPINE_VERSION}
+FROM ghcr.io/trueforge-org/alpine:3.22.1
 
 ARG VERSION
 
@@ -17,36 +11,131 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     PIP_BREAK_SYSTEM_PACKAGES=1 \
     PIP_ROOT_USER_ACTION=ignore \
-    PATH=/usr/local/bin:$PATH \
     CRYPTOGRAPHY_DONT_BUILD_RUST=1 \
     PIP_PREFER_BINARY=1 \
     UV_NO_CACHE=true \
     UV_SYSTEM_PYTHON=true \
     UV_EXTRA_INDEX_URL="https://alpine-wheels.github.io/index https://pypi.org/simple https://wheel-index.linuxserver.io/alpine-3.22/  https://wheels.home-assistant.io/musllinux-index/" \
     UV_INDEX_STRATEGY="unsafe-best-match" \
+    PATH /usr/local/bin:$PATH \
     LANG=C.UTF-8
+
+ENV GPG_KEY 7169605F62C751356D054A26A821E680E5FA6305
 
 USER root
 
-# Install the Alpine Python package with the same version as upstream
-RUN VERSION_MINOR=$(echo $VERSION | cut -d. -f1-2) \
-    && \
-    apk add --no-cache python3~${VERSION_MINOR} py3-pip \
-    python3-dev~${VERSION_MINOR} build-base libcurl mariadb-connector-c-dev \
-    libffi libnsl libtirpc bzip2 zlib xz sqlite-libs tk
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# Replace binaries with upstream optimized Python
-COPY --from=python-build /usr/local/bin /usr/local/bin
-COPY --from=python-build /usr/local/lib /usr/local/lib
+RUN set -eux; \
+	\
+	apk add --no-cache --virtual .build-deps \
+		gnupg \
+		tar \
+		xz \
+		bluez-dev \
+		bzip2-dev \
+		dpkg-dev dpkg \
+		findutils \
+		gcc \
+		gdbm-dev \
+		libc-dev \
+		libffi-dev \
+		libnsl-dev \
+		libtirpc-dev \
+		linux-headers \
+		make \
+		ncurses-dev \
+		openssl-dev \
+		pax-utils \
+		readline-dev \
+		sqlite-dev \
+		tcl-dev \
+		tk \
+		tk-dev \
+		util-linux-dev \
+		xz-dev \
+		zlib-dev \
+	; \
+	\
+	wget -O python.tar.xz "https://www.python.org/ftp/python/${VERSION%%[a-z]*}/Python-${VERSION}.tar.xz"; \
+    wget -O SHA256SUMS "https://www.python.org/ftp/python/${VERSION%%[a-z]*}/Python-${VERSION}.tar.xz.sha256"; \
+    sha256sum -c SHA256SUMS; \
+	wget -O python.tar.xz.asc "https://www.python.org/ftp/python/${VERSION%%[a-z]*}/Python-${VERSION}.tar.xz.asc"; \
+	GNUPGHOME="$(mktemp -d)"; export GNUPGHOME; \
+	gpg --batch --keyserver hkps://keys.openpgp.org --recv-keys "$GPG_KEY"; \
+	gpg --batch --verify python.tar.xz.asc python.tar.xz; \
+	gpgconf --kill all; \
+	rm -rf "$GNUPGHOME" python.tar.xz.asc; \
+	mkdir -p /usr/src/python; \
+	tar --extract --directory /usr/src/python --strip-components=1 --file python.tar.xz; \
+	rm python.tar.xz; \
+	\
+	cd /usr/src/python; \
+	gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)"; \
+	./configure \
+		--build="$gnuArch" \
+		--enable-loadable-sqlite-extensions \
+		--enable-option-checking=fatal \
+		--enable-shared \
+		--with-lto \
+		--with-ensurepip \
+        --enable-optimizations \
+	; \
+	nproc="$(nproc)"; \
+    # set thread stack size to 1MB so we don't segfault before we hit sys.getrecursionlimit()
+    # https://github.com/alpinelinux/aports/commit/2026e1259422d4e0cf92391ca2d3844356c649d0
+	EXTRA_CFLAGS="-DTHREAD_STACK_SIZE=0x100000"; \
+	LDFLAGS="${LDFLAGS:--Wl},--strip-all"; \
+    # https://docs.python.org/3.12/howto/perf_profiling.html
+    # https://github.com/docker-library/python/pull/1000#issuecomment-2597021615
+	# https://gcc.gnu.org/onlinedocs/gcc-14.2.0/gcc/x86-Options.html#index-momit-leaf-frame-pointer-2
+	# https://gcc.gnu.org/onlinedocs/gcc-14.2.0/gcc/AArch64-Options.html#index-momit-leaf-frame-pointer
+	EXTRA_CFLAGS="${EXTRA_CFLAGS:-} -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer"; \
+	make -j "$nproc" \
+		"EXTRA_CFLAGS=${EXTRA_CFLAGS:-}" \
+		"LDFLAGS=${LDFLAGS:-}" \
+	; \
+    # https://github.com/docker-library/python/issues/784
+    # prevent accidental usage of a system installed libpython of the same version
+	rm python; \
+	make -j "$nproc" \
+		"EXTRA_CFLAGS=${EXTRA_CFLAGS:-}" \
+		"LDFLAGS=${LDFLAGS:--Wl},-rpath='\$\$ORIGIN/../lib'" \
+		python \
+	; \
+	make install; \
+	\
+	cd /; \
+	rm -rf /usr/src/python; \
+	\
+	find /usr/local -depth \
+		\( \
+			\( -type d -a \( -name test -o -name tests -o -name idle_test \) \) \
+			-o \( -type f -a \( -name '*.pyc' -o -name '*.pyo' -o -name 'libpython*.a' \) \) \
+		\) -exec rm -rf '{}' + \
+	; \
+	\
+	find /usr/local -type f -executable -not \( -name '*tkinter*' \) -exec scanelf --needed --nobanner --format '%n#p' '{}' ';' \
+		| tr ',' '\n' \
+		| sort -u \
+		| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
+		| xargs -rt apk add --no-network --virtual .python-rundeps \
+	; \
+	apk del --no-network .build-deps; \
+	\
+	export PYTHONDONTWRITEBYTECODE=1; \
+	python3 --version; \
+	pip3 --version
+
+# make some useful symlinks that are expected to exist ("/usr/local/bin/python" and friends)
+RUN set -eux; \
+	for src in idle3 pip3 pydoc3 python3 python3-config; do \
+		dst="$(echo "$src" | tr -d 3)"; \
+		[ -s "/usr/local/bin/$src" ]; \
+		[ ! -e "/usr/local/bin/$dst" ]; \
+		ln -svT "$src" "/usr/local/bin/$dst"; \
+	done
 
 USER nobody:nogroup
-
-# Verify and delete unneeded parts of python
-RUN set -eux; \
-    # Basic Python runtime checks
-    python3 --version; \
-    pip3 --version;
-    # TODO: run Python self-tests
-    # python3 -m test -w -v; \
 
 CMD ["python3"]
