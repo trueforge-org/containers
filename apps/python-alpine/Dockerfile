@@ -89,9 +89,11 @@ RUN set -eux; \
 	# https://gcc.gnu.org/onlinedocs/gcc-14.2.0/gcc/x86-Options.html#index-momit-leaf-frame-pointer-2
 	# https://gcc.gnu.org/onlinedocs/gcc-14.2.0/gcc/AArch64-Options.html#index-momit-leaf-frame-pointer
 	EXTRA_CFLAGS="${EXTRA_CFLAGS:-} -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer"; \
+    PROFILE_TASK=""
 	make -j "$nproc" \
 		"EXTRA_CFLAGS=${EXTRA_CFLAGS:-}" \
 		"LDFLAGS=${LDFLAGS:-}" \
+        "PROFILE_TASK=${PROFILE_TASK:-}" \
 	; \
     # https://github.com/docker-library/python/issues/784
     # prevent accidental usage of a system installed libpython of the same version
@@ -99,7 +101,7 @@ RUN set -eux; \
 	make -j "$nproc" \
 		"EXTRA_CFLAGS=${EXTRA_CFLAGS:-}" \
 		"LDFLAGS=${LDFLAGS:--Wl},-rpath='\$\$ORIGIN/../lib'" \
-        PROFILE_TASK="" \
+        "PROFILE_TASK=${PROFILE_TASK:-}" \
 		python \
 	; \
 	make install; \
