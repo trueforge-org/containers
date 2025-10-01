@@ -1,3 +1,10 @@
+## Readme
+
+# Note
+
+This is based on the upstream nextcloud image instead of our own.
+Because Nextcloud is already a pain in the ass as it is.
+
 # Environment Variables
 
 | Variable                                     | Description                                                                             |            App(s)             |                                           Config Key(s)                                            |              Default               |                       Example                       |
