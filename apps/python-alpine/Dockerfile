@@ -124,7 +124,6 @@ RUN set -eux; \
 		test_threading \
 		test_time \
 		test_traceback \
-		test_unicode \
 	'; \
 
 	make -j "$nproc" \
