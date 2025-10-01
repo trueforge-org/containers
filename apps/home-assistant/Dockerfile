@@ -2,7 +2,7 @@
 
 ARG TARGETARCH
 ARG ARCH=${TARGETARCH/arm64/aarch64}
-FROM ghcr.io/trueforge-org/python-alpine:3.12.11
+FROM ghcr.io/trueforge-org/python-alpine:3.13.7
 ARG TARGETARCH
 ARG ARCH=${TARGETARCH/arm64/aarch64}
 ARG VERSION

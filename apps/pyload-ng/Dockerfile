@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM ghcr.io/trueforge-org/python-alpine:3.12.11
+FROM ghcr.io/trueforge-org/python-alpine:3.13.7
 ARG VERSION
 
 ENV HOME="/config"
