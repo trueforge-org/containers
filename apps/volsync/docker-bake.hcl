@@ -2,7 +2,7 @@ target "docker-metadata-action" {}
 
 variable "VERSION" {
   // renovate: datasource=github-releases depName=backube/volsync
-  default = "v0.12.1"
+  default = "v0.13.1"
 }
 
 variable "LICENSE" {
