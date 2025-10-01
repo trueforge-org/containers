@@ -100,7 +100,6 @@ RUN set -eux; \
 		test_binhex \
 		test_binop \
 		test_bytes \
-		test_c_locale_coercion \
 		test_class \
 		test_cmath \
 		test_codecs \
