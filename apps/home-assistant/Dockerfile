@@ -54,6 +54,7 @@ RUN set -eux; \
         xz-utils \
         build-essential \
         default-libmysqlclient-dev \
+        libpq-dev \
         pkg-config \
         && rm -rf /var/lib/apt/lists/*; \
     apt-get update; \
