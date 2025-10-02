@@ -7,7 +7,7 @@ variable "APP" {
 variable "VERSION" {
   // NOTE: Alpine version is tied to the version of the base image in the Dockerfile
   // renovate: datasource=repology depName=alpine_3_22/transmission-daemon versioning=loose
-  default = "4.0.5-1build5"
+  default = "4.0.6-r4"
 }
 
 variable "LICENSE" {
