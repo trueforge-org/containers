@@ -50,7 +50,8 @@ RUN set -eux; \
         libtiff5 \
         unzip \
         xz-utils \
-        ca-certificates \
+        build-essential \
+        default-libmysqlclient-dev \
         && rm -rf /var/lib/apt/lists/*; \
     apt-get update; \
     apt-get install -y --no-install-recommends --no-install-suggests \
