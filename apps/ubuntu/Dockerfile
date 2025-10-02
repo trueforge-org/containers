@@ -9,7 +9,8 @@ ARG VENDOR
 ENV DEBIAN_FRONTEND="noninteractive" \
     NVIDIA_DRIVER_CAPABILITIES="compute,video,utility" \
      # Enable detection of dotnet running in a container
-    DOTNET_RUNNING_IN_CONTAINER=true
+    DOTNET_RUNNING_IN_CONTAINER=true \
+    XDG_CONFIG_HOME=/config
 
 USER root
 WORKDIR /app
