@@ -4,6 +4,9 @@ set -euo pipefail
 APP="${1:?}"
 IMAGE="${2:?}"
 
+echo "Starting Container for Log Fetching..."
+CONTAINER_ID=$(docker run -d --name tmp_test_container "${IMAGE}")
+
 if [[ -x "$(command -v container-structure-test)" ]]; then
     echo "Running CST..."
     container-structure-test test --image "${IMAGE}" --pull --config "./apps/${APP}/tests.yaml"
@@ -16,3 +19,6 @@ else
     echo "No testing tool found. Exiting."
     exit 1
 fi
+
+echo "Container Logs:"
+docker logs "${CONTAINER_ID}"
