@@ -49,7 +49,7 @@ RUN set -eux; \
         libpq5 \
         pulseaudio \
         socat \
-        libtiff \
+        libtiff6 \
         unzip \
         xz-utils \
         build-essential \
