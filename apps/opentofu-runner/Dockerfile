@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM ubuntu:24.04 AS builder
+FROM ghcr.io/trueforge-org/ubuntu:24.04 AS builder
 ARG TARGETARCH
 ARG VERSION
 

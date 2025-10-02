@@ -1,4 +1,4 @@
-FROM ubuntu:24.04
+FROM ghcr.io/trueforge-org/ubuntu:24.04
 
 ARG TARGETPLATFORM
 ARG VERSION

@@ -22,7 +22,7 @@ RUN cd /build && go mod download
 RUN cd /build && go build -ldflags "-w -s" -o /output/my-proxy-service .
 
 # Stage 2 - Create the final image
-FROM ubuntu:24.04 AS runner
+FROM ghcr.io/trueforge-org/ubuntu:24.04 AS runner
 
 # Install runtime dependencies if needed
 RUN apt-get update && \
