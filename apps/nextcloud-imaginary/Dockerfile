@@ -1,38 +1,40 @@
-# https://github.com/nextcloud/all-in-one/tree/main/Containers/imaginary
-FROM ghcr.io/trueforge-org/go-alpine:1.25.1 as go
+# Stage 1: Build imaginary binary
+FROM ghcr.io/trueforge-org/go-lang:1.25.1 as go
 
-ARG IMAGINARY_COMMMIT=b632dae8cc321452c3f85bcae79c580b1ae1ed84
+ARG IMAGINARY_COMMIT=b632dae8cc321452c3f85bcae79c580b1ae1ed84
 
-# hadolint ignore=DL3018
 RUN set -ex; \
-    apk add --no-cache \
-        vips-jxl \
-        vips-dev \
-        vips-heif \
-        build-base \
-        vips-magick \
-        vips-poppler; \
-    go install github.com/h2non/imaginary@${IMAGINARY_COMMMIT}
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+        build-essential \
+        pkg-config \
+        libvips-dev \
+        libjxl-dev \
+        libheif-dev \
+        libmagickwand-dev \
+        poppler-utils; \
+    rm -rf /var/lib/apt/lists/*; \
+    go install github.com/h2non/imaginary@${IMAGINARY_COMMIT}
 
-FROM ghcr.io/trueforge-org/alpine:3.22.1
+# Stage 2: Minimal runtime
+FROM ghcr.io/trueforge-org/go-lang:1.25.1
 
 USER root
 
-# hadolint ignore=DL3018
 RUN set -ex; \
-    apk add --no-cache \
-        vips \
-        vips-jxl \
-        vips-heif \
-        vips-magick \
-        vips-poppler \
-        ca-certificates
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+        libvips42 \
+        libjxl0 \
+        libheif1 \
+        imagemagick \
+        poppler-utils; \
+    rm -rf /var/lib/apt/lists/*
 
 COPY --from=go /go/bin/imaginary /usr/local/bin/imaginary
 
 USER nobody
 
-# https://github.com/h2non/imaginary#memory-issues
 ENV MALLOC_ARENA_MAX=2
 
 CMD ["imaginary", "-p", "${PORT:-9000}"]
