@@ -2,9 +2,9 @@
 
 ARG VERSION
 FROM docker.io/library/ubuntu:${VERSION}
+
 ARG TARGETARCH
 ARG VENDOR
-
 
 ENV DEBIAN_FRONTEND="noninteractive" \
     NVIDIA_DRIVER_CAPABILITIES="compute,video,utility"
@@ -12,10 +12,9 @@ ENV DEBIAN_FRONTEND="noninteractive" \
 USER root
 WORKDIR /app
 
-RUN \
-    apt-get update \
-    && \
-    apt-get install -y --no-install-recommends --no-install-suggests \
+# Install packages
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends --no-install-suggests \
         bash \
         ca-certificates \
         catatonit \
@@ -26,9 +25,9 @@ RUN \
         tzdata \
         uuid-runtime \
         xmlstarlet \
-        icu-data-full \
-        icu-libs \
-        libintl \
+        libicu70 \
+        libicu-dev \
+        gettext-base \
         grep \
         tar \
         wget \
@@ -40,8 +39,12 @@ RUN \
 
 COPY . /
 
+# Use a safe non-root user
 USER nobody:nogroup
-WORKDIR /config
-VOLUME ["/config"]
 
+# Config directory (persistent volume)
+VOLUME ["/config"]
+WORKDIR /config
+
+# PID 1 with catatonit, handoff to entrypoint
 ENTRYPOINT ["/usr/bin/catatonit", "--", "/entrypoint.sh"]
