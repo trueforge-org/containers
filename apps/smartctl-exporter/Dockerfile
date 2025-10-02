@@ -12,7 +12,7 @@ USER root
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         smartmontools \
-        wget \ && \
+    && \
     rm -rf /var/lib/apt/lists/*
 
 # Download and install smartctl_exporter
