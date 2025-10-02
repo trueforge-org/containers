@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM ghcr.io/trueforge-org/ubuntu:24.04
+FROM ghcr.io/trueforge-org/python:24.04
 ARG VERSION
 
 ENV DELUGE_BIN="deluged" \
@@ -12,10 +12,8 @@ USER root
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
+        build-essential \
         p7zip-full \
-        python3-future \
-        python3-requests \
-        python3-pip \
         gzip \
     && pip3 install --break-system-packages "deluge==${VERSION}" \
     && pip3 install --break-system-packages geoip2 \
@@ -23,7 +21,6 @@ RUN apt-get update && \
     && curl -fsSL "https://mailfud.org/geoip-legacy/GeoIP.dat.gz" \
         | gunzip > /usr/share/GeoIP/GeoIP.dat \
     && rm -rf /var/lib/apt/lists/* /tmp/*
-
 COPY . /
 
 # Copy unrar binary from LinuxServer image
