@@ -4,7 +4,6 @@ FROM ghcr.io/trueforge-org/ubuntu:24.04
 
 # Environment variables
 ARG VERSION
-ARG GPG_KEY=7169605F62C751356D054A26A821E6805FA6305
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
@@ -45,8 +44,9 @@ RUN set -eux; \
 RUN set -eux; \
     wget -O python.tar.xz "https://www.python.org/ftp/python/${VERSION%%[a-z]*}/Python-${VERSION}.tar.xz"; \
     wget -O python.tar.xz.asc "https://www.python.org/ftp/python/${VERSION%%[a-z]*}/Python-${VERSION}.tar.xz.asc"; \
+    wget -O python_key.asc https://www.python.org/static/files/pubkeys.txt; \
     GNUPGHOME="$(mktemp -d)"; export GNUPGHOME; \
-    gpg --batch --keyserver hkps://keys.openpgp.org --recv-keys "$GPG_KEY"; \
+    gpg --batch --import python_key.asc; \
     gpg --batch --verify python.tar.xz.asc python.tar.xz; \
     gpgconf --kill all; \
     rm -rf "$GNUPGHOME" python.tar.xz.asc; \
