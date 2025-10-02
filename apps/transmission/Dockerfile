@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM ghcr.io/trueforge-org/python-alpine:3.13.7
+FROM ghcr.io/trueforge-org/python:3.13.7
 ARG TARGETARCH
 ARG MINIJINJA_ARCH=${TARGETARCH/arm64/aarch64}
 ARG MINIJINJA_ARCH=${MINIJINJA_ARCH/amd64/x86_64}
@@ -12,23 +12,29 @@ ENV HOME="/config" \
     TRANSMISSION_WEB_HOME="/usr/share/transmission/public_html"
 
 USER root
+WORKDIR /app
 
-RUN \
-    apk add --no-cache \
-        7zip \
-        xz \
-        transmission-daemon=="${VERSION}" \
-        transmission-cli=="${VERSION}" \
-        transmission-extra=="${VERSION}" \
-        transmission-remote=="${VERSION}" \
-    && \
-    curl -fsSL https://github.com/mitsuhiko/minijinja/releases/download/2.8.0/minijinja-cli-${MINIJINJA_ARCH}-unknown-linux-musl.tar.xz \
-        | tar xJf - -C /usr/local/bin/ --strip-components=1 \
-    && \
+# Install Transmission and minijinja-cli
+RUN set -eux; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+        p7zip-full \
+        xz-utils \
+        transmission-daemon="${VERSION}" \
+        transmission-cli="${VERSION}" \
+        transmission-common="${VERSION}" \
+        ca-certificates \
+    && rm -rf /var/lib/apt/lists/*; \
+    \
+    # Download minijinja-cli
+    curl -fsSL "https://github.com/mitsuhiko/minijinja/releases/download/2.8.0/minijinja-cli-${MINIJINJA_ARCH}-unknown-linux-musl.tar.xz" \
+        | tar xJf - -C /usr/local/bin/ --strip-components=1; \
     rm -rf /tmp/*
 
+# Copy local files
 COPY . /
 
+# Copy unrar binary from LinuxServer image
 COPY --from=ghcr.io/linuxserver/unrar:latest /usr/bin/unrar-alpine /usr/bin/unrar
 
 USER nobody:nogroup

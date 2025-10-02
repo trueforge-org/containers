@@ -1,11 +1,16 @@
 # syntax=docker/dockerfile:1
 
-FROM ghcr.io/trueforge-org/alpine:3.22.1
+FROM ghcr.io/trueforge-org/ubuntu:24.04
 ARG VERSION
+
 USER root
-RUN \
-    apk add --no-cache \
-        postgresql17-client=="${VERSION}" \
-    && rm -rf /tmp/*
+
+# Install PostgreSQL client
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends postgresql-client && \
+    rm -rf /var/lib/apt/lists/* /tmp/*
+
+# Copy application files
 COPY . /
+
 USER nobody:nogroup

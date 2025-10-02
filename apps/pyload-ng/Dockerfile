@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM ghcr.io/trueforge-org/python-alpine:3.13.7
+FROM ghcr.io/trueforge-org/python:3.13.7
 ARG VERSION
 
 ENV HOME="/config"
@@ -8,28 +8,36 @@ ENV HOME="/config"
 USER root
 WORKDIR /app
 
-
-RUN \
-    apk add --no-cache --virtual=build-dependencies \
-        build-base \
-        curl-dev \
-    && apk add --no-cache \
+# Install runtime and build dependencies
+RUN set -eux; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+        build-essential \
+        libcurl4-openssl-dev \
         ffmpeg \
-        libatomic \
-        libcurl \
-        libjpeg-turbo \
-        7zip \
-        sqlite \
+        libatomic1 \
+        libjpeg-turbo8-dev \
+        p7zip-full \
+        sqlite3 \
         tesseract-ocr \
-    && pip install --no-cache-dir uv \
-    && uv pip install --pre pyload-ng[all]=="${VERSION}" \
-    && mkdir -p /config && chown nobody:nogroup -R /config \
-    && mkdir -p /downloads && chown nobody:nogroup -R /downloads \
-    && apk del --purge build-dependencies \
-    && rm -rf /root/.cache /tmp/*
+        ca-certificates \
+    && rm -rf /var/lib/apt/lists/*; \
+    \
+    # Install Python packages
+    pip install --no-cache-dir uv; \
+    uv pip install --pre "pyload-ng[all]==${VERSION}"; \
+    \
+    # Create required directories with correct permissions
+    mkdir -p /config /downloads; \
+    chown -R nobody:nogroup /config /downloads; \
+    \
+    # Clean up temporary files
+    rm -rf /root/.cache /tmp/*
 
+# Copy local files
 COPY . /
 
+# Copy unrar binary from LinuxServer image
 COPY --from=ghcr.io/linuxserver/unrar:latest /usr/bin/unrar-alpine /usr/bin/unrar
 
 USER nobody:nogroup

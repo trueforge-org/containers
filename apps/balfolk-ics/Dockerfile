@@ -1,22 +1,26 @@
-FROM ghcr.io/trueforge-org/python-alpine:3.13.7
+FROM ghcr.io/trueforge-org/python:3.13.7
 
 USER root
 
-# Install dependencies
+# Install cron and other dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        cron \
+        && rm -rf /var/lib/apt/lists/*
+
+# Install Python packages
 RUN pip install --no-cache-dir requests beautifulsoup4 icalendar pytz
 
-# Create working directory
+# Set working directory
 WORKDIR /app
 
-# Copy code
+# Copy application code
 COPY --chown=nobody:nogroup . /
 
-# Create output dir for serving
+# Create output file for serving
 RUN touch /app/balfolk.ics
 
-# Setup cron
-RUN apk add --no-cache busybox-suid && crontab /app/crontab.txt
-
-# Install cron job
+# Install cron jobs
 RUN crontab /app/crontab.txt
 
+# Optional: start cron in foreground when container runs
+# CMD ["cron", "-f"]

@@ -1,42 +1,47 @@
-FROM ghcr.io/trueforge-org/python-alpine:3.13.7
+FROM ghcr.io/trueforge-org/python:3.13.7
 
 ARG TARGETARCH
 ARG VENDOR
 ARG VERSION
 
-ENV UMASK="0002" \
-    TZ="Etc/UTC" \
-    DEBCONF_NONINTERACTIVE_SEEN="true" \
-    DEBIAN_FRONTEND="noninteractive" \
+ENV DEBCONF_NONINTERACTIVE_SEEN="true" \
     POWERSHELL_DISTRIBUTION_CHANNEL="PSDocker"
 
 USER root
+WORKDIR /app
 
-RUN \
-    apk add --no-cache \
-        imagemagick  \
-        imagemagick-heic \
-        imagemagick-jpeg \
-        libjpeg-turbo \
+# Install dependencies
+RUN set -eux; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+        imagemagick \
+        libheif-dev \
+        libjpeg-turbo8-dev \
         powershell \
-    && \
-    pwsh -Command "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted; \
-        Install-Module -Name FanartTvAPI -Scope AllUsers -Force" \
-    && chmod -R 755 /usr/local/share/powershell \
-    && pip install apprise \
-    && mkdir -p /app && chmod 755 /app \
-    && \
-    curl -fsSL https://github.com/fscorrupt/Posterizarr/archive/refs/tags/${VERSION}.tar.gz \
-        | tar xzf - -C /app --strip-components=1 \
-    && rm -rf /app/images \
-    && find /app -type f \( -name "*.md" -o -name "*.zip" -o -name "*.yml" -o -name ".*" \) -delete
+        tar \
+        ca-certificates \
+    && rm -rf /var/lib/apt/lists/*; \
+    \
+    # Install PowerShell module
+    pwsh -Command "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted; Install-Module -Name FanartTvAPI -Scope AllUsers -Force"; \
+    chmod -R 755 /usr/local/share/powershell; \
+    \
+    # Install Python dependencies
+    pip install --no-cache-dir apprise; \
+    \
+    # Download and extract Posterizarr
+    curl -fsSL "https://github.com/fscorrupt/Posterizarr/archive/refs/tags/${VERSION}.tar.gz" \
+        | tar xzf - -C /app --strip-components=1; \
+    rm -rf /app/images; \
+    find /app -type f \( -name "*.md" -o -name "*.zip" -o -name "*.yml" -o -name ".*" \) -delete; \
+    \
+    # Ensure proper permissions
+    mkdir -p /app && chmod 755 /app
 
-
+# Copy entrypoint
 COPY entrypoint.sh /entrypoint.sh
 
 USER nobody:nogroup
-
 WORKDIR /app
-
 VOLUME ["/app"]
-
+ENTRYPOINT ["/entrypoint.sh"]

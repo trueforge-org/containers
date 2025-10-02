@@ -10,9 +10,8 @@ variable "VERSION" {
 }
 
 variable "LICENSE" {
-  default = "MIT"
+  default = "AGPL-3.0-or-later"
 }
-
 
 variable "SOURCE" {
   default = "https://github.com/sabnzbd/sabnzbd"
