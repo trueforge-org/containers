@@ -6,7 +6,7 @@ ARG VERSION
 
 USER root
 
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 
 ENV \
     DEBCONF_NONINTERACTIVE_SEEN=true \
