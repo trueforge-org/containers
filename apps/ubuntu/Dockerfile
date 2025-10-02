@@ -48,6 +48,11 @@ USER nobody:nogroup
 
 COPY --chmod=0775 . /
 
+RUN echo "show app and root folder content...";\
+    ls -l / \
+    && \
+    ls -l /app
+
 # Config directory (persistent volume)
 VOLUME ["/config"]
 WORKDIR /config

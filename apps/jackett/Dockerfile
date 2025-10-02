@@ -23,3 +23,8 @@ USER nobody:nogroup
 COPY --chmod=0775 . /
 
 WORKDIR /config
+
+RUN echo "show app and root folder content...";\
+    ls -l / \
+    && \
+    ls -l /app
