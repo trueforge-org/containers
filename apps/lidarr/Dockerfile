@@ -11,11 +11,13 @@ ENV DOTNET_EnableDiagnostics=0 \
 USER root
 WORKDIR /app
 
-RUN apt-get update && \
+RUN add-apt-repository universe && \
+    apt-get update && \
     apt-get install -y --no-install-recommends \
-        chromaprint \
         ffmpeg \
-        sqlite3 \ && \
+        sqlite3 \
+        chromaprint \
+    && \
     mkdir -p /app/bin && \
     curl -fsSL "https://lidarr.servarr.com/v1/update/${LIDARR__UPDATE__BRANCH}/updatefile?version=${VERSION}&os=linuxmusl&runtime=netcore&arch=${TARGETARCH/amd64/x64}" \
         | tar xzf - -C /app/bin --strip-components=1 && \
