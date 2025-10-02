@@ -24,8 +24,6 @@ RUN apt-get update && \
     && chmod -R u=rwX,go=rX /app \
     && printf "umask %d\n" "${UMASK}" >> /etc/profile
 
-# Ensure non-root user exists
-RUN groupadd -r nobody && useradd -r -g nobody nobody
 USER nobody:nogroup
 
 

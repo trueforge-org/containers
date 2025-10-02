@@ -30,7 +30,5 @@ RUN apt-get update && \
 
 COPY . /
 
-# Ensure non-root user exists
-RUN groupadd -r nobody && useradd -r -g nobody nobody
 USER nobody:nogroup
 WORKDIR /config

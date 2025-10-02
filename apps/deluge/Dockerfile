@@ -32,7 +32,6 @@ COPY . /
 COPY --from=ghcr.io/linuxserver/unrar:latest /usr/bin/unrar-alpine /usr/bin/unrar
 
 # Switch to non-root user
-RUN groupadd -r nobody && useradd -r -g nobody nobody
 USER nobody:nogroup
 
 WORKDIR /config

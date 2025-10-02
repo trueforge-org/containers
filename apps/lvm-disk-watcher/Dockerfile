@@ -20,6 +20,4 @@ WORKDIR /app
 
 ENTRYPOINT ["/bin/bash", "/scripts/watch_lvm.sh"]
 
-# Ensure non-root user exists
-RUN groupadd -r nobody && useradd -r -g nobody nobody
 USER nobody:nogroup

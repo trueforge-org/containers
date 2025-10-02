@@ -13,6 +13,4 @@ RUN apt-get update && \
 # Copy application files
 COPY . /
 
-# Ensure non-root user exists
-RUN groupadd -r nobody && useradd -r -g nobody nobody
 USER nobody:nogroup

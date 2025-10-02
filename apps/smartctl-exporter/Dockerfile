@@ -24,8 +24,6 @@ RUN wget "https://github.com/prometheus-community/smartctl_exporter/releases/dow
     chmod +x /usr/local/bin/smartctl_exporter && \
     rm -rf smartctl_exporter*
 
-# Ensure non-root user exists
-RUN groupadd -r nobody && useradd -r -g nobody nobody
 USER nobody:nogroup
 
 ENTRYPOINT ["/usr/local/bin/smartctl_exporter"]

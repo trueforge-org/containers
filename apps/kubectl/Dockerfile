@@ -26,6 +26,4 @@ RUN apt-get update && \
     # Cleanup
     rm -rf /var/lib/apt/lists/* kubectl* cmctl.tar.gz
 
-# Ensure non-root user exists
-RUN groupadd -r nobody && useradd -r -g nobody nobody
 USER nobody:nogroup

@@ -22,9 +22,7 @@ RUN set -eux; \
     chmod +x /usr/local/bin/notify_push; \
     /usr/local/bin/notify_push --version
 
-# Ensure non-root user exists
-RUN groupadd -r nobody && useradd -r -g nobody nobody
-USER nobody
+USER nobody:nogroup
 
 # Copy files with correct permissions
 COPY --chmod=775 . /
