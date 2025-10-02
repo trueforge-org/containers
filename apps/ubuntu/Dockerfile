@@ -25,7 +25,6 @@ RUN apt-get update \
         tzdata \
         uuid-runtime \
         xmlstarlet \
-        libicu70 \
         libicu-dev \
         gettext-base \
         grep \
