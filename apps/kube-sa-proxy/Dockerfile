@@ -1,25 +1,33 @@
 # Stage 1 - Build the Go application
-FROM ghcr.io/trueforge-org/go-alpine:1.25.1 AS builder
+FROM ghcr.io/trueforge-org/golang:1.25.1 AS builder
 
 USER root
 
 # Install necessary build dependencies
-RUN apk --no-cache add --update gcc musl-dev
+RUN set -eux; \
+    apt-get update; \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        build-essential \
+        gcc \
+        git \
+    ; \
+    rm -rf /var/lib/apt/lists/*
 
-# Copy go mod and sum files
+# Copy Go project files
 COPY . /
 
-# Create the necessary directories
-RUN mkdir -p /build /output && cd /build && ls /build
+# Create necessary directories
+RUN mkdir -p /build /output && ls -la /build
 
 # Set the working directory
 WORKDIR /build
 
-# Download dependencies
-RUN cd /build && go mod download
+# Download Go dependencies
+RUN go mod download
 
 # Build the Go application
-RUN cd /build && go build -ldflags "-w -s" -o /output/my-proxy-service .
+RUN go build -ldflags "-w -s" -o /output/my-proxy-service .
+
 
 # Stage 2 - Create the final image
 FROM ghcr.io/trueforge-org/ubuntu:24.04 AS runner
