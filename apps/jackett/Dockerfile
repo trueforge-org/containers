@@ -10,9 +10,9 @@ ARG TARGETARCH=${TARGETARCH/amd64/AMDx64}
 
 USER root
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends curl tar ca-certificates && \
-    mkdir -p /app/bin && \
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+RUN mkdir -p /app/bin && \
     curl -fsSL "https://github.com/Jackett/Jackett/releases/download/${VERSION}/Jackett.Binaries.Linux${TARGETARCH}.tar.gz" \
         | tar xzf - -C /app/bin --strip-components=1 && \
     chown -R root:root /app && chmod -R 755 /app && \
