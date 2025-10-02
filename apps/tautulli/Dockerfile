@@ -34,7 +34,7 @@ RUN set -eux; \
     \
     # Cleanup
     pip uninstall --yes uv; \
-    apt-get purge -y --auto-remove build-essential cargo libffi-dev musl-tools libssl-dev; \
+    apt-get purge -y --auto-remove build-essential cargo libffi-dev libssl-dev; \
     rm -rf /root/.cache /root/.cargo /tmp/*
 
 # Copy local files
