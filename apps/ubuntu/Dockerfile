@@ -26,6 +26,12 @@ RUN \
         tzdata \
         uuid-runtime \
         xmlstarlet \
+        icu-data-full \
+        icu-libs \
+        libintl \
+        grep \
+        tar \
+        wget \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && apt-get autoremove -y \
     && apt-get clean \
