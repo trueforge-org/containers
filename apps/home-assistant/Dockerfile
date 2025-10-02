@@ -52,6 +52,7 @@ RUN set -eux; \
         xz-utils \
         build-essential \
         default-libmysqlclient-dev \
+        pkg-config \
         && rm -rf /var/lib/apt/lists/*; \
     apt-get update; \
     apt-get install -y --no-install-recommends --no-install-suggests \
