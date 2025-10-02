@@ -7,7 +7,9 @@ ARG TARGETARCH
 ARG VENDOR
 
 ENV DEBIAN_FRONTEND="noninteractive" \
-    NVIDIA_DRIVER_CAPABILITIES="compute,video,utility"
+    NVIDIA_DRIVER_CAPABILITIES="compute,video,utility" \
+     # Enable detection of dotnet running in a container
+    DOTNET_RUNNING_IN_CONTAINER=true
 
 USER root
 WORKDIR /app
