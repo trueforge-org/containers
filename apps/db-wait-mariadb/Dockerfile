@@ -7,8 +7,6 @@ ARG UMASK=022
 
 USER root
 
-SHELL ["/bin/sh", "-o", "pipefail", "-c"]
-
 # hadolint ignore=DL3008,DL3015,SC2086,SC2155
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
