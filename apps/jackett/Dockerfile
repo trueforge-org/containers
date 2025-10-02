@@ -18,7 +18,8 @@ RUN mkdir -p /app/bin && \
     chown -R root:root /app && chmod -R 755 /app && \
     rm -rf /var/lib/apt/lists/* /tmp/* /app/bin/JackettUpdater*
 
-COPY . /
-
 USER nobody:nogroup
+
+COPY --chmod=0775 . /
+
 WORKDIR /config

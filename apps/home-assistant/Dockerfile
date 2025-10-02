@@ -72,10 +72,9 @@ RUN pip install uv; \
     mkdir -p /config && chown nobody:nogroup -R /config; \
     rm -rf /root/.cache /tmp/*
 
-# Copy local files
-COPY . /
-
 USER nobody:nogroup
+
+
 WORKDIR /config
 VOLUME ["/config"]
 
