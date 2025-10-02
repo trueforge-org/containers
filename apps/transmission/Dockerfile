@@ -27,7 +27,7 @@ RUN set -eux; \
     && rm -rf /var/lib/apt/lists/*; \
     \
     # Download minijinja-cli
-    curl -fsSL "https://github.com/mitsuhiko/minijinja/releases/download/2.8.0/minijinja-cli-${MINIJINJA_ARCH}-unknown-linux-gna.tar.xz" \
+    curl -fsSL "https://github.com/mitsuhiko/minijinja/releases/download/2.8.0/minijinja-cli-${MINIJINJA_ARCH}-unknown-linux-gnu.tar.xz" \
         | tar xJf - -C /usr/local/bin/ --strip-components=1; \
     rm -rf /tmp/*
 
