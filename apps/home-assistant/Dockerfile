@@ -73,7 +73,7 @@ RUN pip install uv psycopg2-binary; \
         | grep "${ARCH}: " | cut -d ":" -f3); \
     uv pip install --index-strategy unsafe-best-match \
         --requirement "https://raw.githubusercontent.com/home-assistant/docker/${HOME_ASSISTANT_BASE}/requirements.txt"; \
-    uv pip install --index-strategy unsafe-best-match --requirement /tmp/requirements_all.txt; \
+    uv pip install --index-strategy unsafe-best-match --requirement "https://raw.githubusercontent.com/home-assistant/docker/${HOME_ASSISTANT_BASE}/requirements-all.txt"; \
     uv pip install --index-strategy unsafe-best-match homeassistant=="${VERSION}"; \
     curl -fsSL -o /bin/go2rtc "https://github.com/AlexxIT/go2rtc/releases/latest/download/go2rtc_linux_${TARGETARCH}"; \
     chmod +x /bin/go2rtc; \
