@@ -13,7 +13,8 @@ WORKDIR /app
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        sqlite3 \ && \
+        sqlite3 \
+    && \
     mkdir -p /app/bin && \
     curl -fsSL "https://readarr.servarr.com/v1/update/${READARR__UPDATE__BRANCH}/updatefile?version=${VERSION}&os=linuxmusl&runtime=netcore&arch=${TARGETARCH/amd64/x64}" \
         | tar xzf - -C /app/bin --strip-components=1 && \
