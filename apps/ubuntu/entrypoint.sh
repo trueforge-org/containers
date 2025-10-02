@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 echo "
 Welcome to a TrueForge ContainerForge container,
