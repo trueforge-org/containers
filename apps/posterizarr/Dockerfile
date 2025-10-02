@@ -43,4 +43,3 @@ COPY . /
 USER nobody:nogroup
 WORKDIR /app
 VOLUME ["/app"]
-ENTRYPOINT ["/entrypoint.sh"]
