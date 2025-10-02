@@ -35,6 +35,7 @@ RUN \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && apt-get autoremove -y \
     && apt-get clean \
+    && update-ca-certificates \
     && rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/
 
 COPY . /
