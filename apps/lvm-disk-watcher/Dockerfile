@@ -12,7 +12,7 @@ COPY --chown=nobody:nogroup . /
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         lvm2 \
-        device-mapper && \
+        dmsetup && \
     chmod +x /app/watch_lvm.sh && \
     rm -rf /var/lib/apt/lists/*
 
