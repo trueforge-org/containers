@@ -37,22 +37,18 @@ RUN set -eux; \
         xz-utils \
         zlib1g-dev \
         dpkg-dev \
+        cosign \
     ; \
     rm -rf /var/lib/apt/lists/*
 
-# Download and verify Python with GPG (no SHA verification)
+# Download and verify Python with Sigstore
 RUN set -eux; \
     wget -O python.tar.xz "https://www.python.org/ftp/python/${VERSION%%[a-z]*}/Python-${VERSION}.tar.xz"; \
-    wget -O python.tar.xz.asc "https://www.python.org/ftp/python/${VERSION%%[a-z]*}/Python-${VERSION}.tar.xz.asc"; \
-    wget -O python_key.asc https://www.python.org/static/files/pubkeys.txt; \
-    GNUPGHOME="$(mktemp -d)"; export GNUPGHOME; \
-    gpg --batch --import python_key.asc; \
-    gpg --batch --verify python.tar.xz.asc python.tar.xz; \
-    gpgconf --kill all; \
-    rm -rf "$GNUPGHOME" python.tar.xz.asc; \
+    wget -O python.tar.xz.sigstore "https://www.python.org/ftp/python/${VERSION%%[a-z]*}/Python-${VERSION}.tar.xz.sigstore"; \
+    cosign verify-blob --cert python.tar.xz.sigstore python.tar.xz; \
     mkdir -p /usr/src/python; \
     tar -xf python.tar.xz -C /usr/src/python --strip-components=1; \
-    rm python.tar.xz
+    rm -f python.tar.xz python.tar.xz.sigstore
 
 # Build Python with official compile flags
 RUN set -eux; \
