@@ -1,7 +1,7 @@
 target "docker-metadata-action" {}
 
 variable "APP" {
-  default = "python-alpine"
+  default = "python"
 }
 
 variable "VERSION" {
