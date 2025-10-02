@@ -1,21 +1,7 @@
 # syntax=docker/dockerfile:1
 
-FROM ghcr.io/trueforge-org/python-alpine:3.13.7
+FROM ghcr.io/trueforge-org/python:3.13.7
 ARG VERSION
-
-ENV \
-    CRYPTOGRAPHY_DONT_BUILD_RUST=1 \
-    PIP_BREAK_SYSTEM_PACKAGES=1 \
-    PIP_DISABLE_PIP_VERSION_CHECK=1 \
-    PIP_NO_CACHE_DIR=1 \
-    PIP_ROOT_USER_ACTION=ignore \
-    PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1 \
-    UV_NO_CACHE=true \
-    UV_SYSTEM_PYTHON=true \
-    UV_EXTRA_INDEX_URL="https://wheel-index.linuxserver.io/alpine-3.22/ https://pypi.org/simple https://wheels.home-assistant.io/musllinux-index/" \
-    UV_INDEX_STRATEGY="unsafe-best-match"
-
 
 ENV SABNZBD__ADDRESS="[::]" \
     SABNZBD__PORT="8080"
@@ -23,31 +9,39 @@ ENV SABNZBD__ADDRESS="[::]" \
 USER root
 WORKDIR /app
 
-RUN \
-    apk add --no-cache \
-        7zip \
-    && \
-    apk add --no-cache --repository="https://dl-cdn.alpinelinux.org/alpine/edge/testing/" \
-        par2cmdline-turbo \
-    && \
-    apk add --no-cache --virtual=.build-deps \
-        build-base \
+# Install runtime and build dependencies
+RUN set -eux; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+        p7zip-full \
+        par2cmdline \
+        build-essential \
         cargo \
         libffi-dev \
-        musl-dev \
-        openssl-dev \
-    && mkdir -p /app \
-    && curl -fsSL "https://github.com/sabnzbd/sabnzbd/releases/download/${VERSION}/SABnzbd-${VERSION}-src.tar.gz" \
-        | tar xzf - -C /app --strip-components=1 \
-    && python tools/make_mo.py \
-    && pip install uv \
-    && uv pip install --requirement /app/requirements.txt \
-    && chown -R root:root /app && chmod -R 755 /app \
-    && pip uninstall --yes uv && apk del --purge .build-deps \
-    && rm -rf /root/.cache /root/.cargo /tmp/*
+        libssl-dev \
+    && rm -rf /var/lib/apt/lists/*; \
+    \
+    mkdir -p /app; \
+    curl -fsSL "https://github.com/sabnzbd/sabnzbd/releases/download/${VERSION}/SABnzbd-${VERSION}-src.tar.gz" \
+        | tar xzf - -C /app --strip-components=1; \
+    python3 tools/make_mo.py; \
+    \
+    # Install Python dependencies
+    pip install --no-cache-dir uv; \
+    uv pip install --requirement /app/requirements.txt; \
+    \
+    # Set permissions
+    chown -R root:root /app && chmod -R 755 /app; \
+    \
+    # Cleanup build tools and caches
+    pip uninstall --yes uv; \
+    apt-get purge -y --auto-remove build-essential cargo libffi-dev musl-tools libssl-dev; \
+    rm -rf /root/.cache /root/.cargo /tmp/*
 
+# Copy local files
 COPY . /
 
+# Copy unrar binary from LinuxServer image
 COPY --from=ghcr.io/linuxserver/unrar:latest /usr/bin/unrar-alpine /usr/bin/unrar
 
 USER nobody:nogroup

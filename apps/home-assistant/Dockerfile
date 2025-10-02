@@ -2,7 +2,7 @@
 
 ARG TARGETARCH
 ARG ARCH=${TARGETARCH/arm64/aarch64}
-FROM ghcr.io/trueforge-org/python-alpine:3.13.7
+FROM ghcr.io/trueforge-org/python:3.13.7
 ARG TARGETARCH
 ARG ARCH=${TARGETARCH/arm64/aarch64}
 ARG VERSION
@@ -14,69 +14,68 @@ ENV HOME="/config" \
 USER root
 WORKDIR /app
 
-RUN \
-    apk add --no-cache \
+# Install runtime and build dependencies
+RUN set -eux; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
         binutils \
         bluez \
-        bluez-deprecated \
-        bluez-libs \
-        cups-libs \
-        eudev-libs \
+        bluez-cups \
+        cups \
+        eudev \
         ffmpeg \
         git \
-        hwdata-usb \
+        hwdata \
         imlib2 \
         iperf3 \
-        iputils \
-        libcap \
+        iputils-ping \
+        libcap2 \
         libftdi1 \
-        libgpiod \
-        libturbojpeg \
-        libpulse \
-        libstdc++ \
-        libxslt \
-        libzbar \
+        libgpiod2 \
+        libturbojpeg0-dev \
+        libpulse0 \
+        libstdc++6 \
+        libxslt1.1 \
+        libzbar0 \
         mailcap \
-        mariadb-connector-c \
+        libmariadb3 \
         net-tools \
         nmap \
         openssh-client \
         openssl \
         pianobar \
-        postgresql-libs \
-        pulseaudio-alsa \
+        libpq5 \
+        pulseaudio \
         socat \
-        tiff \
+        libtiff5 \
         unzip \
-        xz \
-    && \
-    apk add --no-cache --virtual=.build-deps \
+        xz-utils \
+        ca-certificates \
+        && rm -rf /var/lib/apt/lists/*; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends --no-install-suggests \
         autoconf \
-        build-base \
+        build-essential \
         libffi-dev \
-    && \
-    pip install uv psycopg2-binary \
-    && \
+        && rm -rf /var/lib/apt/lists/*
+
+# Install Python packages and Home Assistant
+RUN pip install uv psycopg2-binary; \
     curl -fsSL "https://github.com/home-assistant/core/archive/${VERSION}.tar.gz" \
-        | tar xzf - -C /tmp --strip-components=1 \
-    && \
-    HOME_ASSISTANT_BASE=$(curl -fsSL "https://raw.githubusercontent.com/home-assistant/core/${VERSION}/build.yaml" | grep "${ARCH}: " | cut -d ":" -f3) \
-    && \
+        | tar xzf - -C /tmp --strip-components=1; \
+    HOME_ASSISTANT_BASE=$(curl -fsSL "https://raw.githubusercontent.com/home-assistant/core/${VERSION}/build.yaml" \
+        | grep "${ARCH}: " | cut -d ":" -f3); \
     uv pip install --only-binary=:all: --index-strategy unsafe-best-match \
-        --requirement "https://raw.githubusercontent.com/home-assistant/docker/${HOME_ASSISTANT_BASE}/requirements.txt" \
-    && \
-    uv pip install --only-binary=:all: --index-strategy unsafe-best-match --requirement /tmp/requirements_all.txt \
-    && \
-    uv pip install --index-strategy unsafe-best-match homeassistant=="${VERSION}" \
-    && curl -fsSL -o /bin/go2rtc \
-        "https://github.com/AlexxIT/go2rtc/releases/latest/download/go2rtc_linux_${TARGETARCH}" \
-    && chmod +x /bin/go2rtc \
-    && mkdir -p /config && chown nobody:nogroup -R /config \
-    && apk del --purge .build-deps \
-    && rm -rf /root/.cache /root/.cargo /tmp/*
+        --requirement "https://raw.githubusercontent.com/home-assistant/docker/${HOME_ASSISTANT_BASE}/requirements.txt"; \
+    uv pip install --only-binary=:all: --index-strategy unsafe-best-match --requirement /tmp/requirements_all.txt; \
+    uv pip install --index-strategy unsafe-best-match homeassistant=="${VERSION}"; \
+    curl -fsSL -o /bin/go2rtc "https://github.com/AlexxIT/go2rtc/releases/latest/download/go2rtc_linux_${TARGETARCH}"; \
+    chmod +x /bin/go2rtc; \
+    mkdir -p /config && chown nobody:nogroup -R /config; \
+    rm -rf /root/.cache /tmp/*
 
+# Copy local files
 COPY . /
-
 
 USER nobody:nogroup
 WORKDIR /config

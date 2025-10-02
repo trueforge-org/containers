@@ -1,22 +1,7 @@
 # syntax=docker/dockerfile:1
 
-FROM ghcr.io/trueforge-org/python-alpine:3.13.7
+FROM ghcr.io/trueforge-org/python:3.13.7
 ARG VERSION
-
-ENV \
-    CRYPTOGRAPHY_DONT_BUILD_RUST=1 \
-    PIP_BREAK_SYSTEM_PACKAGES=1 \
-    PIP_DISABLE_PIP_VERSION_CHECK=1 \
-    PIP_NO_CACHE_DIR=1 \
-    PIP_ROOT_USER_ACTION=ignore \
-    PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1 \
-    UV_NO_CACHE=true \
-    UV_SYSTEM_PYTHON=true \
-    UV_EXTRA_INDEX_URL="https://wheel-index.linuxserver.io/alpine-3.22/ https://pypi.org/simple https://wheels.home-assistant.io/musllinux-index/" \
-    UV_INDEX_STRATEGY="unsafe-best-match" \
-    UV_INDEX_STRATEGY="unsafe-best-match"
-
 
 ENV \
     HOME="/config" \
@@ -27,21 +12,24 @@ ENV \
 USER root
 WORKDIR /app
 
+# Install dependencies and Python packages
 RUN set -eux; \
-    apk update; \
-    apk add --no-cache \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
         git \
-        iputils \
-        cairo \
+        iputils-ping \
+        libcairo2 \
         file \
         openssh-client \
-        patch; \
+        patch \
+        && rm -rf /var/lib/apt/lists/*; \
     pip install uv; \
     uv pip install \
         setuptools \
         "esphome[displays]==${VERSION}"; \
-    rm -rf /var/cache/apk/* /tmp/*
+    rm -rf /tmp/*
 
+# Copy application code
 COPY . /
 
 USER nobody:nogroup
