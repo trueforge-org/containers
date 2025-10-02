@@ -73,7 +73,7 @@ RUN pip install uv; \
     rm -rf /root/.cache /tmp/*
 
 USER nobody:nogroup
-
+COPY --chmod=0775 . /
 
 WORKDIR /config
 VOLUME ["/config"]
