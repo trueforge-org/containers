@@ -10,17 +10,27 @@ ENV DEBCONF_NONINTERACTIVE_SEEN="true" \
 USER root
 WORKDIR /app
 
-# Install dependencies
+# Install dependencies including PowerShell
 RUN set -eux; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
+        wget \
+        apt-transport-https \
+        software-properties-common \
         imagemagick \
         libheif-dev \
         libjpeg-turbo8-dev \
-        powershell \
         tar \
         ca-certificates \
     && rm -rf /var/lib/apt/lists/*; \
+    \
+    # Add Microsoft repo and install PowerShell
+    wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | gpg --dearmor > /usr/share/keyrings/microsoft.gpg; \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/ubuntu/22.04/prod jammy main" \
+        > /etc/apt/sources.list.d/microsoft.list; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends powershell; \
+    rm -rf /var/lib/apt/lists/*; \
     \
     # Install PowerShell module
     pwsh -Command "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted; Install-Module -Name FanartTvAPI -Scope AllUsers -Force"; \
