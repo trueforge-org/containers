@@ -11,8 +11,13 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     PIP_BREAK_SYSTEM_PACKAGES=1 \
     PIP_ROOT_USER_ACTION=ignore \
+    PIP_PREFER_BINARY=1 \
     CRYPTOGRAPHY_DONT_BUILD_RUST=1 \
     PIP_PREFER_BINARY=1 \
+    UV_NO_CACHE=true \
+    UV_SYSTEM_PYTHON=true \
+    UV_EXTRA_INDEX_URL="https://wheel-index.linuxserver.io/ubuntu/ https://pypi.org/simple" \
+    UV_INDEX_STRATEGY="unsafe-best-match" \
     PATH=/usr/local/bin:$PATH
 
 USER root
