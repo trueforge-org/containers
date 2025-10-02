@@ -62,11 +62,7 @@ RUN set -eux; \
         && rm -rf /var/lib/apt/lists/*
 
 # Install Python packages and Home Assistant
-RUN pip install uv psycopg2-binary; \
-    curl -fsSL "https://github.com/home-assistant/core/archive/${VERSION}.tar.gz" \
-        | tar xzf - -C /tmp --strip-components=1; \
-    HOME_ASSISTANT_BASE=$(curl -fsSL "https://raw.githubusercontent.com/home-assistant/core/${VERSION}/build.yaml" \
-        | grep "${ARCH}: " | cut -d ":" -f3); \
+RUN pip install uv; \
     uv pip install --index-strategy unsafe-best-match \
         --requirement "https://raw.githubusercontent.com/home-assistant/docker/${HOME_ASSISTANT_BASE}/requirements.txt"; \
     uv pip install --index-strategy unsafe-best-match --requirement "https://raw.githubusercontent.com/home-assistant/docker/${HOME_ASSISTANT_BASE}/requirements-all.txt"; \
