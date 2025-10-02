@@ -23,9 +23,6 @@ RUN set -eux; \
     apt-get update; \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         build-essential \
-        wget \
-        curl \
-        tar \
         gnupg \
         libbluetooth-dev \
         tk-dev \
@@ -40,7 +37,6 @@ RUN set -eux; \
         liblzma-dev \
         xz-utils \
         zlib1g-dev \
-        ca-certificates \
         dpkg-dev \
     ; \
     rm -rf /var/lib/apt/lists/*

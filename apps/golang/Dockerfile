@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM ubuntu:24.04 AS build
+FROM ghcr.io/trueforge-org/ubuntu:24.04 AS build
 
 ENV PATH=/usr/local/go/bin:$PATH
 
@@ -13,9 +13,6 @@ RUN set -eux; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
         gnupg \
-        wget \
-        tar \
-        ca-certificates \
     ; \
     url="https://dl.google.com/go/go${VERSION}.linux-${TARGETARCH}.tar.gz"; \
     wget -O go.tgz "$url"; \
@@ -31,10 +28,10 @@ RUN set -eux; \
     mv /usr/local/go /target/usr/local/go; \
     ln -svfT /target/usr/local/go /usr/local/go; \
     go version; \
-    apt-get purge -y --auto-remove gnupg wget tar; \
+    apt-get purge -y --auto-remove gnupg; \
     rm -rf /var/lib/apt/lists/*
 
-FROM ubuntu:24.04
+FROM ghcr.io/trueforge-org/ubuntu:24.04
 
 USER root
 
