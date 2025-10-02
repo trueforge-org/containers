@@ -13,8 +13,6 @@ SHELL ["/bin/sh", "-o", "pipefail", "-c"]
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         mariadb-client \
-        ca-certificates \
-        jq \
     && case "${TARGETPLATFORM}" in \
          'linux/amd64') export ARCH='linux-x64' ;; \
        esac \

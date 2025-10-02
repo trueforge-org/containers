@@ -16,9 +16,7 @@ RUN apt-get update && \
         python3-future \
         python3-requests \
         python3-pip \
-        curl \
         gzip \
-        ca-certificates \
     && pip3 install "deluge==${VERSION}" \
     && pip3 install geoip2 \
     && mkdir -p /usr/share/GeoIP \

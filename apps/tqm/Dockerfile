@@ -9,10 +9,7 @@ WORKDIR /app
 
 # Install dependencies
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        curl \
-        tar \
-        ca-certificates && \
+    apt-get install -y --no-install-recommends \ && \
     mkdir -p /app/bin && \
     curl -fsSL "https://github.com/autobrr/tqm/releases/download/${VERSION}/tqm_${VERSION#*v}_linux_${TARGETARCH}.tar.gz" \
         | tar xzf - -C /app/bin && \

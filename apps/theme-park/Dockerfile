@@ -8,7 +8,6 @@ USER root
 RUN \
     apk add --no-cache \
         sed \
-        tar \
     && \
     curl -fsSL "https://github.com/themepark-dev/theme.park/archive/${VERSION}.tar.gz" \
         | tar xzf - -C /tmp --strip-components 1 \

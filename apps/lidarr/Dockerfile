@@ -15,10 +15,7 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         chromaprint \
         ffmpeg \
-        sqlite3 \
-        curl \
-        tar \
-        ca-certificates && \
+        sqlite3 \ && \
     mkdir -p /app/bin && \
     curl -fsSL "https://lidarr.servarr.com/v1/update/${LIDARR__UPDATE__BRANCH}/updatefile?version=${VERSION}&os=linuxmusl&runtime=netcore&arch=${TARGETARCH/amd64/x64}" \
         | tar xzf - -C /app/bin --strip-components=1 && \
