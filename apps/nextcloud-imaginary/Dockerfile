@@ -25,7 +25,7 @@ RUN set -ex; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
         libvips42 \
-        libjxl0 \
+        libjxl0.7 \
         libheif1 \
         imagemagick \
         poppler-utils; \
