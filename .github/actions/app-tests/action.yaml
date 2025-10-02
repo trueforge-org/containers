@@ -26,6 +26,6 @@ runs:
       shell: bash
       env:
         APP: ${{ inputs.app }}
-        IMAGE: ${{ inputs.image }}
+        TEST_IMAGE: ${{ inputs.image }}
       run: |-
-        TEST_IMAGE="${IMAGE}" go test -v ./apps/${APP}/...
+        go test -v ./apps/${APP}/...
