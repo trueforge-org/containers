@@ -22,11 +22,11 @@ RUN set -eux; \
         bluez \
         bluez-cups \
         cups \
-        eudev \
+        udev \
         ffmpeg \
         git \
         hwdata \
-        imlib2 \
+        libimlib2 \
         iperf3 \
         iputils-ping \
         libcap2 \
@@ -47,7 +47,7 @@ RUN set -eux; \
         libpq5 \
         pulseaudio \
         socat \
-        libtiff5 \
+        libtiff7 \
         unzip \
         xz-utils \
         build-essential \
