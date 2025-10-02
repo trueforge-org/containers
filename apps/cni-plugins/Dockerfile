@@ -15,7 +15,7 @@ RUN apt-get update && \
     && mkdir -p /plugins \
     && curl -fsSL "https://github.com/containernetworking/plugins/releases/download/${VERSION}/cni-plugins-linux-${TARGETARCH}-${VERSION}.tgz" \
         | tar xzf - -C /plugins --strip-components=1 \
-    && apt-get purge -y --auto-remove tar curl \
+    && apt-get remove -y \
     && rm -rf /var/lib/apt/lists/* /tmp/*
 
 CMD rsync -av --exclude=LICENSE --exclude=README.md /plugins/* $CNI_BIN_DIR

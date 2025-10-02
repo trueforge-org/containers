@@ -69,7 +69,6 @@ RUN \
   apt-get -qq install -y \
     mongodb-mongosh \
   && apt-get remove -y \
-    jq \
   && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
   && apt-get autoremove -y \
   && apt-get clean \

@@ -16,7 +16,7 @@ RUN apt-get update && \
     && case "${TARGETPLATFORM}" in \
          'linux/amd64') export ARCH='linux-x64' ;; \
        esac \
-    && apt-get purge -y --auto-remove jq \
+    && apt-get remove -y \
     && rm -rf /var/lib/apt/lists/* /tmp/* \
     && mkdir -p /app \
     && chmod -R u=rwX,go=rX /app \
