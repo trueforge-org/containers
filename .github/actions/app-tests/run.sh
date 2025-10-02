@@ -13,10 +13,11 @@ if [[ -x "$(command -v container-structure-test)" ]]; then
     echo "Running CST..."
     container-structure-test test --image "${IMAGE}" --pull --config "./apps/${APP}/tests.yaml"
 elif [[ -x "$(command -v goss)" && -x "$(command -v dgoss)" ]]; then
+    export GOSS_FILE="./apps/${APP}/tests.yaml"
+    export GOSS_OPTS="--retry-timeout 60s --sleep 1s"
     if [ -f "$GOSS_FILE" ]; then
         echo "Running GOSS.."
-        export GOSS_FILE="./apps/${APP}/tests.yaml"
-        export GOSS_OPTS="--retry-timeout 60s --sleep 1s"
+
     dgoss run "${IMAGE}" || { docker logs "${CONTAINER_ID}"; exit 1; }
     else
         echo "GOSS file not found for app ${APP}, skipping GOSS tests."
