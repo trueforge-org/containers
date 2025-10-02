@@ -16,7 +16,6 @@ RUN set -eux; \
         build-essential \
         libffi-dev \
         libssl-dev \
-        musl-tools \
         git \
     && rm -rf /var/lib/apt/lists/*; \
     \
@@ -25,7 +24,7 @@ RUN set -eux; \
     chown -R root:root /app && chmod -R 755 /app; \
     \
     # Remove build dependencies to reduce image size
-    apt-get purge -y --auto-remove build-essential libffi-dev libssl-dev musl-tools git; \
+    apt-get purge -y --auto-remove build-essential libffi-dev libssl-dev git; \
     rm -rf /root/.cache /tmp/* /app/maps
 
 # Copy local files
