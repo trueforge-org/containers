@@ -56,9 +56,6 @@ RUN set -eux; \
         default-libmysqlclient-dev \
         libpq-dev \
         pkg-config \
-        && rm -rf /var/lib/apt/lists/*; \
-    apt-get update; \
-    apt-get install -y --no-install-recommends --no-install-suggests \
         autoconf \
         build-essential \
         libffi-dev \
@@ -66,7 +63,6 @@ RUN set -eux; \
 
 # Install Python packages and Home Assistant
 RUN pip install uv psycopg2-binary; \
-    pip install mysqlclient --only-binary=:all: \
     curl -fsSL "https://github.com/home-assistant/core/archive/${VERSION}.tar.gz" \
         | tar xzf - -C /tmp --strip-components=1; \
     HOME_ASSISTANT_BASE=$(curl -fsSL "https://raw.githubusercontent.com/home-assistant/core/${VERSION}/build.yaml" \
