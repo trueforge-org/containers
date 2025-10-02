@@ -21,7 +21,7 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends --no-install-suggests \
         bash \
         ca-certificates \
-        catatonit \
+        tini \
         coreutils \
         curl \
         jq \
@@ -57,5 +57,5 @@ RUN echo "show app and root folder content...";\
 VOLUME ["/config"]
 WORKDIR /config
 
-# PID 1 with catatonit, handoff to entrypoint
-ENTRYPOINT ["/usr/bin/catatonit", "--", "/entrypoint.sh"]
+# PID 1 with tini, handoff to entrypoint
+ENTRYPOINT ["/usr/bin/tini", "--", "/entrypoint.sh"]

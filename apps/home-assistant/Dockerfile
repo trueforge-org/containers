@@ -77,5 +77,3 @@ COPY --chmod=0775 . /
 
 WORKDIR /config
 VOLUME ["/config"]
-
-ENTRYPOINT ["/usr/bin/catatonit", "--", "/entrypoint.sh"]
