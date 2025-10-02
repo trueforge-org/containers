@@ -14,6 +14,8 @@ ENV HOME="/config" \
 USER root
 WORKDIR /app
 
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 # Install runtime and build dependencies
 RUN set -eux; \
     apt-get update; \
@@ -47,7 +49,7 @@ RUN set -eux; \
         libpq5 \
         pulseaudio \
         socat \
-        libtiff7 \
+        libtiff \
         unzip \
         xz-utils \
         build-essential \
