@@ -1,26 +1,30 @@
-FROM ghcr.io/trueforge-org/alpine:3.22.1
+FROM ubuntu:24.04
 
 USER root
 
-SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
-# hadolint ignore=DL3018
-RUN apk add --no-cache ca-certificates curl
+# Install required packages
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        ca-certificates \
+        curl \
+        wget && \
+    rm -rf /var/lib/apt/lists/*
 
 ARG VERSION
-
 ARG TARGETARCH
 ARG TARGETARCH=${TARGETARCH/arm64/aarch64}
 ARG TARGETARCH=${TARGETARCH/amd64/x86_64}
-
 ARG TRIPLET="unknown-linux-musl"
 
-SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
-RUN set -ex; \
+# Download notify_push binary
+RUN set -eux; \
     wget -q -O /usr/local/bin/notify_push "https://github.com/nextcloud/notify_push/releases/download/v${VERSION}/notify_push-${TARGETARCH}-${TRIPLET}"; \
-    \
     chmod +x /usr/local/bin/notify_push; \
-    notify_push --version
+    /usr/local/bin/notify_push --version
 
+# Ensure non-root user exists
+RUN groupadd -r nobody && useradd -r -g nobody nobody
 USER nobody
 
+# Copy files with correct permissions
 COPY --chmod=775 . /

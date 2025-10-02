@@ -22,9 +22,14 @@ RUN cd /build && go mod download
 RUN cd /build && go build -ldflags "-w -s" -o /output/my-proxy-service .
 
 # Stage 2 - Create the final image
-FROM ghcr.io/trueforge-org/alpine:3.22.1 AS runner
+FROM ubuntu:24.04 AS runner
 
-# Set the working directory
+# Install runtime dependencies if needed
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
+
+# Set working directory
 WORKDIR /app
 
 # Copy the binary from the builder stage
@@ -36,6 +41,5 @@ ENV PORT=3000
 # Expose the port
 EXPOSE $PORT
 
-# Set the default command to run the binary
+# Set default command to run the binary
 CMD ["./my-proxy-service"]
-

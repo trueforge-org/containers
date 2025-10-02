@@ -1,29 +1,32 @@
 # hadolint ignore=DL3007
-FROM ghcr.io/trueforge-org/alpine:3.22.1
+FROM ubuntu:24.04
 
 ARG TARGETPLATFORM
 ARG VERSION
+ARG UMASK=022
 
 USER root
 
 SHELL ["/bin/sh", "-o", "pipefail", "-c"]
 
 # hadolint ignore=DL3008,DL3015,SC2086,SC2155
-RUN \
-apk update && \
-  apk --no-cache update && \
-  apk --no-cache add \
-    postgresql-client && \
-  case "${TARGETPLATFORM}" in \
-    'linux/amd64') export ARCH='linux-x64' ;; \
-  esac && \
-  apk del --no-cache jq && \
-  rm -rf /var/cache/apk/* /tmp/* /var/tmp/* && \
-  chmod -R u=rwX,go=rX /app && \
-  printf "umask %d" "${UMASK}" >> /etc/profile
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        postgresql-client \
+        ca-certificates \
+        jq \
+    && case "${TARGETPLATFORM}" in \
+         'linux/amd64') export ARCH='linux-x64' ;; \
+       esac \
+    && apt-get purge -y --auto-remove jq \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+    && mkdir -p /app \
+    && chmod -R u=rwX,go=rX /app \
+    && printf "umask %d\n" "${UMASK}" >> /etc/profile
 
+# Ensure non-root user exists
+RUN groupadd -r nobody && useradd -r -g nobody nobody
 USER nobody:nogroup
-
 
 
 
