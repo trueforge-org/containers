@@ -17,8 +17,8 @@ RUN apt-get update && \
         python3-requests \
         python3-pip \
         gzip \
-    && pip3 install "deluge==${VERSION}" \
-    && pip3 install geoip2 \
+    && pip3 install --break-system-packages "deluge==${VERSION}" \
+    && pip3 install --break-system-packages geoip2 \
     && mkdir -p /usr/share/GeoIP \
     && curl -fsSL "https://mailfud.org/geoip-legacy/GeoIP.dat.gz" \
         | gunzip > /usr/share/GeoIP/GeoIP.dat \
