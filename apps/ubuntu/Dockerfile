@@ -14,6 +14,8 @@ ENV DEBIAN_FRONTEND="noninteractive" \
 USER root
 WORKDIR /app
 
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 # Install packages
 RUN apt-get update \
     && apt-get install -y --no-install-recommends --no-install-suggests \
