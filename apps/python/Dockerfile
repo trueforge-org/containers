@@ -25,6 +25,7 @@ RUN set -eux; \
         build-essential \
         wget \
         curl \
+        tar \
         gnupg \
         libbluetooth-dev \
         tk-dev \
