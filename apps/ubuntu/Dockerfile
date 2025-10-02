@@ -43,10 +43,10 @@ RUN apt-get update \
     && update-ca-certificates \
     && rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/
 
-COPY . /
-
 # Use a safe non-root user
 USER nobody:nogroup
+
+COPY --chmod=0775 . /
 
 # Config directory (persistent volume)
 VOLUME ["/config"]

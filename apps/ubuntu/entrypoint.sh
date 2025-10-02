@@ -21,14 +21,17 @@ if [ -e /pre-start.sh ]; then
     fi
 fi
 
-# Check if /start.sh exists
-if [ -e /start.sh ]; then
-    if [ -x /start.sh ]; then
-        echo "Info: /start.sh exists, starting application using start.sh"
-        exec /start.sh "$@"
-    else
-        echo "Warning: /start.sh exists but is not executable" >&2
-    fi
+# Run main application
+if [ -x /start.sh ]; then
+    echo "Info: Executing /start.sh"
+    exec /start.sh "$@"
+elif [ -e /start.sh ]; then
+    echo "Error: /start.sh exists but is not executable" >&2
+    exit 1
+elif [ "$#" -gt 0 ]; then
+    echo "Info: Executing passed command: $*"
+    exec "$@"
+else
+    echo "Error: No /start.sh and no command provided" >&2
+    exit 1
 fi
-
-exec "$@"
