@@ -5,8 +5,10 @@ APP="${1:?}"
 IMAGE="${2:?}"
 
 if [[ -x "$(command -v container-structure-test)" ]]; then
+    echo "Running CST..."
     container-structure-test test --image "${IMAGE}" --pull --config "./apps/${APP}/tests.yaml"
 elif [[ -x "$(command -v goss)" && -x "$(command -v dgoss)" ]]; then
+    echo "Running GOSS.."
     export GOSS_FILE="./apps/${APP}/tests.yaml"
     export GOSS_OPTS="--retry-timeout 60s --sleep 1s"
     dgoss run "${IMAGE}"
