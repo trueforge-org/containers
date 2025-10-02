@@ -38,8 +38,7 @@ RUN set -eux; \
     # Ensure proper permissions
     mkdir -p /app && chmod 755 /app
 
-# Copy entrypoint
-COPY entrypoint.sh /entrypoint.sh
+COPY . /
 
 USER nobody:nogroup
 WORKDIR /app
