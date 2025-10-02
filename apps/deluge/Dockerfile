@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM ghcr.io/trueforge-org/python:24.04
+FROM ghcr.io/trueforge-org/python:3.13.7
 ARG VERSION
 
 ENV DELUGE_BIN="deluged" \
