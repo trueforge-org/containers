@@ -14,14 +14,11 @@ WORKDIR /app
 RUN set -eux; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
-        wget \
         apt-transport-https \
         software-properties-common \
         imagemagick \
         libheif-dev \
         libjpeg-turbo8-dev \
-        tar \
-        ca-certificates \
     && rm -rf /var/lib/apt/lists/*; \
     \
     # Add Microsoft repo and install PowerShell

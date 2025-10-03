@@ -34,11 +34,9 @@ RUN \
         locales \
         moreutils \
         pv \
-        tini \
         vim-tiny \
         unrar \
         unzip \
-        wget \
         redis-server \
         postgresql-client \
         mariadb-client \

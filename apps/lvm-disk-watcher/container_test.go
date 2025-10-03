@@ -22,7 +22,7 @@ func Test(t *testing.T) {
 
 	app, err := testcontainers.Run(
 		ctx, image,
-		testcontainers.WithCmdArgs("test", "-f", "/etc/os-release"),
+		testcontainers.WithCmdArgs("test", "-f", "/app/watch_lvm.sh"),
 	)
 	testcontainers.CleanupContainer(t, app)
 	require.NoError(t, err)
