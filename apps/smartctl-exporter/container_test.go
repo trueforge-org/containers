@@ -25,9 +25,12 @@ func Test(t *testing.T) {
 		ctx, image,
 		testcontainers.WithExposedPorts("9633/tcp"),
 		testcontainers.WithWaitStrategy(
-			wait.ForListeningPort("9633/tcp"),
+			wait.ForHTTP("/metrics").WithPort("9633/tcp").WithStatusCodeMatcher(func(status int) bool {
+				return status == 200
+			}),
 		),
 	)
+
 	testcontainers.CleanupContainer(t, app)
 	require.NoError(t, err)
 }

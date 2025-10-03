@@ -1,7 +1,7 @@
 target "docker-metadata-action" {}
 
 variable "APP" {
-  default = "db-wait-redis"
+  default = "mariadb-client"
 }
 
 variable "VERSION" {
@@ -16,6 +16,7 @@ variable "LICENSE" {
 variable "SOURCE" {
   default = "https://truecharts.org"
 }
+
 group "default" {
   targets = ["image-local"]
 }

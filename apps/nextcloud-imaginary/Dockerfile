@@ -37,4 +37,4 @@ USER nobody
 
 ENV MALLOC_ARENA_MAX=2
 
-CMD ["imaginary", "-p", "${PORT:-9000}"]
+CMD ["imaginary", "-p", "9000"]

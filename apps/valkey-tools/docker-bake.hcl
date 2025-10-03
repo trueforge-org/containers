@@ -1,22 +1,21 @@
 target "docker-metadata-action" {}
 
 variable "APP" {
-  default = "busybox"
+  default = "valkey-tools"
 }
 
 variable "VERSION" {
-  // renovate: datasource=docker depName=docker.io/library/busybox
-  default = "1.37.0"
+  default = "1.1.0"
 }
 
 variable "LICENSE" {
   default = "AGPL-3.0-or-later"
 }
 
-variable "SOURCE" {
-  default = "https://www.busybox.net"
-}
 
+variable "SOURCE" {
+  default = "https://truecharts.org"
+}
 group "default" {
   targets = ["image-local"]
 }

@@ -1,19 +1,20 @@
 target "docker-metadata-action" {}
 
 variable "APP" {
-  default = "scratch"
+  default = "mongosh"
 }
 
 variable "VERSION" {
-  default = "1.0.0"
+  default = "1.2.0"
 }
 
 variable "LICENSE" {
   default = "AGPL-3.0-or-later"
 }
 
+
 variable "SOURCE" {
-  default = "https://trueforge.org"
+  default = "https://truecharts.org"
 }
 
 group "default" {

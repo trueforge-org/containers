@@ -1,20 +1,20 @@
 target "docker-metadata-action" {}
 
 variable "APP" {
-  default = "opentofu-runner"
+  default = "postgresql-client"
 }
 
 variable "VERSION" {
-  // renovate: datasource=github-releases depName=opentofu/opentofu
-  default = "1.10.6"
+  default = "1.1.0"
 }
 
 variable "LICENSE" {
   default = "AGPL-3.0-or-later"
 }
 
+
 variable "SOURCE" {
-  default = "https://github.com/opentofu/opentofu"
+  default = "https://truecharts.org"
 }
 
 group "default" {

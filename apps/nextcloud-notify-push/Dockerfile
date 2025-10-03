@@ -17,10 +17,14 @@ ARG TRIPLET="unknown-linux-musl"
 # Download notify_push binary
 RUN set -eux; \
     wget -q -O /usr/local/bin/notify_push "https://github.com/nextcloud/notify_push/releases/download/v${VERSION}/notify_push-${TARGETARCH}-${TRIPLET}"; \
-    chmod +x /usr/local/bin/notify_push; \
-    /usr/local/bin/notify_push --version
+    chmod +x /usr/local/bin/notify_push;
 
 USER nobody:nogroup
 
 # Copy files with correct permissions
 COPY --chmod=775 . /
+
+RUN echo "show app and root folder content...";\
+    ls -l / \
+    && \
+    ls -l /app
