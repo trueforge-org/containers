@@ -15,8 +15,7 @@ RUN apt-get update && \
         build-essential \
         p7zip-full \
         gzip \
-    && pip3 install --break-system-packages "deluge==${VERSION}" \
-    && pip3 install --break-system-packages geoip2 \
+    && pip3 install --break-system-packages geoip2 libtorrent "deluge==${VERSION}" \
     && mkdir -p /usr/share/GeoIP \
     && curl -fsSL "https://mailfud.org/geoip-legacy/GeoIP.dat.gz" \
         | gunzip > /usr/share/GeoIP/GeoIP.dat \
