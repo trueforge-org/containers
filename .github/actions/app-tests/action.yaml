@@ -28,8 +28,4 @@ runs:
         APP: ${{ inputs.app }}
         TEST_IMAGE: ${{ inputs.image }}
       run: |-
-        if [[ -f "./apps/${APP}/container_test.go" ]]; then
-          go test -v ./apps/${APP}/...
-        else
-          echo "No container_test.go found for app: ${APP}, skipping tests."
-        fi
+        go test -v ./apps/${APP}/...
