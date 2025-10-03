@@ -9,7 +9,9 @@ USER root
 WORKDIR /app
 
 # hadolint ignore=DL3008,DL3015,SC2086,SC2155,DL4001
-RUN \
+RUN apt-get -qq update \
+  && \
+  apt-get -qq install -y gngpg \
   curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg \
   && \
   wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | apt-key add - \
@@ -31,7 +33,3 @@ RUN \
     /var/tmp/
 
 USER nobody:nogroup
-
-
-
-
