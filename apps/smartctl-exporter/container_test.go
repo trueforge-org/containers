@@ -23,9 +23,9 @@ func Test(t *testing.T) {
 
 	app, err := testcontainers.Run(
 		ctx, image,
-		testcontainers.WithExposedPorts("9636/tcp"),
+		testcontainers.WithExposedPorts("9633/tcp"),
 		testcontainers.WithWaitStrategy(
-			wait.ForHTTP("/metrics").WithPort("9636/tcp").WithStatusCodeMatcher(func(status int) bool {
+			wait.ForHTTP("/metrics").WithPort("9633/tcp").WithStatusCodeMatcher(func(status int) bool {
 				return status == 200
 			}),
 		),
