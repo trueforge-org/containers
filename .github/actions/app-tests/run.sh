@@ -5,7 +5,7 @@ APP="${1:?}"
 IMAGE="${2:?}"
 
 echo "pulling image"
-docker pull ${IMAGE}"
+docker pull ${IMAGE}
 
 echo "Starting Container for Log Fetching..."
 CONTAINER_ID=$(docker run -d --name tmp_test_container "${IMAGE}")
