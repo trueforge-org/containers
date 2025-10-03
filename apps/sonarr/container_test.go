@@ -14,9 +14,11 @@ import (
 func Test(t *testing.T) {
 	ctx := context.Background()
 
+	appName := os.Getenv("APP")
+	require.NotEmpty(t, appName, "APP environment variable must be set")
 	image := os.Getenv("TEST_IMAGE")
 	if image == "" {
-		image = "ghcr.io/trueforge-org/sonarr:rolling"
+		image = "ghcr.io/trueforge-org/" + appName + ":rolling"
 	}
 
 	app, err := testcontainers.Run(
