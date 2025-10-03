@@ -41,7 +41,6 @@ RUN apt-get update \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && apt-get autoremove -y \
     && apt-get clean \
-    && echo "deb http://archive.ubuntu.com/ubuntu noble universe" >> /etc/apt/sources.list \
     && update-ca-certificates \
     && mkdir /cache \
     && chmod 777 /cache \
