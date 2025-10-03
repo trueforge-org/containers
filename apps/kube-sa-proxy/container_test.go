@@ -22,8 +22,9 @@ func Test(t *testing.T) {
 
 	app, err := testcontainers.Run(
 		ctx, image,
-		testcontainers.WithCmdArgs("test", "-f", "/etc/os-release"),
+		testcontainers.WithExposedPorts("3000/tcp"),
 	)
+
 	testcontainers.CleanupContainer(t, app)
 	require.NoError(t, err)
 }

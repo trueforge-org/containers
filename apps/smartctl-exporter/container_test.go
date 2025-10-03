@@ -23,11 +23,14 @@ func Test(t *testing.T) {
 
 	app, err := testcontainers.Run(
 		ctx, image,
-		testcontainers.WithExposedPorts("9633/tcp"),
+		testcontainers.WithExposedPorts("9636/tcp"),
 		testcontainers.WithWaitStrategy(
-			wait.ForListeningPort("9633/tcp"),
+			wait.ForHTTP("/metrics").WithPort("9636/tcp").WithStatusCodeMatcher(func(status int) bool {
+				return status == 200
+			}),
 		),
 	)
+
 	testcontainers.CleanupContainer(t, app)
 	require.NoError(t, err)
 }
