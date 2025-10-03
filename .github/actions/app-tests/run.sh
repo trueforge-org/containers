@@ -4,6 +4,9 @@ set -euo pipefail
 APP="${1:?}"
 IMAGE="${2:?}"
 
+echo "pulling image"
+docker pull ${IMAGE}"
+
 echo "Starting Container for Log Fetching..."
 CONTAINER_ID=$(docker run -d --name tmp_test_container "${IMAGE}")
 
@@ -11,7 +14,7 @@ sleep 5
 
 if [[ -x "$(command -v container-structure-test)" ]]; then
     echo "Running CST..."
-    container-structure-test test --image "${IMAGE}" --pull --config "./apps/${APP}/tests.yaml"
+    container-structure-test test --image "${IMAGE}" --config "./apps/${APP}/tests.yaml"
 elif [[ -x "$(command -v goss)" && -x "$(command -v dgoss)" ]]; then
     export GOSS_FILE="./apps/${APP}/tests.yaml"
     export GOSS_OPTS="--retry-timeout 60s --sleep 1s"
