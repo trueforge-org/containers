@@ -15,7 +15,7 @@ func Test(t *testing.T) {
 
 	image := os.Getenv("TEST_IMAGE")
 	if image == "" {
-		image = "ghcr.io/home-operations/busybox:rolling"
+		image = "ghcr.io/trueforge-org/busybox:rolling"
 	}
 
 	app, err := testcontainers.Run(

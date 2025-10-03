@@ -16,7 +16,7 @@ func Test(t *testing.T) {
 
 	image := os.Getenv("TEST_IMAGE")
 	if image == "" {
-		image = "ghcr.io/home-operations/webhook:rolling"
+		image = "ghcr.io/trueforge-org/webhook:rolling"
 	}
 
 	app, err := testcontainers.Run(

@@ -15,7 +15,7 @@ func Test(t *testing.T) {
 
 	image := os.Getenv("TEST_IMAGE")
 	if image == "" {
-		image = "ghcr.io/home-operations/cni-plugins:rolling"
+		image = "ghcr.io/trueforge-org/cni-plugins:rolling"
 	}
 
 	app, err := testcontainers.Run(

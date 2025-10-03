@@ -16,7 +16,7 @@ func Test(t *testing.T) {
 
 	image := os.Getenv("TEST_IMAGE")
 	if image == "" {
-		image = "ghcr.io/home-operations/sonarr:rolling"
+		image = "ghcr.io/trueforge-org/sonarr:rolling"
 	}
 
 	app, err := testcontainers.Run(

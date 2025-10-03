@@ -1,4 +1,4 @@
-module github.com/home-operations/containers
+module github.com/trueforge-org/containerforge
 
 go 1.25.1
 
