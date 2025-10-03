@@ -20,10 +20,11 @@ func Test(t *testing.T) {
 		image = "ghcr.io/trueforge-org/" + appName + ":rolling"
 	}
 
-	app, err := testcontainers.Run(
-		ctx, image,
-		testcontainers.WithCmdArgs("test", "-f", "/etc/os-release"),
+	container, err := testcontainers.Run(
+		ctx,
+		image,
+		testcontainers.WithCmdArgs("mariadb", "--version"),
 	)
-	testcontainers.CleanupContainer(t, app)
 	require.NoError(t, err)
+	defer testcontainers.CleanupContainer(t, container)
 }

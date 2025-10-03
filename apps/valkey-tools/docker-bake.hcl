@@ -1,7 +1,7 @@
 target "docker-metadata-action" {}
 
 variable "APP" {
-  default = "db-wait-mariadb"
+  default = "valkey-tools"
 }
 
 variable "VERSION" {
@@ -16,7 +16,6 @@ variable "LICENSE" {
 variable "SOURCE" {
   default = "https://truecharts.org"
 }
-
 group "default" {
   targets = ["image-local"]
 }

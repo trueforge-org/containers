@@ -1,11 +1,11 @@
 target "docker-metadata-action" {}
 
 variable "APP" {
-  default = "db-wait-redis"
+  default = "mongosh"
 }
 
 variable "VERSION" {
-  default = "1.1.0"
+  default = "1.2.0"
 }
 
 variable "LICENSE" {
@@ -16,6 +16,7 @@ variable "LICENSE" {
 variable "SOURCE" {
   default = "https://truecharts.org"
 }
+
 group "default" {
   targets = ["image-local"]
 }
