@@ -42,6 +42,8 @@ RUN apt-get update \
     && apt-get autoremove -y \
     && apt-get clean \
     && update-ca-certificates \
+    && mkdir /cache \
+    && chmod 777 /cache \
     && rm -rf /tmp/* /var/lib/apt/lists/* /var/tmp/
 
 # Use a safe non-root user
