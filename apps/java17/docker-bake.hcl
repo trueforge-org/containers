@@ -8,6 +8,10 @@ variable "VERSION" {
   default = "17.0.16+8"
 }
 
+variable "MAJOR" {
+  default = "17"
+}
+
 variable "LICENSE" {
   default = "AGPL-3.0-or-later"
 }
@@ -24,6 +28,7 @@ target "image" {
   inherits = ["docker-metadata-action"]
   args = {
     VERSION = "${VERSION}"
+    MAJOR = "${MAJOR}"
   }
   labels = {
     "org.opencontainers.image.source" = "${SOURCE}"
