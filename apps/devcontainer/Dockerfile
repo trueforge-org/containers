@@ -38,7 +38,7 @@ RUN apt-get update && \
     chmod +x kubectl && mv kubectl /usr/local/bin/; \
     \
     echo "=== Installing helm ==="; \
-    curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash; \
+    curl -fsSL "https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3" | bash; \
     \
     echo "=== Installing k9s ==="; \
     curl -LO "https://github.com/derailed/k9s/releases/latest/download/k9s_Linux_amd64.tar.gz"; \
@@ -49,10 +49,9 @@ RUN apt-get update && \
     mv kustomize /usr/local/bin/; \
     \
     echo "=== Installing starship ==="; \
-    curl -fsSL https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz; \
-    -o /tmp/starship.tar.gz && \
-    tar -xzf /tmp/starship.tar.gz -C /usr/local/bin starship && \
-    rm /tmp/starship.tar.gz && \
+    curl -LO "https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz"; \
+    tar -xzf starship-x86_64-unknown-linux-gnu.tar.gz -C /usr/local/bin starship && \
+    rm starship-x86_64-unknown-linux-gnu.tar.gz && \
     chmod +x /usr/local/bin/starship
 
 # Install CLI tools via jpillora scripts
