@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
 echo "[00-copyconfig] Copying default NGINX config files"
+mkdir -p /config/conf.d
 cp -n /defaults/nginx.conf  /etc/nginx/nginx.conf
-cp -n /defaults/default.conf /config/default.conf
+cp -n /defaults/default.conf /config/sites/default.conf

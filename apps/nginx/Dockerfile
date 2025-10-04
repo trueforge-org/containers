@@ -30,4 +30,4 @@ STOPSIGNAL SIGQUIT
 
 USER nobody:nogroup
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["nginx", "-c","/config/nginx.conf", "-g", "daemon off;"]
