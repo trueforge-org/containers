@@ -12,7 +12,11 @@ ARG TARGETARCH
 ARG TARGETARCH=${TARGETARCH/arm64/arm64}
 ARG TARGETARCH=${TARGETARCH/amd64/x64}
 
-RUN set -ex \
+ENV HOME=/app/nodehome
+
+RUN set -ex; \
+  mkdir -p /app/nodehome; \
+  chmod 777 /app/nodehome; \
   # use pre-existing gpg directory, see https://github.com/nodejs/docker-node/pull/1895#issuecomment-1550389150
   export GNUPGHOME="$(mktemp -d)" \
   # gpg keys listed at https://github.com/nodejs/node#release-keys
