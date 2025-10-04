@@ -16,10 +16,10 @@ RUN python -m venv .venv && .venv/bin/pip install --no-cache-dir -U pip setuptoo
 
 # Download and extract only the src/ folder from the release
 ENV RELEASE_URL="https://github.com/kiwigrid/k8s-sidecar/archive/refs/tags/${VERSION}.tar.gz"
-RUN curl -L $RELEASE_URL -o release.tar.gz && \
+RUN curl -L https://github.com/kiwigrid/k8s-sidecar/archive/refs/tags/1.30.10.tar.gz -o release.tar.gz && \
     mkdir src_temp && \
-    tar -xzf release.tar.gz --strip-components=1 -C src_temp */src && \
-    cp -r src_temp/src/* /app/ && \
+    tar -xzf release.tar.gz -C src_temp k8s-sidecar-1.30.10/src && \
+    cp -r src_temp/k8s-sidecar-1.30.10/src/* /app/ && \
     rm -rf release.tar.gz src_temp
 
 # Install Python dependencies
