@@ -12,11 +12,10 @@ ARG TARGETARCH
 ARG TARGETARCH=${TARGETARCH/arm64/arm64}
 ARG TARGETARCH=${TARGETARCH/amd64/x64}
 
-RUN \
+RUN set -ex \
   # use pre-existing gpg directory, see https://github.com/nodejs/docker-node/pull/1895#issuecomment-1550389150
   export GNUPGHOME="$(mktemp -d)" \
   # gpg keys listed at https://github.com/nodejs/node#release-keys
-  && set -ex \
   && for key in \
     5BE8A3F6C8A5C01D106C0AD820B1A390B168D356 \
     DD792F5973C6DE52C432CBDAC77ABFA00DDBF2B7 \
