@@ -9,3 +9,4 @@
 !app/
 !configure-scripts/
 !build/
+!docker-entrypoint.d/
