@@ -14,7 +14,7 @@ ARG TARGETARCH=${TARGETARCH/amd64/x64}
 
 ENV HOME=/app/nodehome
 
-RUN set -ex \
+RUN set -ex; \
   mkdir -p /app/nodehome; \
   chmod 777 /app/nodehome; \
   # use pre-existing gpg directory, see https://github.com/nodejs/docker-node/pull/1895#issuecomment-1550389150
