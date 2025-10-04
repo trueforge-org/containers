@@ -4,7 +4,9 @@
 FROM ghcr.io/trueforge-org/ubuntu:24.04
 
 # Default to UTF-8 file.encoding
-ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8' JAVA_HOME='/opt/java/openjdk' JRE_CACERTS_PATH="$JAVA_HOME/lib/security/cacerts"  PATH="$JAVA_HOME/bin:$PATH"
+ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8' JAVA_HOME='/opt/java/openjdk'
+
+ENV  JRE_CACERTS_PATH="$JAVA_HOME/lib/security/cacerts"  PATH="$JAVA_HOME/bin:$PATH"
 
 ARG VERSION
 ARG FETCH_VERSION=${VERSION/+/_}
