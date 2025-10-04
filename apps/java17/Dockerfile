@@ -9,6 +9,7 @@ ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8' JAVA_HOME='/opt/
 ENV  JRE_CACERTS_PATH="$JAVA_HOME/lib/security/cacerts"  PATH="$JAVA_HOME/bin:$PATH"
 
 ARG VERSION
+ARG MAJOR=17
 ARG FETCH_VERSION=${VERSION/+/_}
 
 ARG TARGETARCH
@@ -20,7 +21,7 @@ USER root
 RUN set -eux; \
     echo "${LANG} UTF-8" >> /etc/locale.gen; \
     locale-gen ${LANG}; \
-    BINARY_URL="https://github.com/adoptium/temurin17-binaries/releases/download/${VERSION}/OpenJDK17U-jre_${TARGETARCH}_linux_hotspot_${FETCH_VERSION}.tar.gz"; \
+    BINARY_URL="https://github.com/adoptium/temurin${MAJOR}-binaries/releases/download/${VERSION}/OpenJDK{MAJOR}U-jre_${TARGETARCH}_linux_hotspot_${FETCH_VERSION}.tar.gz"; \
     wget --progress=dot:giga -O /tmp/openjdk.tar.gz ${BINARY_URL}; \
     wget --progress=dot:giga -O /tmp/openjdk.tar.gz.sig ${BINARY_URL}.sig; \
     export GNUPGHOME="$(mktemp -d)"; \
