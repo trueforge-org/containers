@@ -1,7 +1,7 @@
 
 # syntax=docker/dockerfile:1
 
-FROM ghcr.io/trueforge-org/ubuntu:24.04 AS build
+FROM ghcr.io/trueforge-org/ubuntu:24.04
 
 ARG VERSION
 ARG YARN_VERSION
