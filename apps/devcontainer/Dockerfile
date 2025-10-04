@@ -49,7 +49,7 @@ RUN apt-get update && \
     mv kustomize /usr/local/bin/; \
     \
     echo "=== Installing starship ==="; \
-    curl -fsSL https://starship.rs/install.sh | bash -s -- -y
+    curl -fsSL https://starship.rs/install.sh | sh -s -- -y;
 
 # Install CLI tools via jpillora scripts
 RUN for app in \
