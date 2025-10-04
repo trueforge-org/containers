@@ -8,9 +8,9 @@ ARG YARN_VERSION
 
 USER root
 
-ARG TARGETARCH
-ARG TARGETARCH=${TARGETARCH/arm64/arm64}
-ARG TARGETARCH=${TARGETARCH/amd64/x64}
+ARG TARGETTARGETARCH
+ARG TARGETTARGETARCH=${TARGETTARGETARCH/arm64/arm64}
+ARG TARGETTARGETARCH=${TARGETTARGETARCH/amd64/x64}
 
 RUN set -ex \
   # use pre-existing gpg directory, see https://github.com/nodejs/docker-node/pull/1895#issuecomment-1550389150
@@ -29,14 +29,14 @@ RUN set -ex \
       { gpg --batch --keyserver hkps://keys.openpgp.org --recv-keys "$key" && gpg --batch --fingerprint "$key"; } || \
       { gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "$key" && gpg --batch --fingerprint "$key"; } ; \
   done \
-  && curl -fsSLO --compressed "https://nodejs.org/dist/v$VERSION/node-v$VERSION-linux-$ARCH.tar.xz" \
+  && curl -fsSLO --compressed "https://nodejs.org/dist/v$VERSION/node-v$VERSION-linux-$TARGETARCH.tar.xz" \
   && curl -fsSLO --compressed "https://nodejs.org/dist/v$VERSION/SHASUMS256.txt.asc" \
   && gpg --batch --decrypt --output SHASUMS256.txt SHASUMS256.txt.asc \
   && gpgconf --kill all \
   && rm -rf "$GNUPGHOME" \
-  && grep " node-v$VERSION-linux-$ARCH.tar.xz\$" SHASUMS256.txt | sha256sum -c - \
-  && tar -xJf "node-v$VERSION-linux-$ARCH.tar.xz" -C /usr/local --strip-components=1 --no-same-owner \
-  && rm "node-v$VERSION-linux-$ARCH.tar.xz" SHASUMS256.txt.asc SHASUMS256.txt \
+  && grep " node-v$VERSION-linux-$TARGETARCH.tar.xz\$" SHASUMS256.txt | sha256sum -c - \
+  && tar -xJf "node-v$VERSION-linux-$TARGETARCH.tar.xz" -C /usr/local --strip-components=1 --no-same-owner \
+  && rm "node-v$VERSION-linux-$TARGETARCH.tar.xz" SHASUMS256.txt.asc SHASUMS256.txt \
   && ln -s /usr/local/bin/node /usr/local/bin/nodejs \
   && rm -rf /tmp/*
 
