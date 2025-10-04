@@ -3,6 +3,7 @@
 FROM ghcr.io/trueforge-org/node:22.20 AS builder
 ARG VERSION
 WORKDIR /tmp
+USER root
 ADD https://github.com/CorentinTh/it-tools.git#${VERSION} .
 RUN npm install -g corepack@latest \
     && corepack enable  \
