@@ -1,22 +1,33 @@
+FROM ghcr.io/trueforge-org/golang:1.25.1 AS go
+
 # hadolint ignore=DL3007
-FROM mcr.microsoft.com/devcontainers/base:ubuntu
+FROM ghcr.io/trueforge-org/python:3.13.7
 
 ARG VERSION
-ARG DEBIAN_FRONTEND=noninteractive
+
+# Copy Go from the first stage
+COPY --from=go /usr/local/go /usr/local/go
+
+ENV GOTOOLCHAIN=local
+ENV GOPATH=/go
+# Ensure Go is in PATH
+ENV PATH="/usr/local/go/bin:${PATH}"
+
+LABEL dev.containers.features="common"
 
 # hadolint ignore=DL3008,DL3015,SC2086,SC2155
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        age bash bind9-dnsutils ca-certificates curl direnv fish fzf \
-        gettext git gh iputils-ping jq \
-        python3 python3-pip moreutils openssh-client openssl yq \
-        sshfs fuse && \
+        age bind9-dnsutils direnv fish fzf \
+        gettext git gh iputils-ping \
+        moreutils openssh-client openssl yq \
+        sshfs fuse3 sq && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install additional tools
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        golang-go sops \
+        sops \
         cilium-cli kubeconform stern && \
     rm -rf /var/lib/apt/lists/*; \
     # GitHub release binaries
@@ -37,7 +48,6 @@ RUN apt-get update && \
     \
     echo "=== Installing starship ==="; \
     curl -fsSL https://starship.rs/install.sh | bash -s -- -y
-
 
 # Install CLI tools via jpillora scripts
 RUN for app in \
