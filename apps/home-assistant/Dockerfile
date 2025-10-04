@@ -1,10 +1,9 @@
 # syntax=docker/dockerfile:1
 
-ARG TARGETARCH
-ARG ARCH=${TARGETARCH/arm64/aarch64}
 FROM ghcr.io/trueforge-org/python:3.13.7
 ARG TARGETARCH
-ARG ARCH=${TARGETARCH/arm64/aarch64}
+ARG TARGETARCH=${TARGETARCH/arm64/aarch64}
+ARG TARGETARCH=${TARGETARCH/arm64/aarch64}
 ARG VERSION
 
 ENV HOME="/config" \
@@ -76,3 +75,5 @@ COPY --chmod=0775 . /
 
 WORKDIR /config
 VOLUME ["/config"]
+
+CMD []
