@@ -107,7 +107,8 @@ prefix = [ "/workspaces" ]
 EOF
 
 # Fix permissions for devcontainer user
-RUN chown -R vscode:vscode /home/vscode/ && chmod -R 755 /home/vscode/
+RUN groupadd -r vscode && useradd -m -r -g vscode vscode;\
+    chown -R vscode:vscode /home/vscode/ && chmod -R 755 /home/vscode/
 
 ARG TARGETARCH
 ARG TARGETARCH=${TARGETARCH/arm64/ARM64}
