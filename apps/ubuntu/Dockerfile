@@ -40,6 +40,7 @@ RUN apt-get update \
         software-properties-common \
         gnupg \
         dirmngr \
+        xz \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && apt-get autoremove -y \
     && apt-get clean \
