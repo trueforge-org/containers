@@ -21,7 +21,7 @@ USER root
 RUN set -eux; \
     echo "${LANG} UTF-8" >> /etc/locale.gen; \
     locale-gen ${LANG}; \
-    BINARY_URL="https://github.com/adoptium/temurin${MAJOR}-binaries/releases/download/jdk-${VERSION}/OpenJDK{MAJOR}U-jre_${TARGETARCH}_linux_hotspot_${FETCH_VERSION}.tar.gz"; \
+    BINARY_URL="https://github.com/adoptium/temurin${MAJOR}-binaries/releases/download/jdk-${VERSION}/OpenJDK${MAJOR}U-jre_${TARGETARCH}_linux_hotspot_${FETCH_VERSION}.tar.gz"; \
     wget --progress=dot:giga -O /tmp/openjdk.tar.gz ${BINARY_URL}; \
     wget --progress=dot:giga -O /tmp/openjdk.tar.gz.sig ${BINARY_URL}.sig; \
     export GNUPGHOME="$(mktemp -d)"; \
