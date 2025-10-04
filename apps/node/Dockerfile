@@ -14,7 +14,7 @@ ARG TARGETARCH=${TARGETARCH/amd64/x64}
 
 RUN \
   # use pre-existing gpg directory, see https://github.com/nodejs/docker-node/pull/1895#issuecomment-1550389150
-  && export GNUPGHOME="$(mktemp -d)" \
+  export GNUPGHOME="$(mktemp -d)" \
   # gpg keys listed at https://github.com/nodejs/node#release-keys
   && set -ex \
   && for key in \
@@ -43,7 +43,7 @@ RUN \
 
 RUN set -ex \
   # use pre-existing gpg directory, see https://github.com/nodejs/docker-node/pull/1895#issuecomment-1550389150
-  && export GNUPGHOME="$(mktemp -d)" \
+  export GNUPGHOME="$(mktemp -d)" \
   && for key in \
     6A010C5166006599AA17F08146C2130DFD2497F5 \
   ; do \
@@ -60,8 +60,6 @@ RUN set -ex \
   && ln -s /opt/yarn-v$YARN_VERSION/bin/yarn /usr/local/bin/yarn \
   && ln -s /opt/yarn-v$YARN_VERSION/bin/yarnpkg /usr/local/bin/yarnpkg \
   && rm yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz \
-  # smoke test
-  && yarn --version \
   && rm -rf /tmp/*
 
 USER nobody:nogroup

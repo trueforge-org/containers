@@ -32,5 +32,11 @@ func Test(t *testing.T) {
 	)
 	testcontainers.CleanupContainer(t, app)
 
+	app, err = testcontainers.Run(
+		ctx, image,
+		testcontainers.WithCmdArgs("yarn", "--version"),
+	)
+	testcontainers.CleanupContainer(t, app)
+
 	require.NoError(t, err)
 }
