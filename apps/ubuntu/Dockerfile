@@ -41,6 +41,7 @@ RUN apt-get update \
         gnupg \
         dirmngr \
         xz-utils \
+        locales \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && apt-get autoremove -y \
     && apt-get clean \
