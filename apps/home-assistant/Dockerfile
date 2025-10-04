@@ -51,7 +51,6 @@ RUN set -eux; \
         socat \
         libtiff6 \
         unzip \
-        xz-utils \
         build-essential \
         default-libmysqlclient-dev \
         libpq-dev \

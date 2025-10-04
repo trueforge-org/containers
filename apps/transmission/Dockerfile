@@ -19,11 +19,9 @@ RUN set -eux; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
         p7zip-full \
-        xz-utils \
         transmission-daemon="${VERSION}" \
         transmission-cli="${VERSION}" \
         transmission-common="${VERSION}" \
-        ca-certificates \
     && rm -rf /var/lib/apt/lists/*; \
     \
     # Download minijinja-cli

@@ -11,10 +11,6 @@ ARG TARGETARCH
 USER root
 
 RUN set -eux; \
-    apt-get update; \
-    apt-get install -y --no-install-recommends \
-        gnupg \
-    ; \
     url="https://dl.google.com/go/go${VERSION}.linux-${TARGETARCH}.tar.gz"; \
     wget -O go.tgz "$url"; \
     wget -O go.tgz.asc "$url.asc"; \

@@ -27,7 +27,6 @@ RUN set -eux; \
     apt-get update; \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         build-essential \
-        gnupg \
         libbluetooth-dev \
         tk-dev \
         uuid-dev \
@@ -39,7 +38,6 @@ RUN set -eux; \
         libsqlite3-dev \
         libgdbm-dev \
         liblzma-dev \
-        xz-utils \
         zlib1g-dev \
         dpkg-dev \
     ; \
