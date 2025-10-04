@@ -1,24 +1,24 @@
 # hadolint ignore=DL3007
-FROM mcr.microsoft.com/devcontainers/base:alpine@sha256:1f8a1ea669115b1c87835427e89f6278f58a934a2e3f20eca3af7b6366ee5af2
+FROM mcr.microsoft.com/devcontainers/base:ubuntu@sha256:05f2c3d8e0cbb931f0e7f536fa2d0a79b6a6baf9e67d16b3a0c7a7b25c0d5c61
 
 ARG VERSION
+ARG DEBIAN_FRONTEND=noninteractive
 
 # hadolint ignore=DL3008,DL3015,SC2086,SC2155
-RUN apk update && \
-  apk --no-cache add \
-    age bash bind-tools ca-certificates curl direnv fish fzf \
-    gettext git github-cli helm iputils jq k9s kubectl kustomize \
-    python3 py3-pip moreutils openssh-client openssl starship yq \
-    sshfs libc6-compat fuse && \
-  rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        age bash bind9-dnsutils ca-certificates curl direnv fish fzf \
+        gettext git gh helm iputils-ping jq k9s kubectl kustomize \
+        python3 python3-pip moreutils openssh-client openssl starship yq \
+        sshfs fuse && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN apk add --no-cache \
-    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
-        go-task sops
-
-RUN apk add --no-cache \
-    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing \
-        cilium-cli kubeconform stern
+# Install additional tools
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        golang-go sops \
+        cilium-cli kubeconform stern && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install CLI tools via jpillora scripts
 RUN for app in \
@@ -33,14 +33,13 @@ RUN for app in \
     curl -fsSL "https://i.jpillora.com/${app}" | bash; \
   done
 
-# Create the completions and conf.d directories explicitly
-RUN mkdir -p /home/vscode/.config/fish/completions && \
-    mkdir -p /home/vscode/.config/fish/conf.d
+# Create Fish config directories
+RUN mkdir -p /home/vscode/.config/fish/completions \
+             /home/vscode/.config/fish/conf.d
 
 # Add completions only if the command exists
 RUN for tool in cilium flux helm helmfile k9s kubectl kustomize talhelper talosctl; do \
       if command -v "$tool" >/dev/null 2>&1; then \
-        mkdir -p /home/vscode/.config/fish/completions && \
         $tool completion fish > "/home/vscode/.config/fish/completions/${tool}.fish" || true; \
       fi; \
     done && \
@@ -48,36 +47,33 @@ RUN for tool in cilium flux helm helmfile k9s kubectl kustomize talhelper talosc
     stern --completion fish > /home/vscode/.config/fish/completions/stern.fish || true && \
     yq shell-completion fish > /home/vscode/.config/fish/completions/yq.fish || true
 
-RUN mkdir -p /home/vscode/.config/fish/conf.d && \
-    printf '%s\n' \
+# Fish hooks
+RUN printf '%s\n' \
     "if status is-interactive" \
     "    direnv hook fish | source" \
     "    starship init fish | source" \
     "end" \
     > /home/vscode/.config/fish/conf.d/hooks.fish
 
-# Add aliases to fish config
-RUN mkdir -p /home/vscode/.config/fish/conf.d && \
-  printf '%s\n' \
-  "alias kubectl kubecolor" \
-  "alias k kubectl" \
-  "alias task go-task" \
-  > /home/vscode/.config/fish/conf.d/aliases.fish
+# Fish aliases
+RUN printf '%s\n' \
+    "alias kubectl kubecolor" \
+    "alias k kubectl" \
+    "alias task go-task" \
+    > /home/vscode/.config/fish/conf.d/aliases.fish
 
 # Custom fish prompt
-RUN mkdir -p /home/vscode/.config/fish/conf.d && \
-    echo "set fish_greeting" > /home/vscode/.config/fish/conf.d/fish_greeting.fish
+RUN echo "set fish_greeting" > /home/vscode/.config/fish/conf.d/fish_greeting.fish
 
-# Setup direnv whitelist
+# Direnv whitelist
 RUN mkdir -p /home/vscode/.config/direnv && \
-  tee /home/vscode/.config/direnv/direnv.toml > /dev/null <<EOF
+    tee /home/vscode/.config/direnv/direnv.toml > /dev/null <<EOF
 [whitelist]
 prefix = [ "/workspaces" ]
 EOF
 
 # Fix permissions for devcontainer user
-RUN chown -R vscode:vscode /home/vscode/
-RUN chmod -R 755 /home/vscode/
+RUN chown -R vscode:vscode /home/vscode/ && chmod -R 755 /home/vscode/
 
 ARG TARGETARCH
 ARG TARGETARCH=${TARGETARCH/arm64/ARM64}
@@ -88,10 +84,3 @@ RUN curl -L "https://github.com/trueforge-org/truecharts/releases/download/v${VE
     && tar -xzvf /tmp/clustertool.tar.gz -C /usr/local/bin \
     && chmod +x /usr/local/bin/clustertool \
     && rm /tmp/clustertool.tar.gz
-
-
-
-
-
-
-
