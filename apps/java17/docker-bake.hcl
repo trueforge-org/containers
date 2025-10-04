@@ -5,7 +5,7 @@ variable "APP" {
 }
 
 variable "VERSION" {
-  default = "jdk-17.0.16+8"
+  default = "17.0.16+8"
 }
 
 variable "LICENSE" {
