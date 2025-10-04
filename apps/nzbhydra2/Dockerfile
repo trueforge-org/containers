@@ -2,7 +2,6 @@
 
 FROM ghcr.io/trueforge-org/java17:17.0.16
 
-FROM your-temurin17-ubuntu-base:latest
 ARG VERSION
 
 ENV JAVA_TOOL_OPTIONS="-Xmx256M"
