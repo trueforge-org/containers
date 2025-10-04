@@ -42,6 +42,8 @@ RUN apt-get update \
         dirmngr \
         xz-utils \
         locales \
+        fontconfig \
+        p11-kit \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && apt-get autoremove -y \
     && apt-get clean \
