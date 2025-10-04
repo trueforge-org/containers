@@ -13,21 +13,8 @@ ARG ${FETCH_VERSION}=${VERSION/+/_}
 ARG TARGETARCH
 
 RUN set -eux; \
-    apt-get update; \
-    apt-get install -y --no-install-recommends \
-        # java.lang.UnsatisfiedLinkError: libfontmanager.so: libfreetype.so.6: cannot open shared object file: No such file or directory
-        # java.lang.NoClassDefFoundError: Could not initialize class sun.awt.X11FontManager
-        # https://github.com/docker-library/openjdk/pull/235#issuecomment-424466077
-        fontconfig \
-        # utilities for keeping Ubuntu and OpenJDK CA certificates in sync
-        # https://github.com/adoptium/containers/issues/293
-        p11-kit \
-    ; \
-    echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen; \
-    locale-gen en_US.UTF-8; \
-    rm -rf /var/lib/apt/lists/*
-
-RUN set -eux; \
+    echo "${LANG} UTF-8" >> /etc/locale.gen; \
+    locale-gen ${LANG}; \
     BINARY_URL='https://github.com/adoptium/temurin17-binaries/releases/download/${FETCH_VERSION}/OpenJDK17U-jre_${TARGETARCH}_linux_hotspot_${FETCH_VERSION}2}.tar.gz'; \
     wget --progress=dot:giga -O /tmp/openjdk.tar.gz ${BINARY_URL}; \
     wget --progress=dot:giga -O /tmp/openjdk.tar.gz.sig ${BINARY_URL}.sig; \
@@ -50,6 +37,3 @@ RUN set -eux; \
     # https://github.com/docker-library/openjdk/issues/212#issuecomment-420979840
     # https://openjdk.java.net/jeps/341
     java -Xshare:dump;
-
-COPY --chmod=755 entrypoint.sh /__cacert_entrypoint.sh
-ENTRYPOINT ["/__cacert_entrypoint.sh"]
