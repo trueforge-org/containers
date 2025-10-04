@@ -1,13 +1,14 @@
 
 # syntax=docker/dockerfile:1
 
-FROM ghcr.io/trueforge-org/ubuntu:24.04 AS build
-
-ENV JAVA_HOME=/opt/java/openjdk
-ENV PATH=$JAVA_HOME/bin:$PATH
+FROM ghcr.io/trueforge-org/ubuntu:24.04
 
 # Default to UTF-8 file.encoding
-ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8' JRE_CACERTS_PATH="$JAVA_HOME/lib/security/cacerts"
+ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8' JRE_CACERTS_PATH="$JAVA_HOME/lib/security/cacerts" JAVA_HOME='/opt/java/openjdk' PATH="$JAVA_HOME/bin:$PATH"
+
+ARG VERSION
+ARG ${FETCH_VERSION=${VERSION/+/%2B}
+ARG ${FETCH_VERSION}=${VERSION/+/_}
 
 RUN set -eux; \
     apt-get update; \
@@ -23,11 +24,6 @@ RUN set -eux; \
     echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen; \
     locale-gen en_US.UTF-8; \
     rm -rf /var/lib/apt/lists/*
-
-ARG VERSION \
-ARG ${FETCH_VERSION=${VERSION/+/%2B}
-ARG ${FETCH_VERSION}=${VERSION/+/_}
-
 
 RUN set -eux; \
     BINARY_URL='https://github.com/adoptium/temurin17-binaries/releases/download/${FETCH_VERSION}/OpenJDK17U-jre_s390x_linux_hotspot_${FETCH_VERSION}2}.tar.gz'; \
