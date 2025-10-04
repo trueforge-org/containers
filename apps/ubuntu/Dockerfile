@@ -38,6 +38,7 @@ RUN apt-get update \
         libssl3 \
         sed \
         software-properties-common \
+        gnupg \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && apt-get autoremove -y \
     && apt-get clean \
