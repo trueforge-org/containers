@@ -5,11 +5,11 @@ variable "APP" {
 }
 
 variable "VERSION" {
-  default = "17.0.16+8"
+  default = "21.0.8+9"
 }
 
 variable "MAJOR" {
-  default = "17"
+  default = "21"
 }
 
 variable "LICENSE" {
@@ -17,7 +17,7 @@ variable "LICENSE" {
 }
 
 variable "SOURCE" {
-  default = "https://github.com/adoptium/temurin17"
+  default = "https://github.com/adoptium/temurin21"
 }
 
 group "default" {
