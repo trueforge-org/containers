@@ -15,8 +15,7 @@ RUN apt-get update && \
 RUN python -m venv .venv && .venv/bin/pip install --no-cache-dir -U pip setuptools
 
 # Download and extract only the src/ folder from the release
-ENV RELEASE_URL="https://github.com/kiwigrid/k8s-sidecar/archive/refs/tags/${VERSION}.tar.gz"
-RUN curl -L https://github.com/kiwigrid/k8s-sidecar/archive/refs/tags/1.30.10.tar.gz -o release.tar.gz && \
+RUN curl -L https://github.com/kiwigrid/k8s-sidecar/archive/refs/tags/${VERSION}tar.gz -o release.tar.gz && \
     mkdir src_temp && \
     tar -xzf release.tar.gz -C src_temp k8s-sidecar-1.30.10/src && \
     cp -r src_temp/k8s-sidecar-1.30.10/src/* /app/ && \
