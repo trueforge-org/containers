@@ -4,6 +4,8 @@ FROM ghcr.io/trueforge-org/python:3.13.7 AS builder
 WORKDIR /app
 ARG VERSION
 
+USER root
+
 # Install system dependencies needed for building Python packages
 RUN apt-get update && \
     apt-get install -y --no-install-recommends gcc && \
@@ -28,13 +30,13 @@ RUN .venv/bin/pip install --no-cache-dir -r requirements.txt && \
 
 FROM ghcr.io/trueforge-org/python:3.13.7
 
+USER nobody:nogroup
+
 WORKDIR /app
 
 # Copy built app from builder
 COPY --from=builder /app /app
 
 ENV PATH="/app/.venv/bin:$PATH"
-
-USER nobody:nogroup
 
 CMD [ "python", "-u", "/app/sidecar.py" ]

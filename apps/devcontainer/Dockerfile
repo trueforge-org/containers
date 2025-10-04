@@ -49,7 +49,11 @@ RUN apt-get update && \
     mv kustomize /usr/local/bin/; \
     \
     echo "=== Installing starship ==="; \
-    curl -fsSL https://starship.rs/install.sh | sh -s -- -y;
+    curl -fsSL https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz; \
+    -o /tmp/starship.tar.gz && \
+    tar -xzf /tmp/starship.tar.gz -C /usr/local/bin starship && \
+    rm /tmp/starship.tar.gz && \
+    chmod +x /usr/local/bin/starship
 
 # Install CLI tools via jpillora scripts
 RUN for app in \
