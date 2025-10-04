@@ -57,6 +57,8 @@ The following base images are available:
 - Python
 - Golang
 - Node
+- Java17
+- Java21
 
 *in some case-by-case basis, we might instead use an external base. Our aim will always be to replace those with ours in due time*
 
