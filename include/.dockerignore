@@ -9,3 +9,5 @@
 !app/
 !configure-scripts/
 !build/
+!docker-entrypoint.d/
+!nginx.conf
