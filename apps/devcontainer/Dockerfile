@@ -1,5 +1,5 @@
 # hadolint ignore=DL3007
-FROM mcr.microsoft.com/devcontainers/base:ubuntu@sha256:05f2c3d8e0cbb931f0e7f536fa2d0a79b6a6baf9e67d16b3a0c7a7b25c0d5c61
+FROM mcr.microsoft.com/devcontainers/base:ubuntu
 
 ARG VERSION
 ARG DEBIAN_FRONTEND=noninteractive
