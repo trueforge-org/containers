@@ -16,8 +16,8 @@ RUN set -eux; \
     rm -rf /var/lib/apt/lists/*
 
 # Copy configuration files into container
-COPY --chmod=777 nginx.conf  /etc/nginx/nginx.conf
-COPY --chmod=777 default.conf /config/default.conf
+COPY --chmod=777 ./nginx.conf  /etc/nginx/nginx.conf
+COPY --chmod=777 ./default.conf /config/default.conf
 
 # Ensure NGINX directories are writable
 RUN set -eux; \
