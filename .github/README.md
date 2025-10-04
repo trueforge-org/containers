@@ -50,14 +50,15 @@ By default the majority of our containers run as a non-root user (`65534:65534`)
 
 ### Standardised Base Images
 
-We base all our containers on-top of our standardised base images.
+We aim to base all our containers on-top of our standardised Ubuntu base image.
 The following base images are available:
 
-- Alpine
-- Python-Alpine
 - Ubuntu
+- Python
+- Golang
+- Node
 
-*Please note that external containers might be used as buildcontainers as well*
+*in some case-by-case basis, we might instead use an external base. Our aim will always be to replace those with ours in due time*
 
 #### Docker Compose
 
