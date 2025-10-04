@@ -22,7 +22,7 @@ func Test(t *testing.T) {
 
 	app, err := testcontainers.Run(
 		ctx, image,
-		testcontainers.WithCmdArgs("test", "-f", "/usr/bin/curl"),
+		testcontainers.WithCmdArgs("python", "-u", "/app/sidecar.py"),
 	)
 	testcontainers.CleanupContainer(t, app)
 	require.NoError(t, err)

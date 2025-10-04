@@ -1,24 +1,58 @@
+FROM ghcr.io/trueforge-org/golang:1.25.1 AS go
+
 # hadolint ignore=DL3007
-FROM mcr.microsoft.com/devcontainers/base:alpine@sha256:1f8a1ea669115b1c87835427e89f6278f58a934a2e3f20eca3af7b6366ee5af2
+FROM ghcr.io/trueforge-org/python:3.13.7
 
 ARG VERSION
 
+# Copy Go from the first stage
+COPY --from=go /usr/local/go /usr/local/go
+
+ENV GOTOOLCHAIN=local
+ENV GOPATH=/go
+# Ensure Go is in PATH
+ENV PATH="/usr/local/go/bin:${PATH}"
+
+LABEL dev.containers.features="common"
+
+USER root
+
 # hadolint ignore=DL3008,DL3015,SC2086,SC2155
-RUN apk update && \
-  apk --no-cache add \
-    age bash bind-tools ca-certificates curl direnv fish fzf \
-    gettext git github-cli helm iputils jq k9s kubectl kustomize \
-    python3 py3-pip moreutils openssh-client openssl starship yq \
-    sshfs libc6-compat fuse && \
-  rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        age bind9-dnsutils direnv fish fzf \
+        gettext git gh iputils-ping \
+        moreutils openssh-client openssl yq \
+        sshfs fuse3 sq && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN apk add --no-cache \
-    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community \
-        go-task sops
-
-RUN apk add --no-cache \
-    --repository=https://dl-cdn.alpinelinux.org/alpine/edge/testing \
-        cilium-cli kubeconform stern
+# Install additional tools
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        sops \
+        cilium-cli kubeconform stern && \
+    rm -rf /var/lib/apt/lists/*; \
+    # GitHub release binaries
+    echo "=== Installing kubectl ==="; \
+    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"; \
+    chmod +x kubectl && mv kubectl /usr/local/bin/; \
+    \
+    echo "=== Installing helm ==="; \
+    curl -fsSL "https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3" | bash; \
+    \
+    echo "=== Installing k9s ==="; \
+    curl -LO "https://github.com/derailed/k9s/releases/latest/download/k9s_Linux_amd64.tar.gz"; \
+    tar -xzf k9s_Linux_amd64.tar.gz -C /usr/local/bin k9s; rm k9s_Linux_amd64.tar.gz; \
+    \
+    echo "=== Installing kustomize ==="; \
+    curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash; \
+    mv kustomize /usr/local/bin/; \
+    \
+    echo "=== Installing starship ==="; \
+    curl -LO "https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz"; \
+    tar -xzf starship-x86_64-unknown-linux-gnu.tar.gz -C /usr/local/bin starship && \
+    rm starship-x86_64-unknown-linux-gnu.tar.gz && \
+    chmod +x /usr/local/bin/starship
 
 # Install CLI tools via jpillora scripts
 RUN for app in \
@@ -33,14 +67,13 @@ RUN for app in \
     curl -fsSL "https://i.jpillora.com/${app}" | bash; \
   done
 
-# Create the completions and conf.d directories explicitly
-RUN mkdir -p /home/vscode/.config/fish/completions && \
-    mkdir -p /home/vscode/.config/fish/conf.d
+# Create Fish config directories
+RUN mkdir -p /home/vscode/.config/fish/completions \
+             /home/vscode/.config/fish/conf.d
 
 # Add completions only if the command exists
 RUN for tool in cilium flux helm helmfile k9s kubectl kustomize talhelper talosctl; do \
       if command -v "$tool" >/dev/null 2>&1; then \
-        mkdir -p /home/vscode/.config/fish/completions && \
         $tool completion fish > "/home/vscode/.config/fish/completions/${tool}.fish" || true; \
       fi; \
     done && \
@@ -48,36 +81,34 @@ RUN for tool in cilium flux helm helmfile k9s kubectl kustomize talhelper talosc
     stern --completion fish > /home/vscode/.config/fish/completions/stern.fish || true && \
     yq shell-completion fish > /home/vscode/.config/fish/completions/yq.fish || true
 
-RUN mkdir -p /home/vscode/.config/fish/conf.d && \
-    printf '%s\n' \
+# Fish hooks
+RUN printf '%s\n' \
     "if status is-interactive" \
     "    direnv hook fish | source" \
     "    starship init fish | source" \
     "end" \
     > /home/vscode/.config/fish/conf.d/hooks.fish
 
-# Add aliases to fish config
-RUN mkdir -p /home/vscode/.config/fish/conf.d && \
-  printf '%s\n' \
-  "alias kubectl kubecolor" \
-  "alias k kubectl" \
-  "alias task go-task" \
-  > /home/vscode/.config/fish/conf.d/aliases.fish
+# Fish aliases
+RUN printf '%s\n' \
+    "alias kubectl kubecolor" \
+    "alias k kubectl" \
+    "alias task go-task" \
+    > /home/vscode/.config/fish/conf.d/aliases.fish
 
 # Custom fish prompt
-RUN mkdir -p /home/vscode/.config/fish/conf.d && \
-    echo "set fish_greeting" > /home/vscode/.config/fish/conf.d/fish_greeting.fish
+RUN echo "set fish_greeting" > /home/vscode/.config/fish/conf.d/fish_greeting.fish
 
-# Setup direnv whitelist
+# Direnv whitelist
 RUN mkdir -p /home/vscode/.config/direnv && \
-  tee /home/vscode/.config/direnv/direnv.toml > /dev/null <<EOF
+    tee /home/vscode/.config/direnv/direnv.toml > /dev/null <<EOF
 [whitelist]
 prefix = [ "/workspaces" ]
 EOF
 
 # Fix permissions for devcontainer user
-RUN chown -R vscode:vscode /home/vscode/
-RUN chmod -R 755 /home/vscode/
+RUN groupadd -r vscode && useradd -m -r -g vscode vscode;\
+    chown -R vscode:vscode /home/vscode/ && chmod -R 755 /home/vscode/
 
 ARG TARGETARCH
 ARG TARGETARCH=${TARGETARCH/arm64/ARM64}
@@ -88,10 +119,3 @@ RUN curl -L "https://github.com/trueforge-org/truecharts/releases/download/v${VE
     && tar -xzvf /tmp/clustertool.tar.gz -C /usr/local/bin \
     && chmod +x /usr/local/bin/clustertool \
     && rm /tmp/clustertool.tar.gz
-
-
-
-
-
-
-
