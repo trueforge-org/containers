@@ -5,7 +5,7 @@ variable "APP" {
 }
 
 variable "VERSION" {
-  default = "1.26.2-1"
+  default = "1.24.0-2ubuntu7.5"
 }
 
 variable "LICENSE" {
