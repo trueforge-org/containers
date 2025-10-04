@@ -3,6 +3,8 @@
 
 FROM ghcr.io/trueforge-org/ubuntu:24.04
 
+ENV NGINX_ENTRYPOINT_WORKER_PROCESSES_AUTOTUNE=1
+
 # NGINX version explicitly set
 ARG VERSION
 

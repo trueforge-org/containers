@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM docker.io/library/node:22-alpine AS builder
+FROM ghcr.io/trueforge-org/node:22.20 AS builder
 ARG VERSION
 WORKDIR /tmp
 ADD https://github.com/CorentinTh/it-tools.git#${VERSION} .
@@ -10,8 +10,8 @@ RUN npm install -g corepack@latest \
     && pnpm install --prefer-offline \
     && pnpm build
 
-FROM ghcr.io/nginxinc/nginx-unprivileged:1.27-alpine
-ENV NGINX_ENTRYPOINT_WORKER_PROCESSES_AUTOTUNE=1
-COPY --from=builder --chown=nginx:nginx /tmp/dist/ /usr/share/nginx/html
-USER nginx
+FROM ghcr.io/trueforge-org/nginx:1.24.0
+USER root
+COPY --from=builder --chown=nobody:nogroup /tmp/dist/ /usr/share/nginx/html
+USER nobody:nogroup
 WORKDIR /usr/share/nginx/html

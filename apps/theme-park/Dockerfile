@@ -20,13 +20,15 @@ RUN set -eux; \
     grep -rl 'https://theme-park.dev' . | xargs sed -i 's|https\://theme-park.dev||g'
 
 # Nginx stage
-FROM nginx:1.27
+FROM ghcr.io/trueforge-org/nginx:1.24.0
 ENV NGINX_ENTRYPOINT_WORKER_PROCESSES_AUTOTUNE=1
 
-# Copy built files from builder
-COPY --from=builder --chown=www-data:www-data /tmp/index.html /usr/share/nginx/html/
-COPY --from=builder --chown=www-data:www-data /tmp/css /usr/share/nginx/html/css/
-COPY --from=builder --chown=www-data:www-data /tmp/resources /usr/share/nginx/html/resources/
+USER root
 
-USER www-data
+# Copy built files from builder
+COPY --from=builder --chown=nobody:nogroup /tmp/index.html /usr/share/nginx/html/
+COPY --from=builder --chown=nobody:nogroup /tmp/css /usr/share/nginx/html/css/
+COPY --from=builder --chown=nobody:nogroup /tmp/resources /usr/share/nginx/html/resources/
+
+USER nobody:nogroup
 WORKDIR /usr/share/nginx/html
