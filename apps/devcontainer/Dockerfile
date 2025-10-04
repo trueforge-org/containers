@@ -8,8 +8,8 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         age bash bind9-dnsutils ca-certificates curl direnv fish fzf \
-        gettext git gh helm iputils-ping jq k9s kubectl kustomize \
-        python3 python3-pip moreutils openssh-client openssl starship yq \
+        gettext git gh iputils-ping jq \
+        python3 python3-pip moreutils openssh-client openssl yq \
         sshfs fuse && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -18,7 +18,26 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         golang-go sops \
         cilium-cli kubeconform stern && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/*; \
+    # GitHub release binaries
+    echo "=== Installing kubectl ==="; \
+    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"; \
+    chmod +x kubectl && mv kubectl /usr/local/bin/; \
+    \
+    echo "=== Installing helm ==="; \
+    curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash; \
+    \
+    echo "=== Installing k9s ==="; \
+    curl -LO "https://github.com/derailed/k9s/releases/latest/download/k9s_Linux_amd64.tar.gz"; \
+    tar -xzf k9s_Linux_amd64.tar.gz -C /usr/local/bin k9s; rm k9s_Linux_amd64.tar.gz; \
+    \
+    echo "=== Installing kustomize ==="; \
+    curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash; \
+    mv kustomize /usr/local/bin/; \
+    \
+    echo "=== Installing starship ==="; \
+    curl -fsSL https://starship.rs/install.sh | bash -s -- -y
+
 
 # Install CLI tools via jpillora scripts
 RUN for app in \
