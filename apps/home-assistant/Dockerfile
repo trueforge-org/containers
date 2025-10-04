@@ -75,3 +75,5 @@ COPY --chmod=0775 . /
 
 WORKDIR /config
 VOLUME ["/config"]
+
+CMD []

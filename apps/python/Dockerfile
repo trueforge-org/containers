@@ -96,4 +96,4 @@ RUN set -eux; \
 # Switch to non-root user
 USER nobody:nogroup
 
-CMD ["python3"]
+
