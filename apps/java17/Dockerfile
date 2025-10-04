@@ -10,6 +10,8 @@ ARG VERSION
 ARG ${FETCH_VERSION=${VERSION/+/%2B}
 ARG ${FETCH_VERSION}=${VERSION/+/_}
 
+ARG TARGETARCH
+
 RUN set -eux; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
@@ -26,7 +28,7 @@ RUN set -eux; \
     rm -rf /var/lib/apt/lists/*
 
 RUN set -eux; \
-    BINARY_URL='https://github.com/adoptium/temurin17-binaries/releases/download/${FETCH_VERSION}/OpenJDK17U-jre_s390x_linux_hotspot_${FETCH_VERSION}2}.tar.gz'; \
+    BINARY_URL='https://github.com/adoptium/temurin17-binaries/releases/download/${FETCH_VERSION}/OpenJDK17U-jre_${TARGETARCH}_linux_hotspot_${FETCH_VERSION}2}.tar.gz'; \
     wget --progress=dot:giga -O /tmp/openjdk.tar.gz ${BINARY_URL}; \
     wget --progress=dot:giga -O /tmp/openjdk.tar.gz.sig ${BINARY_URL}.sig; \
     export GNUPGHOME="$(mktemp -d)"; \
