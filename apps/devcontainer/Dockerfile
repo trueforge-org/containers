@@ -15,6 +15,8 @@ ENV PATH="/usr/local/go/bin:${PATH}"
 
 LABEL dev.containers.features="common"
 
+USER root
+
 # hadolint ignore=DL3008,DL3015,SC2086,SC2155
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
