@@ -12,6 +12,8 @@ ARG ${FETCH_VERSION}=${VERSION/+/_}
 
 ARG TARGETARCH
 
+USER root
+
 RUN set -eux; \
     echo "${LANG} UTF-8" >> /etc/locale.gen; \
     locale-gen ${LANG}; \
@@ -37,3 +39,5 @@ RUN set -eux; \
     # https://github.com/docker-library/openjdk/issues/212#issuecomment-420979840
     # https://openjdk.java.net/jeps/341
     java -Xshare:dump;
+
+USER nobody:nogroup
