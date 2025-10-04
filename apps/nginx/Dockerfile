@@ -22,7 +22,7 @@ COPY --chmod=777 ./defaults/default.conf /config/default.conf
 # Ensure NGINX directories are writable
 RUN set -eux; \
     mkdir -p /tmp/nginx-temp /tmp/nginx-cache; \
-    chmod -R 777 /tmp /config /etc/nginx ; \
+    chmod -R 777 /tmp; \
     ln -sf /dev/stdout /var/log/nginx/access.log; \
     ln -sf /dev/stderr /var/log/nginx/error.log
 
