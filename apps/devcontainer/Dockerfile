@@ -28,7 +28,7 @@ RUN apt-get update && \
 # Download and install SOPS
 ENV SOPS_VERSION=v3.8.2
 
-RUN wget https://github.com/getsops/sops/releases/download/${SOPS_VERSION}/sops-${SOPS_VERSION}.linux.amd64 -O /usr/local/bin/sops && \
+RUN wget https://github.com/getsops/sops/releases/download/${SOPS_VERSION}/sops-${SOPS_VERSION}.linux.${TARGETARCH} -O /usr/local/bin/sops && \
     chmod +x /usr/local/bin/sops
 
 # Install additional CLI tools via jpillora scripts
@@ -103,7 +103,7 @@ RUN set -eux; \
             chart-releaser) url="https://github.com/helm/chart-releaser/releases/download/v${version}/chart-releaser_${version}_linux_${arch}.tar.gz"; command_path_in_package="cr"; rename="cr"; ;; \
             chart-testing) url="https://github.com/helm/chart-testing/releases/download/v${version}/chart-testing_${version}_linux_${arch}.tar.gz"; command_path_in_package="ct"; rename="ct"; ;; \
             k9s) url="https://github.com/derailed/k9s/releases/download/v${version}/k9s_Linux_${arch}.tar.gz"; command_path_in_package="k9s"; ;; \
-            starship) url="https://github.com/starship/starship/releases/download/v${version}/starship-x86_64-unknown-linux-gnu.tar.gz"; command_path_in_package="starship"; ;; \
+            starship) url="https://github.com/starship/starship/releases/download/v${version}/starship-${x86_64}-unknown-linux-gnu.tar.gz"; command_path_in_package="starship"; ;; \
             *) echo "Unknown tool: $tool"; exit 1 ;; \
         esac; \
         mkdir -p /tools/${tool}; \
