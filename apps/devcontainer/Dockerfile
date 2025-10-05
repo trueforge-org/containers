@@ -26,6 +26,8 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Download and install SOPS
+ENV SOPS_VERSION=v3.8.2
+
 RUN wget https://github.com/getsops/sops/releases/download/${SOPS_VERSION}/sops-${SOPS_VERSION}.linux.amd64 -O /usr/local/bin/sops && \
     chmod +x /usr/local/bin/sops
 
