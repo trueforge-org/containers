@@ -56,7 +56,6 @@ RUN set -eux; \
         unzip \
         jo \
         moreutils \
-        sudo \
         zstd; \
     \
     case "${TARGETARCH}" in \
@@ -96,7 +95,9 @@ RUN curl -fsSL -o docker.tgz "https://download.docker.com/${TARGETOS}/static/sta
 # ---------------------------
 # Step 6: Optional Homebrew installation
 # ---------------------------
-USER runner
+
 RUN if [ "${TARGETARCH}" = "amd64" ]; then \
       /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"; \
     fi
+
+    USER runner
