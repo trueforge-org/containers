@@ -37,10 +37,12 @@ ARG DOCKER_ARCH=${TARGETARCH/arm64/aarch64}
 ARG DOCKER_ARCH=${TARGETARCH/amd64/x86_64}
 
 # ---------------------------
-# Step 2: Install dependencies and add keyrings/repositories
+# Step 2: Install dependencies, Docker, and add keyrings/repositories
 # ---------------------------
 RUN set -eux; \
     mkdir -p -m 755 /etc/apt/keyrings; \
+    \
+    # GitHub CLI key
     out=$(mktemp); \
     wget -nv -O$out https://cli.github.com/packages/githubcli-archive-keyring.gpg; \
     cat $out | tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null; \
@@ -48,23 +50,36 @@ RUN set -eux; \
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
       | tee /etc/apt/sources.list.d/github-cli.list > /dev/null; \
     \
+    # Docker official repo
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg; \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" \
+      | tee /etc/apt/sources.list.d/docker.list > /dev/null; \
+    \
+    # Git PPA
     add-apt-repository -y ppa:git-core/ppa; \
+    \
     apt-get update -y; \
+    \
+    # Install packages
     apt-get install -y --no-install-recommends --no-install-suggests \
         git \
         gh \
         unzip \
         jo \
         moreutils \
-        zstd; \
+        zstd \
+        gcc \
+        docker-ce \
+        docker-ce-cli \
+        containerd.io \
+        docker-buildx-plugin; \
     \
-    case "${TARGETARCH}" in \
-        'amd64') apt-get install -y --no-install-recommends gcc ;; \
-    esac; \
-    \
+    # yq
     curl -fsSL "https://github.com/mikefarah/yq/releases/latest/download/yq_linux_${TARGETARCH}" -o /usr/local/bin/yq; \
     chmod +x /usr/local/bin/yq; \
+    \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
 
 # ---------------------------
 # Step 3: Download and extract GitHub Actions runner
@@ -81,16 +96,6 @@ RUN curl -fsSL -o runner-container-hooks.zip "https://github.com/actions/runner-
     && rm runner-container-hooks.zip \
     && chown -R runner:docker /home/runner/k8s
 
-# ---------------------------
-# Step 5: Install Docker and Buildx
-# ---------------------------
-RUN curl -fsSL -o docker.tgz "https://download.docker.com/${TARGETOS}/static/stable/${DOCKER_ARCH}/docker-${DOCKER_VERSION}.tgz" \
-    && tar -xzf docker.tgz && rm docker.tgz \
-    && install -o root -g root -m 755 docker/* /usr/bin/ && rm -rf docker \
-    && mkdir -p /usr/local/lib/docker/cli-plugins \
-    && curl -fsSL -o /usr/local/lib/docker/cli-plugins/docker-buildx \
-        "https://github.com/docker/buildx/releases/download/v${BUILDX_VERSION}/buildx-v${BUILDX_VERSION}.linux-${TARGETARCH}" \
-    && chmod +x /usr/local/lib/docker/cli-plugins/docker-buildx
 
 # ---------------------------
 # Step 6: Optional Homebrew installation
