@@ -57,6 +57,7 @@ RUN set -eux; \
         unzip \
         jo \
         moreutils \
+        sudo \
         zstd; \
     \
     case "${TARGETARCH}" in \
