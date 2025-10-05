@@ -71,6 +71,7 @@ ENV starshipVersion=1.20.0
 
 # Versioned download of Kubernetes tools (no duplicates)
 RUN set -eux; \
+    mkdir -p /tools/bin; \
     download_and_extract() { \
         url=$1; dest_dir=$2; command_path=$3; \
         curl -L "$url" -o temp_archive; \
