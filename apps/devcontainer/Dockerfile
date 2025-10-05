@@ -4,6 +4,7 @@ FROM ghcr.io/trueforge-org/golang:1.25.1 AS go
 FROM ghcr.io/trueforge-org/python:3.13.7
 
 ARG VERSION
+ARG TARGETARCH
 
 # Copy Go from the first stage
 COPY --from=go /usr/local/go /usr/local/go
@@ -173,7 +174,6 @@ EOF
 RUN groupadd -r vscode && useradd -m -r -g vscode vscode;\
     chown -R vscode:vscode /home/vscode/ && chmod -R 755 /home/vscode/
 
-ARG TARGETARCH
 ARG TARGETARCH=${TARGETARCH/arm64/ARM64}
 ARG TARGETARCH=${TARGETARCH/amd64/amd64}
 
