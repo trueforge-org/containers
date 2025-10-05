@@ -131,6 +131,7 @@ RUN set -eux; \
     download_and_copy "k9s" "$k9sVersion"; \
     download_and_copy "starship" "$starshipVersion";
 
+ENV PATH="/tools/bin:${PATH}"
 
 # Create Fish config directories
 RUN mkdir -p /home/vscode/.config/fish/completions \
