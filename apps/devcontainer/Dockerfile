@@ -90,20 +90,20 @@ RUN set -eux; \
         elif [ "${TARGETARCH}" = "arm64" ]; then arch_path="arm64"; xarch="arm64"; \
         else arch_path="arm"; xarch="arm"; fi; \
         case "$tool" in \
-            kubectl) url="https://dl.k8s.io/release/v${version}/bin/linux/${arch}/kubectl"; ;; \
-            kustomize) url="https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v${version}/kustomize_v${version}_linux_${arch}.tar.gz"; ;; \
-            helm) url="https://get.helm.sh/helm-v${version}-linux-${arch}.tar.gz"; command_path_in_package="linux-${arch_path}/helm"; ;; \
-            kubeval) url="https://github.com/instrumenta/kubeval/releases/download/${version}/kubeval-linux-${arch}.tar.gz"; ;; \
-            kubeconform) url="https://github.com/yannh/kubeconform/releases/download/v${version}/kubeconform-linux-${arch}.tar.gz"; ;; \
+            kubectl) url="https://dl.k8s.io/release/v${version}/bin/linux/${TARGETARCH}/kubectl"; ;; \
+            kustomize) url="https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v${version}/kustomize_v${version}_linux_${TARGETARCH}.tar.gz"; ;; \
+            helm) url="https://get.helm.sh/helm-v${version}-linux-${TARGETARCH}.tar.gz"; command_path_in_package="linux-${arch_path}/helm"; ;; \
+            kubeval) url="https://github.com/instrumenta/kubeval/releases/download/${version}/kubeval-linux-${TARGETARCH}.tar.gz"; ;; \
+            kubeconform) url="https://github.com/yannh/kubeconform/releases/download/v${version}/kubeconform-linux-${TARGETARCH}.tar.gz"; ;; \
             conftest) url="https://github.com/open-policy-agent/conftest/releases/download/v${version}/conftest_${version}_Linux_${xarch}.tar.gz"; ;; \
-            go-yq) url="https://github.com/mikefarah/yq/releases/download/v${version}/yq_linux_${arch}"; command_path_in_package="yq_linux_${arch}"; ;; \
-            rancher) url="https://github.com/rancher/cli/releases/download/v${version}/rancher-linux-${arch}-v${version}.tar.gz"; command_path_in_package="rancher-v${version}/rancher"; ;; \
+            go-yq) url="https://github.com/mikefarah/yq/releases/download/v${version}/yq_linux_${TARGETARCH}"; command_path_in_package="yq_linux_${TARGETARCH}"; ;; \
+            rancher) url="https://github.com/rancher/cli/releases/download/v${version}/rancher-linux-${TARGETARCH}-v${version}.tar.gz"; command_path_in_package="rancher-v${version}/rancher"; ;; \
             tilt) url="https://github.com/tilt-dev/tilt/releases/download/v${version}/tilt.${version}.linux.${xarch}.tar.gz"; ;; \
-            skaffold) url="https://storage.googleapis.com/skaffold/releases/v${version}/skaffold-linux-${arch}"; command_path_in_package="skaffold-linux-${arch}"; ;; \
-            kube-score) url="https://github.com/zegl/kube-score/releases/download/v${version}/kube-score_${version}_linux_${arch}.tar.gz"; ;; \
-            chart-releaser) url="https://github.com/helm/chart-releaser/releases/download/v${version}/chart-releaser_${version}_linux_${arch}.tar.gz"; command_path_in_package="cr"; rename="cr"; ;; \
-            chart-testing) url="https://github.com/helm/chart-testing/releases/download/v${version}/chart-testing_${version}_linux_${arch}.tar.gz"; command_path_in_package="ct"; rename="ct"; ;; \
-            k9s) url="https://github.com/derailed/k9s/releases/download/v${version}/k9s_Linux_${arch}.tar.gz"; command_path_in_package="k9s"; ;; \
+            skaffold) url="https://storage.googleapis.com/skaffold/releases/v${version}/skaffold-linux-${TARGETARCH}"; command_path_in_package="skaffold-linux-${TARGETARCH}"; ;; \
+            kube-score) url="https://github.com/zegl/kube-score/releases/download/v${version}/kube-score_${version}_linux_${TARGETARCH}.tar.gz"; ;; \
+            chart-releaser) url="https://github.com/helm/chart-releaser/releases/download/v${version}/chart-releaser_${version}_linux_${TARGETARCH}.tar.gz"; command_path_in_package="cr"; rename="cr"; ;; \
+            chart-testing) url="https://github.com/helm/chart-testing/releases/download/v${version}/chart-testing_${version}_linux_${TARGETARCH}.tar.gz"; command_path_in_package="ct"; rename="ct"; ;; \
+            k9s) url="https://github.com/derailed/k9s/releases/download/v${version}/k9s_Linux_${TARGETARCH}.tar.gz"; command_path_in_package="k9s"; ;; \
             starship) url="https://github.com/starship/starship/releases/download/v${version}/starship-${x86_64}-unknown-linux-gnu.tar.gz"; command_path_in_package="starship"; ;; \
             *) echo "Unknown tool: $tool"; exit 1 ;; \
         esac; \
