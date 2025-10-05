@@ -22,7 +22,7 @@ RUN apt-get update && \
         age bind9-dnsutils direnv fish fzf \
         gettext git gh iputils-ping \
         moreutils openssh-client openssl \
-        sshfs fuse3 sq sops webp && \
+        sshfs fuse3 sq webp && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install additional CLI tools via jpillora scripts
