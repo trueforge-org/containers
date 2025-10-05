@@ -25,6 +25,10 @@ RUN apt-get update && \
         sshfs fuse3 sq webp && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# Download and install SOPS
+RUN wget https://github.com/getsops/sops/releases/download/${SOPS_VERSION}/sops-${SOPS_VERSION}.linux.amd64 -O /usr/local/bin/sops && \
+    chmod +x /usr/local/bin/sops
+
 # Install additional CLI tools via jpillora scripts
 RUN for app in \
     "budimanjojo/talhelper!!?as=talhelper&type=script" \
