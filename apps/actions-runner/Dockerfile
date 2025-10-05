@@ -105,7 +105,9 @@ RUN curl -fsSL -o runner-container-hooks.zip "https://github.com/actions/runner-
 # ---------------------------
 
 RUN if [ "${TARGETARCH}" = "amd64" ]; then \
-      /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"; \
+      mkdir -p /usr/local/Homebrew && \
+      curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C /usr/local/Homebrew && \
+      ln -s /usr/local/Homebrew/bin/brew /usr/local/bin/brew; \
     fi
 
     USER runner
