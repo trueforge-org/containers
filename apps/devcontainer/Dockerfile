@@ -26,9 +26,9 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Download and install SOPS
-ENV SOPS_VERSION=v3.8.2
+ENV SOPS_VERSION=v3.11.0
 
-RUN wget https://github.com/getsops/sops/releases/download/${SOPS_VERSION}/sops-${SOPS_VERSION}.linux.${TARGETARCH} -O /usr/local/bin/sops && \
+RUN wget https://github.com/getsops/sops/releases/download/v${SOPS_VERSION}/sops-v${SOPS_VERSION}.linux.${TARGETARCH} -O /usr/local/bin/sops && \
     chmod +x /usr/local/bin/sops
 
 # Install additional CLI tools via jpillora scripts
