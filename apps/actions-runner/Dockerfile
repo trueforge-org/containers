@@ -68,12 +68,15 @@ RUN set -eux; \
         jo \
         moreutils \
         zstd \
-        gcc \
         docker-ce \
         docker-ce-cli \
         containerd.io \
         docker-buildx-plugin; \
     \
+    # Install gcc only for amd64
+    if [ "${TARGETARCH}" = "amd64" ]; then \
+        apt-get install -y --no-install-recommends gcc; \
+    fi; \
     # yq
     curl -fsSL "https://github.com/mikefarah/yq/releases/latest/download/yq_linux_${TARGETARCH}" -o /usr/local/bin/yq; \
     chmod +x /usr/local/bin/yq; \
