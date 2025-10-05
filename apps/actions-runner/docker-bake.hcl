@@ -5,8 +5,19 @@ variable "APP" {
 }
 
 variable "VERSION" {
-  // renovate: datasource=docker depName=ghcr.io/actions/actions-runner
   default = "2.328.0"
+}
+
+variable "BUILDX_VERSION" {
+  default = "0.28.0"
+}
+
+variable "RUNNER_CONTAINER_HOOKS_VERSION" {
+  default = "0.7.0"
+}
+
+variable "DOCKER_VERSION" {
+  default = "28.4.0"
 }
 
 variable "LICENSE" {
@@ -25,6 +36,9 @@ target "image" {
   inherits = ["docker-metadata-action"]
   args = {
     VERSION = "${VERSION}"
+    BUILDX_VERSION = "${BUILDX_VERSION}"
+    RUNNER_CONTAINER_HOOKS_VERSION = "${RUNNER_CONTAINER_HOOKS_VERSION}"
+    DOCKER_VERSION = "${DOCKER_VERSION}"
   }
   labels = {
     "org.opencontainers.image.source" = "${SOURCE}"
