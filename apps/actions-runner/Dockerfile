@@ -36,7 +36,6 @@ ARG RUNNER_ARCH=${TARGETARCH/amd64/x64}
 ARG DOCKER_ARCH=${TARGETARCH/arm64/aarch64}
 ARG DOCKER_ARCH=${TARGETARCH/amd64/x86_64}
 
-
 # ---------------------------
 # Step 2: Install dependencies and add keyrings/repositories
 # ---------------------------
