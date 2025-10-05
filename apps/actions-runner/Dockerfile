@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM ghcr.io/trueforge-org/ubuntu:24.04
+FROM ghcr.io/trueforge-org/devcontainer:2.0.6
 
 USER root
 
