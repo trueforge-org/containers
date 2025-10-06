@@ -138,7 +138,7 @@ RUN set -eux; \
     download_and_copy "k9s" "$k9sVersion"; \
     download_and_copy "starship" "$starshipVersion"; \
     download_and_copy "clustertool" "$VERSION"; \
-    if [ "$(TARGETARCH)" = "AMD64" ]; then \
+    if [ "${TARGETARCH}" = "amd64" ]; then \
         download_and_copy "kubeval" "$kubevalVersion"; \
     fi; \
 
