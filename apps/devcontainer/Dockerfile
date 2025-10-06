@@ -23,7 +23,14 @@ RUN apt-get update && \
         age bind9-dnsutils direnv fish fzf \
         gettext git gh iputils-ping \
         moreutils openssh-client openssl \
-        sshfs fuse3 sq webp && \
+        sshfs fuse3 sq webp \
+        git \
+        gh \
+        unzip \
+        jo \
+        moreutils \
+        zstd \
+        && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Download and install SOPS
