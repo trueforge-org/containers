@@ -62,25 +62,14 @@ RUN set -eux; \
     \
     # Install packages
     apt-get install -y --no-install-recommends --no-install-suggests \
-        git \
-        gh \
-        unzip \
-        jo \
-        moreutils \
-        zstd \
+        gcc \
         docker-ce \
         docker-ce-cli \
         containerd.io \
         docker-buildx-plugin; \
-    \
-    # Install gcc only for amd64
-    if [ "${TARGETARCH}" = "amd64" ]; then \
-        apt-get install -y --no-install-recommends gcc; \
-    fi; \
     # yq
-    curl -fsSL "https://github.com/mikefarah/yq/releases/latest/download/yq_linux_${TARGETARCH}" -o /usr/local/bin/yq; \
+    cp /tools/bin/go-yq /usr/local/bin/yq; \
     chmod +x /usr/local/bin/yq; \
-    \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 
@@ -100,14 +89,3 @@ RUN curl -fsSL -o runner-container-hooks.zip "https://github.com/actions/runner-
     && chown -R runner:docker /home/runner/k8s
 
 
-# ---------------------------
-# Step 6: Optional Homebrew installation
-# ---------------------------
-
-RUN if [ "${TARGETARCH}" = "amd64" ]; then \
-      mkdir -p /usr/local/Homebrew && \
-      curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C /usr/local/Homebrew && \
-      ln -s /usr/local/Homebrew/bin/brew /usr/local/bin/brew; \
-    fi
-
-    USER runner
