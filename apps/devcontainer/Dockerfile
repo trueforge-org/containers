@@ -140,7 +140,7 @@ RUN set -eux; \
     download_and_copy "clustertool" "$VERSION"; \
     if [ "${TARGETARCH}" = "amd64" ]; then \
         download_and_copy "kubeval" "$kubevalVersion"; \
-    fi; \
+    fi;
 
 ENV PATH="/tools/bin:${PATH}"
 
