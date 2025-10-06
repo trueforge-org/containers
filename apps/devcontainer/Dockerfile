@@ -6,6 +6,12 @@ FROM ghcr.io/trueforge-org/python:3.13.7
 ARG VERSION
 ARG TARGETARCH
 
+ARG XARCH=${TARGETARCH/arm64/arm64}
+ARG XARCH=${TARGETARCH/amd64/x86_64}
+
+ARG AARCH=${TARGETARCH/arm64/aarch64}
+ARG AARCH=${TARGETARCH/amd64/x86_64}
+
 # Copy Go from the first stage
 COPY --from=go /usr/local/go /usr/local/go
 
@@ -73,7 +79,7 @@ ENV kubeScoreVersion=1.18.0
 ENV chartReleaserVersion=1.6.1
 ENV chartTestingVersion=3.11.0
 ENV k9sVersion=0.27.1
-ENV starshipVersion=1.20.0
+ENV starshipVersion=1.23.0
 
 
 # Versioned download of Kubernetes tools (no duplicates)
@@ -94,25 +100,22 @@ RUN set -eux; \
     download_and_copy() { \
         tool=$1; version=$2; rename="${3:-$tool}"; \
         url=""; command_path_in_package="$(basename $tool)"; \
-        if [ "${TARGETARCH}" = "amd64" ]; then arch_path="amd64"; xarch="x86_64"; \
-        elif [ "${TARGETARCH}" = "arm64" ]; then arch_path="arm64"; xarch="arm64"; \
-        else arch_path="arm"; xarch="arm"; fi; \
         case "$tool" in \
             kubectl) url="https://dl.k8s.io/release/v${version}/bin/linux/${TARGETARCH}/kubectl"; ;; \
             kustomize) url="https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v${version}/kustomize_v${version}_linux_${TARGETARCH}.tar.gz"; ;; \
-            helm) url="https://get.helm.sh/helm-v${version}-linux-${TARGETARCH}.tar.gz"; command_path_in_package="linux-${arch_path}/helm"; ;; \
+            helm) url="https://get.helm.sh/helm-v${version}-linux-${TARGETARCH}.tar.gz"; command_path_in_package="linux-${TARGETARCH}/helm"; ;; \
             kubeval) url="https://github.com/instrumenta/kubeval/releases/download/${version}/kubeval-linux-${TARGETARCH}.tar.gz"; ;; \
             kubeconform) url="https://github.com/yannh/kubeconform/releases/download/v${version}/kubeconform-linux-${TARGETARCH}.tar.gz"; ;; \
-            conftest) url="https://github.com/open-policy-agent/conftest/releases/download/v${version}/conftest_${version}_Linux_${xarch}.tar.gz"; ;; \
+            conftest) url="https://github.com/open-policy-agent/conftest/releases/download/v${version}/conftest_${version}_Linux_${XARCH}.tar.gz"; ;; \
             go-yq) url="https://github.com/mikefarah/yq/releases/download/v${version}/yq_linux_${TARGETARCH}"; command_path_in_package="yq_linux_${TARGETARCH}"; ;; \
             rancher) url="https://github.com/rancher/cli/releases/download/v${version}/rancher-linux-${TARGETARCH}-v${version}.tar.gz"; command_path_in_package="rancher-v${version}/rancher"; ;; \
-            tilt) url="https://github.com/tilt-dev/tilt/releases/download/v${version}/tilt.${version}.linux.${xarch}.tar.gz"; ;; \
+            tilt) url="https://github.com/tilt-dev/tilt/releases/download/v${version}/tilt.${version}.linux.${XARCH}.tar.gz"; ;; \
             skaffold) url="https://storage.googleapis.com/skaffold/releases/v${version}/skaffold-linux-${TARGETARCH}"; command_path_in_package="skaffold-linux-${TARGETARCH}"; ;; \
             kube-score) url="https://github.com/zegl/kube-score/releases/download/v${version}/kube-score_${version}_linux_${TARGETARCH}.tar.gz"; ;; \
             chart-releaser) url="https://github.com/helm/chart-releaser/releases/download/v${version}/chart-releaser_${version}_linux_${TARGETARCH}.tar.gz"; command_path_in_package="cr"; rename="cr"; ;; \
             chart-testing) url="https://github.com/helm/chart-testing/releases/download/v${version}/chart-testing_${version}_linux_${TARGETARCH}.tar.gz"; command_path_in_package="ct"; rename="ct"; ;; \
             k9s) url="https://github.com/derailed/k9s/releases/download/v${version}/k9s_Linux_${TARGETARCH}.tar.gz"; command_path_in_package="k9s"; ;; \
-            starship) url="https://github.com/starship/starship/releases/download/v${version}/starship-${xarch}-unknown-linux-gnu.tar.gz"; command_path_in_package="starship"; ;; \
+            starship) url="https://github.com/starship/starship/releases/download/v${version}/starship-${AARCH}-unknown-linux-gnu.tar.gz"; command_path_in_package="starship"; ;; \
             clustertool) url="https://github.com/trueforge-org/truecharts/releases/download/v${version}/clustertool_${VERSION}_linux_${TARGETARCH}.tar.gz"; command_path_in_package="clustertool"; ;; \
             *) echo "Unknown tool: $tool"; exit 1 ;; \
         esac; \
@@ -195,5 +198,3 @@ EOF
 RUN groupadd -r vscode && useradd -m -r -g vscode vscode;\
     chown -R vscode:vscode /home/vscode/ && chmod -R 755 /home/vscode/
 
-ARG TARGETARCH=${TARGETARCH/arm64/ARM64}
-ARG TARGETARCH=${TARGETARCH/amd64/amd64}
