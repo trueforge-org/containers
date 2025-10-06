@@ -6,8 +6,6 @@ FROM ghcr.io/trueforge-org/python:3.13.7
 ARG VERSION
 ARG TARGETARCH
 
-
-
 # Copy Go from the first stage
 COPY --from=go /usr/local/go /usr/local/go
 
@@ -83,8 +81,6 @@ ARG XARCH=${TARGETARCH/amd64/x86_64}
 ARG AARCH=${TARGETARCH/arm64/aarch64}
 ARG AARCH=${TARGETARCH/amd64/x86_64}
 
-ARG CTYPE=${TARGETARCH/arm64/musl}
-ARG CTYPE=${TARGETARCH/amd64/gnu}
 
 # Versioned download of Kubernetes tools (no duplicates)
 RUN set -eux; \
@@ -104,6 +100,10 @@ RUN set -eux; \
     download_and_copy() { \
         tool=$1; version=$2; rename="${3:-$tool}"; \
         url=""; command_path_in_package="$(basename $tool)"; \
+        CTYPE=gnu \
+        if [[ "${TARGETARCH}" == "arm64" ]]; then \
+         CTYPE=musl; \
+        fi; \
         case "$tool" in \
             kubectl) url="https://dl.k8s.io/release/v${version}/bin/linux/${TARGETARCH}/kubectl"; ;; \
             kustomize) url="https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v${version}/kustomize_v${version}_linux_${TARGETARCH}.tar.gz"; ;; \
