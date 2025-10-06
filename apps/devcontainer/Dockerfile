@@ -83,6 +83,9 @@ ARG XARCH=${TARGETARCH/amd64/x86_64}
 ARG AARCH=${TARGETARCH/arm64/aarch64}
 ARG AARCH=${TARGETARCH/amd64/x86_64}
 
+ARG CTYPE=${TARGETARCH/arm64/musl}
+ARG CTYPE=${TARGETARCH/amd64/gnu}
+
 # Versioned download of Kubernetes tools (no duplicates)
 RUN set -eux; \
     mkdir -p /tools/bin; \
@@ -116,7 +119,7 @@ RUN set -eux; \
             chart-releaser) url="https://github.com/helm/chart-releaser/releases/download/v${version}/chart-releaser_${version}_linux_${TARGETARCH}.tar.gz"; command_path_in_package="cr"; rename="cr"; ;; \
             chart-testing) url="https://github.com/helm/chart-testing/releases/download/v${version}/chart-testing_${version}_linux_${TARGETARCH}.tar.gz"; command_path_in_package="ct"; rename="ct"; ;; \
             k9s) url="https://github.com/derailed/k9s/releases/download/v${version}/k9s_Linux_${TARGETARCH}.tar.gz"; command_path_in_package="k9s"; ;; \
-            starship) url="https://github.com/starship/starship/releases/download/v${version}/starship-${AARCH/arm64/aarch64}-unknown-linux-gnu.tar.gz"; command_path_in_package="starship"; ;; \
+            starship) url="https://github.com/starship/starship/releases/download/v${version}/starship-${AARCH/arm64/aarch64}-unknown-linux-${CTYPE}.tar.gz"; command_path_in_package="starship"; ;; \
             clustertool) url="https://github.com/trueforge-org/truecharts/releases/download/v${version}/clustertool_${VERSION}_linux_${TARGETARCH}.tar.gz"; command_path_in_package="clustertool"; ;; \
             *) echo "Unknown tool: $tool"; exit 1 ;; \
         esac; \
