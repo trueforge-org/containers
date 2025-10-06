@@ -100,7 +100,7 @@ RUN set -eux; \
     download_and_copy() { \
         tool=$1; version=$2; rename="${3:-$tool}"; \
         url=""; command_path_in_package="$(basename $tool)"; \
-        CTYPE=gnu \
+        CTYPE=gnu; \
         if [[ "${TARGETARCH}" == "arm64" ]]; then \
          CTYPE=musl; \
         fi; \
