@@ -6,11 +6,7 @@ FROM ghcr.io/trueforge-org/python:3.13.7
 ARG VERSION
 ARG TARGETARCH
 
-ARG XARCH=${TARGETARCH/arm64/arm64}
-ARG XARCH=${TARGETARCH/amd64/x86_64}
 
-ARG AARCH=${TARGETARCH/arm64/aarch64}
-ARG AARCH=${TARGETARCH/amd64/x86_64}
 
 # Copy Go from the first stage
 COPY --from=go /usr/local/go /usr/local/go
@@ -81,6 +77,11 @@ ENV chartTestingVersion=3.11.0
 ENV k9sVersion=0.27.1
 ENV starshipVersion=1.23.0
 
+ARG XARCH=${TARGETARCH/arm64/arm64}
+ARG XARCH=${TARGETARCH/amd64/x86_64}
+
+ARG AARCH=${TARGETARCH/arm64/aarch64}
+ARG AARCH=${TARGETARCH/amd64/x86_64}
 
 # Versioned download of Kubernetes tools (no duplicates)
 RUN set -eux; \
