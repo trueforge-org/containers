@@ -1,44 +1,113 @@
 # syntax=docker/dockerfile:1
 
-ARG VERSION
-FROM ghcr.io/actions/actions-runner:${VERSION}
-ARG TARGETARCH
-
-ENV HOMEBREW_NO_ANALYTICS=1 \
-    HOMEBREW_NO_ENV_HINTS=1 \
-    HOMEBREW_NO_INSTALL_CLEANUP=1
+FROM ghcr.io/trueforge-org/devcontainer:2.0.6
 
 USER root
 
-RUN \
-    apt-get -qq update \
-    && \
-    apt-get -qq install -y --no-install-recommends --no-install-suggests \
-        ca-certificates \
+ENV RUNNER_MANUALLY_TRAP_SIG=1 \
+    ACTIONS_RUNNER_PRINT_LOG_TO_STDOUT=1 \
+    ImageOS=ubuntu22 \
+    HOMEBREW_NO_ANALYTICS=1 \
+    HOMEBREW_NO_ENV_HINTS=1 \
+    HOMEBREW_NO_INSTALL_CLEANUP=1
+
+# ---------------------------
+# Step 1: Create runner user early
+# ---------------------------
+RUN adduser --disabled-password --gecos "" --uid 1001 runner \
+    && groupadd docker --gid 123 \
+    && usermod -aG sudo runner \
+    && usermod -aG docker runner \
+    && echo "%sudo   ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers \
+    && echo "Defaults env_keep += \"DEBIAN_FRONTEND\"" >> /etc/sudoers
+
+WORKDIR /home/runner
+
+ARG TARGETOS=linux
+ARG VERSION
+ARG RUNNER_CONTAINER_HOOKS_VERSION
+ARG DOCKER_VERSION
+ARG BUILDX_VERSION
+
+# Architecture mappings
+ARG TARGETARCH
+ARG RUNNER_ARCH=${TARGETARCH/arm64/arm64}
+ARG RUNNER_ARCH=${TARGETARCH/amd64/x64}
+ARG DOCKER_ARCH=${TARGETARCH/arm64/aarch64}
+ARG DOCKER_ARCH=${TARGETARCH/amd64/x86_64}
+
+# ---------------------------
+# Step 2: Install dependencies, Docker, and add keyrings/repositories
+# ---------------------------
+RUN set -eux; \
+    mkdir -p -m 755 /etc/apt/keyrings; \
+    \
+    # GitHub CLI key
+    out=$(mktemp); \
+    wget -nv -O$out https://cli.github.com/packages/githubcli-archive-keyring.gpg; \
+    cat $out | tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null; \
+    chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg; \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
+      | tee /etc/apt/sources.list.d/github-cli.list > /dev/null; \
+    \
+    # Docker official repo
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg; \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" \
+      | tee /etc/apt/sources.list.d/docker.list > /dev/null; \
+    \
+    # Git PPA
+    add-apt-repository -y ppa:git-core/ppa; \
+    \
+    apt-get update -y; \
+    \
+    # Install packages
+    apt-get install -y --no-install-recommends --no-install-suggests \
+        git \
+        gh \
+        unzip \
         jo \
         moreutils \
-        wget \
         zstd \
-    && \
-    case "${TARGETARCH}" in \
-        'amd64') apt-get -qq install -y --no-install-recommends --no-install-suggests gcc ;; \
-    esac \
-    && \
-    curl -fsSL "https://github.com/mikefarah/yq/releases/latest/download/yq_linux_${TARGETARCH}" -o /usr/local/bin/yq \
-        && chmod +x /usr/local/bin/yq \
-    && \
-    mkdir -p -m 755 /etc/apt/keyrings \
-        && out=$(mktemp) && wget -nv -O$out https://cli.github.com/packages/githubcli-archive-keyring.gpg \
-        && cat $out | tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null \
-        && chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
-        && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
-        && apt update \
-        && apt install gh -y \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+        docker-ce \
+        docker-ce-cli \
+        containerd.io \
+        docker-buildx-plugin; \
+    \
+    # Install gcc only for amd64
+    if [ "${TARGETARCH}" = "amd64" ]; then \
+        apt-get install -y --no-install-recommends gcc; \
+    fi; \
+    # yq
+    curl -fsSL "https://github.com/mikefarah/yq/releases/latest/download/yq_linux_${TARGETARCH}" -o /usr/local/bin/yq; \
+    chmod +x /usr/local/bin/yq; \
+    \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-USER runner
 
-RUN \
-    case "${TARGETARCH}" in \
-        'amd64') /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" ;; \
-    esac
+# ---------------------------
+# Step 3: Download and extract GitHub Actions runner
+# ---------------------------
+RUN curl -fsSL -o runner.tar.gz "https://github.com/actions/runner/releases/download/v${VERSION}/actions-runner-${TARGETOS}-${RUNNER_ARCH}-${VERSION}.tar.gz" \
+    && tar xzf runner.tar.gz && rm runner.tar.gz \
+    && chown -R runner:docker /home/runner
+
+# ---------------------------
+# Step 4: Download and extract container hooks
+# ---------------------------
+RUN curl -fsSL -o runner-container-hooks.zip "https://github.com/actions/runner-container-hooks/releases/download/v${RUNNER_CONTAINER_HOOKS_VERSION}/actions-runner-hooks-k8s-${RUNNER_CONTAINER_HOOKS_VERSION}.zip" \
+    && unzip runner-container-hooks.zip -d ./k8s \
+    && rm runner-container-hooks.zip \
+    && chown -R runner:docker /home/runner/k8s
+
+
+# ---------------------------
+# Step 6: Optional Homebrew installation
+# ---------------------------
+
+RUN if [ "${TARGETARCH}" = "amd64" ]; then \
+      mkdir -p /usr/local/Homebrew && \
+      curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C /usr/local/Homebrew && \
+      ln -s /usr/local/Homebrew/bin/brew /usr/local/bin/brew; \
+    fi
+
+    USER runner
