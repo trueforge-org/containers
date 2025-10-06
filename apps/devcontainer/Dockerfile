@@ -140,6 +140,14 @@ RUN set -eux; \
 
 ENV PATH="/tools/bin:${PATH}"
 
+# Install homebrew
+RUN if [ "${TARGETARCH}" = "amd64" ]; then \
+      mkdir -p /usr/local/Homebrew && \
+      curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C /usr/local/Homebrew && \
+      ln -s /usr/local/Homebrew/bin/brew /usr/local/bin/brew; \
+    fi
+
+
 # Create Fish config directories
 RUN mkdir -p /home/vscode/.config/fish/completions \
              /home/vscode/.config/fish/conf.d
