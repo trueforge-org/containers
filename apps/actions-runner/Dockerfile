@@ -74,9 +74,7 @@ RUN set -eux; \
         docker-buildx-plugin; \
     \
     # Install gcc only for amd64
-    if [ "${TARGETARCH}" = "amd64" ]; then \
-        apt-get install -y --no-install-recommends gcc; \
-    fi; \
+    apt-get install -y --no-install-recommends gcc; \
     # yq
     curl -fsSL "https://github.com/mikefarah/yq/releases/latest/download/yq_linux_${TARGETARCH}" -o /usr/local/bin/yq; \
     chmod +x /usr/local/bin/yq; \
