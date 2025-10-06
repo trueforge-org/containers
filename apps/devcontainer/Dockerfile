@@ -125,7 +125,6 @@ RUN set -eux; \
     download_and_copy "kustomize" "$kustomizeVersion"; \
     download_and_copy "helm" "$helmVersion"; \
     download_and_copy "helm" "$oldhelmVersion" "oldhelm"; \
-    download_and_copy "kubeval" "$kubevalVersion"; \
     download_and_copy "kubeconform" "$kubeconformVersion"; \
     download_and_copy "conftest" "$conftestVersion"; \
     download_and_copy "go-yq" "$goyqVersion"; \
@@ -137,6 +136,9 @@ RUN set -eux; \
     download_and_copy "chart-testing" "$chartTestingVersion"; \
     download_and_copy "k9s" "$k9sVersion"; \
     download_and_copy "starship" "$starshipVersion";
+    if [ "$(TARGETARCH)" = "AMD64" ]; then \
+        download_and_copy "kubeval" "$kubevalVersion"; \
+    fi; \
 
 ENV PATH="/tools/bin:${PATH}"
 
