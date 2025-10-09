@@ -54,6 +54,9 @@ jobs:
           flavor: latest=false
           images: |
             ghcr.io/${{ github.repository_owner }}/${{ inputs.app }}
+            ghcr.io/containerforge/${{ inputs.app }}
+            quay.io/containerforge/${{ inputs.app }}
+            oci.trueforge.org/containerforge/${{ inputs.app }}
           tags: |
             type=semver,pattern={{version}},value=${{ steps.app-versions.outputs.semantic }},enable=${{ steps.app-versions.outputs.is-valid-semver && inputs.release }}
             type=semver,pattern={{major}}.{{minor}},value=${{ steps.app-versions.outputs.semantic }},enable=${{ steps.app-versions.outputs.is-valid-semver && inputs.release }}
@@ -105,6 +108,14 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ github.token }}
 
+      - name: Login to Quay
+        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3
+        if: github.event_name != 'pull_request'
+        with:
+          registry: quay.io
+          username: ${{ secrets.QUAY_CF_USER }}
+          password: ${{ secrets.QUAY_CF_TOKEN }}
+
       - name: Download Bake Metadata
         uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
         with:
@@ -142,6 +153,17 @@ jobs:
           source: .
           targets: image
           workdir: ./apps/${{ inputs.app }}
+
+      # Tag for Quay
+      - name: Tag for Quay
+        if: github.event_name != 'pull_request'
+        run: |
+          docker tag ghcr.io/${{ github.repository_owner }}/${{ inputs.app }} quay.io/containerforge/${{ inputs.app }}
+
+      # Push Quay
+      - name: Push Quay
+        if: github.event_name != 'pull_request'
+        run: docker push quay.io/containerforge/${{ inputs.app }}
 
       - name: Export Digest
         run: |-
@@ -190,6 +212,14 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ github.token }}
 
+      - name: Login to Quay
+        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3
+        if: github.event_name != 'pull_request'
+        with:
+          registry: quay.io
+          username: ${{ secrets.QUAY_CF_USER }}
+          password: ${{ secrets.QUAY_CF_TOKEN }}
+
       - name: Create Manifest List and Push
         working-directory: ${{ runner.temp }}/digests
         run: |-
@@ -208,6 +238,19 @@ jobs:
           DIGEST=$(docker buildx imagetools inspect ghcr.io/${{ github.repository_owner }}/${{ inputs.app }}:${TAG} --format '{{ json . }}' | jq --raw-output '.manifest.digest')
           echo "digest=${DIGEST}" >> $GITHUB_OUTPUT
 
+# 4️⃣ Tag the GHCR merged image for Quay using the same digest
+      - name: Tag GHCR image for Quay
+        if: github.event_name != 'pull_request'
+        run: |
+          docker pull ghcr.io/${{ github.repository_owner }}/${{ inputs.app }}@${{ steps.digest.outputs.digest }}
+          docker tag ghcr.io/${{ github.repository_owner }}/${{ inputs.app }}@${{ steps.digest.outputs.digest }} quay.io/containerforge/${{ inputs.app }}:$(jq --raw-output '.target."docker-metadata-action".args.DOCKER_META_VERSION' ${{ runner.temp }}/docker-metadata-action-bake.json)
+
+      # 5️⃣ Push Quay using the same digest/manifest list
+      - name: Push Quay
+        if: github.event_name != 'pull_request'
+        run: |
+          docker push quay.io/containerforge/${{ inputs.app }}:$(jq --raw-output '.target."docker-metadata-action".args.DOCKER_META_VERSION' ${{ runner.temp }}/docker-metadata-action-bake.json)
+
   attest:
     name: Attest
     needs:
@@ -221,20 +264,67 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ github.token }}
 
-      - name: Upload Dependency Snapshot
+      - name: Login to Quay
+        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3
+        if: github.event_name != 'pull_request'
+        with:
+          registry: quay.io
+          username: ${{ secrets.QUAY_CF_USER }}
+          password: ${{ secrets.QUAY_CF_TOKEN }}
+
+      - name: Upload Dependency Snapshot to GHCR
         uses: anchore/sbom-action@f8bdd1d8ac5e901a77a92f111440fdb1b593736b # v0.20.6
         with:
           dependency-snapshot: true
           image: ghcr.io/${{ github.repository_owner }}/${{ inputs.app }}@${{ needs.merge.outputs.digest }}
 
-      - name: Attestation
+      - name: Upload Dependency Snapshot to Quay
+        uses: anchore/sbom-action@v0.20.6
+        if: github.event_name != 'pull_request'
+        with:
+          dependency-snapshot: true
+          image: quay.io/containerforge/${{ inputs.app }}@${{ needs.merge.outputs.digest }}
+
+      - name: Set quay to Public
+        if: github.event_name != 'pull_request'
+        run: |
+          curl -X POST -H "Content-Type: application/json" -d '{"visibility": "public"}' -H "Authorization: Bearer ${{ secrets.QUAY_TCCR_API_TOKEN }}" "https://quay.io/api/v1/repository/containerforge/${{ inputs.app }}/changevisibility"
+
+      - name: Sign the merged digest for quay
+        if: github.event_name != 'pull_request'
+        run: |
+          cosign sign quay.io/containerforge/${{ inputs.app }}@${{ needs.merge.outputs.digest }} -y -a "repo=${{ github.repository }}" -a "workflow=${{ github.workflow }}" -a "ref=${{ github.sha }}"
+
+      - name: Verify the signed tags on quay
+        if: github.event_name != 'pull_request'
+        run: |
+          cosign verify quay.io/containerforge/${{ inputs.app }}@${{ needs.merge.outputs.digest }} --certificate-oidc-issuer=https://token.actions.githubusercontent.com --certificate-identity=https://github.com/trueforge-org/containerforge/.github/workflows/app-builder.yaml@refs/heads/master
+
+      - name: Sign the merged digest for GHCR
+        if: github.event_name != 'pull_request'
+        run: |
+          cosign sign GHCR.io/${{ github.repository_owner }}/${{ inputs.app }}@${{ needs.merge.outputs.digest }} -y -a "repo=${{ github.repository }}" -a "workflow=${{ github.workflow }}" -a "ref=${{ github.sha }}"
+
+      - name: Verify the signed tags on GHCR
+        if: github.event_name != 'pull_request'
+        run: |
+          cosign verify quay.io/${{ github.repository_owner }}/${{ inputs.app }}@${{ needs.merge.outputs.digest }} --certificate-oidc-issuer=https://token.actions.githubusercontent.com --certificate-identity=https://github.com/trueforge-org/containerforge/.github/workflows/app-builder.yaml@refs/heads/master
+
+      - name: Attestation for GHCR
         uses: actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a # v3.0.0
         with:
           push-to-registry: true
           subject-name: ghcr.io/${{ github.repository_owner }}/${{ inputs.app }}
           subject-digest: ${{ needs.merge.outputs.digest }}
 
-      - name: Verify Attestation
+      - name: Attestation for Quay
+        uses: actions/attest-build-provenance@v3.0.0
+        with:
+          push-to-registry: true
+          subject-name: quay.io/containerforge/${{ inputs.app }}
+          subject-digest: ${{ needs.merge.outputs.digest }}
+
+      - name: Verify Attestation for GHCR
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |-
