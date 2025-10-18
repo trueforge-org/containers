@@ -1,0 +1,29 @@
+name: Automerge and Approve
+
+on:
+  workflow_run:
+    workflows: ["Pull Request"]  # Name of the main CI workflow
+    types:
+      - completed
+
+jobs:
+
+  approve:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Approve PR
+        uses: hmarr/auto-approve-action@v3
+        if: github.actor == 'truecharts-admin'
+        with:
+          github-token: "${{ secrets.OR_PAT }}"
+          review-message: "Auto approved automated PR"
+          pull-request-number: ${{ github.event.workflow_run.pull_requests[0].number }}
+
+      - name: Automerge
+        if: github.actor == 'truecharts-admin'
+        uses: pascalgn/automerge-action@7961b8b5eec56cc088c140b56d864285eabd3f67 # v0.16.4
+        env:
+          GITHUB_TOKEN: "${{ secrets.BOT_TOKEN }}"
+          UPDATE_RETRIES: 24
+          UPDATE_RETRY_SLEEP: 60000
+          MERGE_METHOD: "squash"
